@@ -1,12 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:intern_portal/screens/login.dart';
 
 class SecureAccountPage extends StatefulWidget {
   const SecureAccountPage({super.key});
 
   @override
- 
   _SecureAccountPageState createState() => _SecureAccountPageState();
 }
 
@@ -54,8 +54,10 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
           onPressed: () => Navigator.pop(context),
           child: Icon(Icons.arrow_back, color: Color(0xFF3B6EF0)),
         ),
-        title: Text("Secure Your Account",
-            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16)),
+        title: Text(
+          "Secure Your Account",
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16),
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
           child: Divider(height: 1, color: Colors.grey[100]),
@@ -67,18 +69,18 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
           children: [
             // Lock icon
             Container(
-              width: 70, height: 70,
-              decoration: BoxDecoration(
-                color: Color(0xFFEFF4FF),
-                borderRadius: BorderRadius.circular(18),
-              ),
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(18)),
               child: Icon(Icons.lock_reset_outlined, color: Color(0xFF3B6EF0), size: 36),
             ),
             SizedBox(height: 20),
 
             // Title
-            Text("Secure Your Account",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              "Secure Your Account",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             SizedBox(height: 10),
             Text(
               "Welcome to your first login. Please update your\ntemporary password to continue to the student\nportal.",
@@ -99,8 +101,10 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
             // New Password
             Align(
               alignment: Alignment.centerLeft,
-              child: Text("New Password",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87)),
+              child: Text(
+                "New Password",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+              ),
             ),
             SizedBox(height: 8),
             TextField(
@@ -112,7 +116,8 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     _showNew ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                    color: Colors.grey[400], size: 20,
+                    color: Colors.grey[400],
+                    size: 20,
                   ),
                   onPressed: () => setState(() => _showNew = !_showNew),
                 ),
@@ -184,8 +189,15 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Update Password",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                      },
+                      child: Text(
+                        "Update Password",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                      ),
+                    ),
                     SizedBox(width: 8),
                     Icon(Icons.arrow_forward, color: Colors.white, size: 18),
                   ],
@@ -197,10 +209,7 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
             // Security Tip
             Container(
               padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xFFEFF4FF),
-                borderRadius: BorderRadius.circular(12),
-              ),
+              decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(12)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -210,8 +219,10 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Security Tip",
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0), fontSize: 14)),
+                        Text(
+                          "Security Tip",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0), fontSize: 14),
+                        ),
                         SizedBox(height: 4),
                         Text(
                           "Enable two-factor authentication (2FA) for an extra layer of protection on your account.",
@@ -242,7 +253,10 @@ class _PasswordFieldSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87)),
+        Text(
+          label,
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+        ),
         SizedBox(height: 8),
         TextField(
           obscureText: obscure,
@@ -250,8 +264,11 @@ class _PasswordFieldSection extends StatelessWidget {
             hintText: hint,
             hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
             suffixIcon: IconButton(
-              icon: Icon(obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                  color: Colors.grey[400], size: 20),
+              icon: Icon(
+                obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                color: Colors.grey[400],
+                size: 20,
+              ),
               onPressed: onToggle,
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),

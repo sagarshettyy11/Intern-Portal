@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -15,10 +17,7 @@ class DashboardPage extends StatelessWidget {
             Container(
               width: 32,
               height: 32,
-              decoration: BoxDecoration(
-                color: Color(0xFF3B6EF0),
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
               child: Icon(Icons.school, color: Colors.white, size: 18),
             ),
             SizedBox(width: 8),
@@ -52,13 +51,14 @@ class DashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Progress card
             Container(
               padding: EdgeInsets.all(18),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2))],
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2)),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,9 +67,7 @@ class DashboardPage extends StatelessWidget {
                     text: TextSpan(
                       text: "Good Morning, ",
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
-                      children: [
-                        TextSpan(text: "Alex Rivera!"),
-                      ],
+                      children: [TextSpan(text: "Alex Rivera!")],
                     ),
                   ),
                   SizedBox(height: 8),
@@ -100,15 +98,16 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 14),
-
-            // View Assignment / Weekly Log
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: () {},
                     icon: Icon(Icons.assignment_outlined, size: 16, color: Colors.white),
-                    label: Text("View Assignment", style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
+                    label: Text(
+                      "View Assignment",
+                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF3B6EF0),
                       padding: EdgeInsets.symmetric(vertical: 13),
@@ -122,7 +121,10 @@ class DashboardPage extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: () {},
                     icon: Icon(Icons.calendar_month_outlined, size: 16, color: Colors.grey[700]),
-                    label: Text("Weekly Log", style: TextStyle(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.w600)),
+                    label: Text(
+                      "Weekly Log",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 13),
                       side: BorderSide(color: Colors.grey[300]!),
@@ -133,8 +135,6 @@ class DashboardPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 14),
-
-            // Stats row
             Row(
               children: [
                 Expanded(
@@ -155,23 +155,21 @@ class DashboardPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 22),
-
-            // Internship Journey
-            Text("Internship Journey", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              "Internship Journey",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             SizedBox(height: 14),
             _JourneyTimeline(),
             SizedBox(height: 22),
-
-            // Priority Alerts
-            Text("Priority Alerts", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              "Priority Alerts",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             SizedBox(height: 12),
-
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFF1F1),
-                borderRadius: BorderRadius.circular(12),
-              ),
+              decoration: BoxDecoration(color: Color(0xFFFFF1F1), borderRadius: BorderRadius.circular(12)),
               child: Row(
                 children: [
                   Icon(Icons.warning_amber_rounded, color: Color(0xFFE53935), size: 24),
@@ -180,8 +178,10 @@ class DashboardPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Submit Weekly Report 12",
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE53935), fontSize: 14)),
+                        Text(
+                          "Submit Weekly Report 12",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE53935), fontSize: 14),
+                        ),
                         Text("Due by end of day today", style: TextStyle(fontSize: 12, color: Color(0xFFE53935))),
                       ],
                     ),
@@ -191,13 +191,9 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFF8E6),
-                borderRadius: BorderRadius.circular(12),
-              ),
+              decoration: BoxDecoration(color: Color(0xFFFFF8E6), borderRadius: BorderRadius.circular(12)),
               child: Row(
                 children: [
                   Icon(Icons.access_time_rounded, color: Color(0xFFE67E00), size: 24),
@@ -206,8 +202,10 @@ class DashboardPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Mentor Meeting",
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE67E00), fontSize: 14)),
+                        Text(
+                          "Mentor Meeting",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFE67E00), fontSize: 14),
+                        ),
                         Text("Tomorrow at 10:00 AM", style: TextStyle(fontSize: 12, color: Color(0xFFE67E00))),
                       ],
                     ),
@@ -217,21 +215,28 @@ class DashboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 22),
-
-            // Resources
-            Text("Resources for You", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              "Resources for You",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2))],
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2)),
+                ],
               ),
               child: Column(
                 children: [
                   _ResourceItem(icon: Icons.description_outlined, title: "Guidelines", trailing: Icons.open_in_new),
                   Divider(height: 1, indent: 52),
-                  _ResourceItem(icon: Icons.article_outlined, title: "Report Template", trailing: Icons.download_outlined),
+                  _ResourceItem(
+                    icon: Icons.article_outlined,
+                    title: "Report Template",
+                    trailing: Icons.download_outlined,
+                  ),
                   Divider(height: 1, indent: 52),
                   _ResourceItem(icon: Icons.help_outline, title: "Student FAQ", trailing: Icons.chevron_right),
                   Divider(height: 1, indent: 52),
@@ -243,7 +248,10 @@ class DashboardPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomNav(currentIndex: 0),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 0,
+        onTap: (index) => BottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -266,7 +274,10 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.5)),
+          Text(
+            label,
+            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.5),
+          ),
           SizedBox(height: 6),
           Text(value, style: valueStyle),
         ],
@@ -304,34 +315,32 @@ class _JourneyTimeline extends StatelessWidget {
                       color: isCompleted
                           ? Color(0xFF3B6EF0)
                           : isActive
-                              ? Colors.white
-                              : Colors.grey[200],
+                          ? Colors.white
+                          : Colors.grey[200],
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isActive ? Color(0xFF3B6EF0) : Colors.transparent,
-                        width: 2,
-                      ),
+                      border: Border.all(color: isActive ? Color(0xFF3B6EF0) : Colors.transparent, width: 2),
                     ),
                     child: Icon(
                       isCompleted
                           ? Icons.check
                           : isActive
-                              ? Icons.play_arrow
-                              : Icons.circle,
-                      size: isCompleted ? 16 : isActive ? 14 : 8,
+                          ? Icons.play_arrow
+                          : Icons.circle,
+                      size: isCompleted
+                          ? 16
+                          : isActive
+                          ? 14
+                          : 8,
                       color: isCompleted
                           ? Colors.white
                           : isActive
-                              ? Color(0xFF3B6EF0)
-                              : Colors.grey[400],
+                          ? Color(0xFF3B6EF0)
+                          : Colors.grey[400],
                     ),
                   ),
                   if (i < steps.length - 1)
                     Expanded(
-                      child: Container(
-                        height: 2,
-                        color: i < completedCount - 1 ? Color(0xFF3B6EF0) : Colors.grey[300],
-                      ),
+                      child: Container(height: 2, color: i < completedCount - 1 ? Color(0xFF3B6EF0) : Colors.grey[300]),
                     ),
                 ],
               ),
@@ -341,7 +350,11 @@ class _JourneyTimeline extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                  color: isActive ? Color(0xFF3B6EF0) : isFuture ? Colors.grey[400] : Colors.black87,
+                  color: isActive
+                      ? Color(0xFF3B6EF0)
+                      : isFuture
+                      ? Colors.grey[400]
+                      : Colors.black87,
                 ),
               ),
             ],
@@ -367,37 +380,12 @@ class _ResourceItem extends StatelessWidget {
         decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
         child: Icon(icon, color: Color(0xFF3B6EF0), size: 18),
       ),
-      title: Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87)),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+      ),
       trailing: Icon(trailing, color: Colors.grey[400], size: 18),
       contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey[200]!))),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF3B6EF0),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 9),
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'PROFILE'),
-        ],
-      ),
     );
   }
 }

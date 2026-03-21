@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ReportsOverviewPage extends StatefulWidget {
   const ReportsOverviewPage({super.key});
-
   @override
   // ignore: library_private_types_in_public_api
   _ReportsOverviewPageState createState() => _ReportsOverviewPageState();
@@ -13,13 +14,55 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
   final List<String> _filters = ["All Reports", "Pending", "Submitted", "Approved"];
 
   final List<Map<String, dynamic>> _reports = [
-    {"type": "Safety Audit Q3", "due": "Oct 24, 2023", "status": "Approved", "statusColor": Color(0xFF27AE60), "bgColor": Color(0xFFEAF7EF)},
-    {"type": "Monthly Expense Review", "due": "Oct 20, 2023", "status": "Overdue", "statusColor": Color(0xFFE53935), "bgColor": Color(0xFFFFF1F1)},
-    {"type": "Compliance Checklist", "due": "Oct 28, 2023", "status": "Pending", "statusColor": Color(0xFF3B6EF0), "bgColor": Color(0xFFEFF4FF)},
-    {"type": "Internal Audit v1", "due": "Oct 22, 2023", "status": "Late", "statusColor": Color(0xFFE67E00), "bgColor": Color(0xFFFFF8E6)},
-    {"type": "Quarterly Performance", "due": "Oct 25, 2023", "status": "Rejected", "statusColor": Color(0xFFE53935), "bgColor": Color(0xFFFFF1F1)},
-    {"type": "Compliance Checklist", "due": "Oct 28, 2023", "status": "Pending", "statusColor": Color(0xFF3B6EF0), "bgColor": Color(0xFFEFF4FF)},
-    {"type": "Internal Audit v2", "due": "Oct 22, 2023", "status": "Late", "statusColor": Color(0xFFE67E00), "bgColor": Color(0xFFFFF8E6)},
+    {
+      "type": "Safety Audit Q3",
+      "due": "Oct 24, 2023",
+      "status": "Approved",
+      "statusColor": Color(0xFF27AE60),
+      "bgColor": Color(0xFFEAF7EF),
+    },
+    {
+      "type": "Monthly Expense Review",
+      "due": "Oct 20, 2023",
+      "status": "Overdue",
+      "statusColor": Color(0xFFE53935),
+      "bgColor": Color(0xFFFFF1F1),
+    },
+    {
+      "type": "Compliance Checklist",
+      "due": "Oct 28, 2023",
+      "status": "Pending",
+      "statusColor": Color(0xFF3B6EF0),
+      "bgColor": Color(0xFFEFF4FF),
+    },
+    {
+      "type": "Internal Audit v1",
+      "due": "Oct 22, 2023",
+      "status": "Late",
+      "statusColor": Color(0xFFE67E00),
+      "bgColor": Color(0xFFFFF8E6),
+    },
+    {
+      "type": "Quarterly Performance",
+      "due": "Oct 25, 2023",
+      "status": "Rejected",
+      "statusColor": Color(0xFFE53935),
+      "bgColor": Color(0xFFFFF1F1),
+    },
+    {
+      "type": "Compliance Checklist",
+      "due": "Oct 28, 2023",
+      "status": "Pending",
+      "statusColor": Color(0xFF3B6EF0),
+      "bgColor": Color(0xFFEFF4FF),
+    },
+    {
+      "type": "Internal Audit v2",
+      "due": "Oct 22, 2023",
+      "status": "Late",
+      "statusColor": Color(0xFFE67E00),
+      "bgColor": Color(0xFFFFF8E6),
+    },
   ];
 
   @override
@@ -30,24 +73,33 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Icon(Icons.arrow_back, color: Colors.black87),
-        title: Text("Reports Overview",
-            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17)),
+        title: Text(
+          "Reports Overview",
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
+        ),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: Colors.black87), onPressed: () {}),
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.black87),
+            onPressed: () {},
+          ),
           Container(
             margin: EdgeInsets.only(right: 12),
             decoration: BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
-            child: IconButton(icon: Icon(Icons.add, color: Colors.white, size: 20), onPressed: () {}),
+            child: IconButton(
+              icon: Icon(Icons.add, color: Colors.white, size: 20),
+              onPressed: () {},
+            ),
           ),
         ],
         bottom: PreferredSize(
-            preferredSize: Size.fromHeight(1), child: Divider(height: 1, color: Colors.grey[200])),
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, color: Colors.grey[200]),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            // Stats row
             Row(
               children: [
                 Expanded(
@@ -81,8 +133,6 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
               ],
             ),
             SizedBox(height: 14),
-
-            // Filter chips
             SizedBox(
               height: 38,
               child: ListView.separated(
@@ -113,42 +163,61 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
               ),
             ),
             SizedBox(height: 14),
-
-            // Table
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
-                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2))],
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: Offset(0, 2)),
+                  ],
                 ),
                 child: Column(
                   children: [
-                    // Table header
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       child: Row(
                         children: [
                           Expanded(
                             flex: 3,
-                            child: Text("REPORT TYPE",
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                            child: Text(
+                              "REPORT TYPE",
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.grey[500],
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text("DUE DATE",
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                            child: Text(
+                              "DUE DATE",
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.grey[500],
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text("STATUS",
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                            child: Text(
+                              "STATUS",
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.grey[500],
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                     Divider(height: 1, color: Colors.grey[100]),
-
                     Expanded(
                       child: ListView.separated(
                         itemCount: _reports.length,
@@ -162,8 +231,10 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                               children: [
                                 Expanded(
                                   flex: 3,
-                                  child: Text(r["type"],
-                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87)),
+                                  child: Text(
+                                    r["type"],
+                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                                  ),
                                 ),
                                 Expanded(
                                   flex: 2,
@@ -199,8 +270,6 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
               ),
             ),
             SizedBox(height: 12),
-
-            // Pagination
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -210,9 +279,15 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                     _PageBtn(icon: Icons.chevron_left, isActive: false),
                     SizedBox(width: 8),
                     Container(
-                      width: 32, height: 32,
+                      width: 32,
+                      height: 32,
                       decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
-                      child: Center(child: Text("1", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13))),
+                      child: Center(
+                        child: Text(
+                          "1",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 8),
                     _PageBtn(icon: Icons.chevron_right, isActive: false),
@@ -224,7 +299,10 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomNav(currentIndex: 2),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 2,
+        onTap: (index) => BottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -232,7 +310,13 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
 class _MetricCard extends StatelessWidget {
   final String title, value, badge, sub;
   final Color badgeColor;
-  const _MetricCard({required this.title, required this.value, required this.badge, required this.badgeColor, required this.sub});
+  const _MetricCard({
+    required this.title,
+    required this.value,
+    required this.badge,
+    required this.badgeColor,
+    required this.sub,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -250,9 +334,15 @@ class _MetricCard extends StatelessWidget {
           SizedBox(height: 4),
           Row(
             children: [
-              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87)),
+              Text(
+                value,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
               SizedBox(width: 4),
-              Text(badge, style: TextStyle(fontSize: 10, color: badgeColor, fontWeight: FontWeight.w600)),
+              Text(
+                badge,
+                style: TextStyle(fontSize: 10, color: badgeColor, fontWeight: FontWeight.w600),
+              ),
             ],
           ),
           SizedBox(height: 2),
@@ -266,8 +356,12 @@ class _MetricCard extends StatelessWidget {
 class _MetricCardWithProgress extends StatelessWidget {
   final String title, value, badge;
   final double progress;
-  const _MetricCardWithProgress({required this.title, required this.value, required this.badge, required this.progress});
-
+  const _MetricCardWithProgress({
+    required this.title,
+    required this.value,
+    required this.badge,
+    required this.progress,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -284,15 +378,26 @@ class _MetricCardWithProgress extends StatelessWidget {
           SizedBox(height: 4),
           Row(
             children: [
-              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87)),
+              Text(
+                value,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
               SizedBox(width: 4),
-              Text(badge, style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w600)),
+              Text(
+                badge,
+                style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w600),
+              ),
             ],
           ),
           SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(value: progress, backgroundColor: Colors.grey[200], color: Color(0xFF3B6EF0), minHeight: 4),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.grey[200],
+              color: Color(0xFF3B6EF0),
+              minHeight: 4,
+            ),
           ),
         ],
       ),
@@ -308,40 +413,13 @@ class _PageBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 32, height: 32,
+      width: 32,
+      height: 32,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(icon, size: 18, color: Colors.grey[500]),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey[200]!))),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF3B6EF0),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 9),
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'PROFILE'),
-        ],
-      ),
     );
   }
 }

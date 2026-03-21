@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class SubmitReportPage extends StatefulWidget {
   const SubmitReportPage({super.key});
-
   @override
   _SubmitReportPageState createState() => _SubmitReportPageState();
 }
@@ -12,7 +11,6 @@ class SubmitReportPage extends StatefulWidget {
 class _SubmitReportPageState extends State<SubmitReportPage> {
   final _descController = TextEditingController();
   int _charCount = 0;
-
   @override
   void initState() {
     super.initState();
@@ -29,8 +27,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: Icon(Icons.arrow_back, color: Colors.black87),
-        title: Text("Submit New Report",
-            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16)),
+        title: Text(
+          "Submit New Report",
+          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16),
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
           child: Divider(height: 1, color: Colors.grey[200]),
@@ -42,8 +42,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Title
-            Text("Submit New Report",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87)),
+            Text(
+              "Submit New Report",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
             SizedBox(height: 6),
             Text(
               "Complete the fields below finalize your official\nreporting documentation.",
@@ -54,15 +56,13 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
             // Deadline banner
             Container(
               padding: EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Color(0xFFEFF4FF),
-                borderRadius: BorderRadius.circular(12),
-              ),
+              decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(12)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 36, height: 36,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
                     child: Icon(Icons.notifications_outlined, color: Colors.white, size: 18),
                   ),
@@ -71,8 +71,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Submission Deadline Approaching",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
+                        Text(
+                          "Submission Deadline Approaching",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                        ),
                         SizedBox(height: 4),
                         RichText(
                           text: TextSpan(
@@ -91,8 +93,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text("View Calendar →",
-                      style: TextStyle(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600)),
+                  Text(
+                    "View Calendar →",
+                    style: TextStyle(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                  ),
                 ],
               ),
             ),
@@ -109,8 +113,15 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                         children: [
                           Icon(Icons.work_outline, size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
-                          Text("REPORT TYPE",
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                          Text(
+                            "REPORT TYPE",
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey[500],
+                              letterSpacing: 0.5,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: 8),
@@ -127,8 +138,15 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                         children: [
                           Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
-                          Text("REPORTING PERIOD",
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                          Text(
+                            "REPORTING PERIOD",
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey[500],
+                              letterSpacing: 0.5,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: 8),
@@ -148,12 +166,18 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                   children: [
                     Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
                     SizedBox(width: 4),
-                    Text("DETAILED DESCRIPTION",
-                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                    Text(
+                      "DETAILED DESCRIPTION",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.grey[500],
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                   ],
                 ),
-                Text("$_charCount / 2000",
-                    style: TextStyle(fontSize: 11, color: Colors.grey[400])),
+                Text("$_charCount / 2000", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
               ],
             ),
             SizedBox(height: 8),
@@ -187,8 +211,15 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
               children: [
                 Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
                 SizedBox(width: 4),
-                Text("SUPPORTING ATTACHMENTS",
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.grey[500], letterSpacing: 0.5)),
+                Text(
+                  "SUPPORTING ATTACHMENTS",
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey[500],
+                    letterSpacing: 0.5,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 8),
@@ -204,14 +235,17 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
                 children: [
                   Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 38),
                   SizedBox(height: 8),
-                  Text("Drag and drop files here",
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87)),
+                  Text(
+                    "Drag and drop files here",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                  ),
                   SizedBox(height: 4),
-                  Text("or click to browse from your computer",
-                      style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                  Text(
+                    "or click to browse from your computer",
+                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                  ),
                   SizedBox(height: 4),
-                  Text("PDF, CSV, PNG (MAX 25MB)",
-                      style: TextStyle(fontSize: 11, color: Colors.grey[400])),
+                  Text("PDF, CSV, PNG (MAX 25MB)", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
                 ],
               ),
             ),
@@ -224,8 +258,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
               child: ElevatedButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.send, color: Colors.white, size: 18),
-                label: Text("Submit Report",
-                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                label: Text(
+                  "Submit Report",
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF3B6EF0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -242,8 +278,10 @@ class _SubmitReportPageState extends State<SubmitReportPage> {
               child: OutlinedButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.save_outlined, color: Colors.black87, size: 18),
-                label: Text("Save as Draft",
-                    style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500)),
+                label: Text(
+                  "Save as Draft",
+                  style: TextStyle(color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w500),
+                ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey[300]!),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -277,7 +315,11 @@ class _DropdownBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(hint, style: TextStyle(color: Colors.grey[400], fontSize: 13), overflow: TextOverflow.ellipsis),
+            child: Text(
+              hint,
+              style: TextStyle(color: Colors.grey[400], fontSize: 13),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           hasCalendarIcon
               ? Icon(Icons.calendar_today_outlined, color: Colors.grey[400], size: 16)
@@ -295,7 +337,9 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey[200]!))),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,

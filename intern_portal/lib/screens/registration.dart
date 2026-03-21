@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({super.key});
@@ -25,7 +27,6 @@ class RegistrationPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Info banner
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
@@ -48,15 +49,11 @@ class RegistrationPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 22),
-
-            // Section: Company Details
             _SectionHeader(icon: Icons.grid_view_rounded, title: "Company Details"),
             SizedBox(height: 14),
-
             _FieldLabel("COMPANY NAME"),
             _TextField(hint: "e.g. Acme Corp"),
             SizedBox(height: 14),
-
             Row(
               children: [
                 Expanded(
@@ -81,15 +78,12 @@ class RegistrationPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 14),
-
             _FieldLabel("PHONE"),
             _TextField(hint: "+1 (555) 000-0000"),
             SizedBox(height: 14),
-
             _FieldLabel("ADDRESS"),
             _TextField(hint: "Full office address"),
             SizedBox(height: 14),
-
             _FieldLabel("COMPANY DESCRIPTION"),
             SizedBox(
               height: 90,
@@ -116,27 +110,19 @@ class RegistrationPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24),
-
-            // Section: Industry Guide Details
             _SectionHeader(icon: Icons.person_outline_rounded, title: "Industry Guide Details"),
             SizedBox(height: 14),
-
             _FieldLabel("GUIDE NAME"),
             _TextField(hint: "John Doe"),
             SizedBox(height: 14),
-
             _FieldLabel("EMAIL ADDRESS"),
             _TextField(hint: "john.doe@company.com"),
             SizedBox(height: 14),
-
             _FieldLabel("PHONE"),
             _TextField(hint: "+1 (555) 000-0000"),
             SizedBox(height: 24),
-
-            // Section: Documentation
             _SectionHeader(icon: Icons.description_outlined, title: "Documentation"),
             SizedBox(height: 14),
-
             _FieldLabel("OFFER LETTER"),
             Container(
               height: 130,
@@ -163,8 +149,6 @@ class RegistrationPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30),
-
-            // Buttons
             Row(
               children: [
                 Expanded(
@@ -203,7 +187,10 @@ class RegistrationPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _BottomNav(currentIndex: 1),
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 1,
+        onTap: (index) => BottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -212,7 +199,6 @@ class _SectionHeader extends StatelessWidget {
   final IconData icon;
   final String title;
   const _SectionHeader({required this.icon, required this.title});
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -231,7 +217,6 @@ class _SectionHeader extends StatelessWidget {
 class _FieldLabel extends StatelessWidget {
   final String label;
   const _FieldLabel(this.label);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -247,7 +232,6 @@ class _FieldLabel extends StatelessWidget {
 class _TextField extends StatelessWidget {
   final String hint;
   const _TextField({required this.hint});
-
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -275,7 +259,6 @@ class _TextField extends StatelessWidget {
 class _DropdownField extends StatelessWidget {
   final String hint;
   const _DropdownField({required this.hint});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -290,42 +273,6 @@ class _DropdownField extends StatelessWidget {
           Text(hint, style: TextStyle(color: Colors.grey[400], fontSize: 13)),
           Icon(Icons.keyboard_arrow_down, color: Colors.grey[500], size: 20),
         ],
-      ),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    final items = [
-      {'icon': Icons.grid_view_rounded, 'label': 'DASHBOARD'},
-      {'icon': Icons.work_outline, 'label': 'INTERNSHIPS'},
-      {'icon': Icons.bar_chart_rounded, 'label': 'REPORTS'},
-      {'icon': Icons.verified_user_outlined, 'label': 'CERTIFICATES'},
-      {'icon': Icons.person_outline, 'label': 'PROFILE'},
-    ];
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF3B6EF0),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 9),
-        elevation: 0,
-        items: items
-            .map((item) => BottomNavigationBarItem(
-                  icon: Icon(item['icon'] as IconData),
-                  label: item['label'] as String,
-                ))
-            .toList(),
       ),
     );
   }

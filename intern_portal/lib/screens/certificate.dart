@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class CertificatePage extends StatelessWidget {
   const CertificatePage({super.key});
@@ -15,13 +17,16 @@ class CertificatePage extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 32, height: 32,
+                width: 32,
+                height: 32,
                 decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
                 child: Icon(Icons.school, color: Colors.white, size: 18),
               ),
               SizedBox(width: 6),
-              Text("InternPortal",
-                  style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15)),
+              Text(
+                "InternPortal",
+                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
+              ),
               SizedBox(width: 12),
             ],
           ),
@@ -40,8 +45,6 @@ class CertificatePage extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 10),
-
-            // Title section
             Text(
               "Internship Certificate",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
@@ -58,8 +61,6 @@ class CertificatePage extends StatelessWidget {
               style: TextStyle(fontSize: 13, color: Colors.grey[600], height: 1.5),
             ),
             SizedBox(height: 24),
-
-            // Certificate card
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(28),
@@ -72,10 +73,9 @@ class CertificatePage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // Shield icon
-                  // ignore: sized_box_for_whitespace
-                  Container(
-                    width: 72, height: 72,
+                  SizedBox(
+                    width: 72,
+                    height: 72,
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -85,7 +85,6 @@ class CertificatePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 16),
-
                   Text(
                     "CERTIFICATE OF COMPLETION",
                     style: TextStyle(
@@ -96,8 +95,7 @@ class CertificatePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 6),
-                  Text("This is to certify that",
-                      style: TextStyle(fontSize: 13, color: Colors.grey[500])),
+                  Text("This is to certify that", style: TextStyle(fontSize: 13, color: Colors.grey[500])),
                   SizedBox(height: 16),
 
                   Text(
@@ -110,15 +108,12 @@ class CertificatePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 16),
-
                   Text(
                     "has successfully completed a 12-week\nintensive internship in\nFrontend Development Excellence.",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: Colors.black54, height: 1.6),
                   ),
                   SizedBox(height: 28),
-
-                  // Signature + QR row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -126,37 +121,43 @@ class CertificatePage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("J. Miller",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.black87)),
+                          Text(
+                            "J. Miller",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black87,
+                            ),
+                          ),
                           Container(width: 100, height: 1, color: Colors.black45),
                           SizedBox(height: 4),
-                          Text("PROGRAM DIRECTOR",
-                              style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1)),
+                          Text(
+                            "PROGRAM DIRECTOR",
+                            style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
+                          ),
                         ],
                       ),
                       Row(
                         children: [
-                          // QR code simulation
                           Container(
-                            width: 52, height: 52,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
+                            width: 52,
+                            height: 52,
+                            decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(4)),
                             child: Icon(Icons.qr_code_2, color: Colors.white, size: 44),
                           ),
                           SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("TC-2023-8842",
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black87)),
-                              Text("VERIFICATION ID",
-                                  style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1)),
+                              Text(
+                                "TC-2023-8842",
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black87),
+                              ),
+                              Text(
+                                "VERIFICATION ID",
+                                style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
+                              ),
                             ],
                           ),
                         ],
@@ -167,16 +168,16 @@ class CertificatePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 22),
-
-            // Download button
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.download_rounded, color: Colors.white),
-                label: Text("Download as PDF",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+                label: Text(
+                  "Download as PDF",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF3B6EF0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -185,16 +186,16 @@ class CertificatePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12),
-
-            // Share button
             SizedBox(
               width: double.infinity,
               height: 50,
               child: OutlinedButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.share_outlined, color: Colors.black87),
-                label: Text("Share Achievement",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87)),
+                label: Text(
+                  "Share Achievement",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
+                ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey[300]!),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -202,46 +203,18 @@ class CertificatePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 18),
-
-            // View Previous
             TextButton.icon(
               onPressed: () {},
               icon: Icon(Icons.arrow_back, color: Colors.grey[600], size: 16),
-              label: Text("View Previous Internships",
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+              label: Text("View Previous Internships", style: TextStyle(color: Colors.grey[600], fontSize: 13)),
             ),
             SizedBox(height: 16),
           ],
         ),
       ),
-      bottomNavigationBar: _BottomNav(currentIndex: 3),
-    );
-  }
-}
-
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey[200]!))),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF3B6EF0),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: TextStyle(fontSize: 9),
-        elevation: 0,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'PROFILE'),
-        ],
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 3,
+        onTap: (index) => BottomNavController.onItemTapped(context, index),
       ),
     );
   }
