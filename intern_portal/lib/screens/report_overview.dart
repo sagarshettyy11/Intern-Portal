@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/submit_report.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ReportsOverviewPage extends StatefulWidget {
@@ -87,7 +88,9 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
             decoration: BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
             child: IconButton(
               icon: Icon(Icons.add, color: Colors.white, size: 20),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const SubmitReportPage()));
+              },
             ),
           ),
         ],
