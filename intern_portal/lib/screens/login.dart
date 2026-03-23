@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/dashboard.dart';
 import 'package:intern_portal/screens/secure_account.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
-  // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   bool _keepSignedIn = false;
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -48,9 +45,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: const Icon(Icons.school, color: Color(0xFF3B6EF0), size: 22),
                       ),
                       const SizedBox(width: 10),
-                      const Text(
+                      Text(
                         "InternPortal",
-                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
                       ),
                     ],
                   ),
@@ -60,15 +57,25 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Empowering your\nprofessional journey\nthrough academic\nexcellence.",
-                        style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold, height: 1.3),
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                          height: 1.3,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Text(
                         "Connecting students with industry leaders to faster\n"
                         "growth, innovation, and practical learning.",
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, height: 1.5),
+                        style: GoogleFonts.inter(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          height: 1.5,
+                        ),
                       ),
                     ],
                   ),
@@ -86,26 +93,26 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             "Student Login",
-                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+                            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.black87),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             "Welcome back! Please enter your details.",
-                            style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                            style: GoogleFonts.inter(fontSize: 15, color: Colors.grey[600],fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
+                          Text(
                             "Internship ID",
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
+                            style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
                           const SizedBox(height: 8),
                           TextField(
                             decoration: InputDecoration(
                               hintText: "Enter your Internship ID",
-                              hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
-                              prefixIcon: Icon(Icons.badge_outlined, color: Colors.grey[400], size: 20),
+                              hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 14, fontWeight: FontWeight.bold,),
+                              prefixIcon: Icon(Icons.badge_outlined, color: Colors.grey[400], size: 20, fontWeight: FontWeight.bold,),
                               contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -127,7 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Text(
                                 "Password",
-                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
+                                style: GoogleFonts.inter(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -135,7 +146,11 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                                 child: Text(
                                   "Forgot Password?",
-                                  style: TextStyle(fontSize: 13, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w500),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13,
+                                    color: Color(0xFF3B6EF0),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ],
@@ -145,13 +160,13 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               hintText: "••••••••",
-                              hintStyle: TextStyle(color: Colors.grey[500], fontSize: 16),
-                              prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[400], size: 20),
+                              hintStyle: GoogleFonts.inter(color: Colors.grey[500], fontSize: 16, fontWeight: FontWeight.bold),
+                              prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[400], size: 20, fontWeight: FontWeight.bold),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                                   color: Colors.grey[400],
-                                  size: 20,
+                                  size: 20, fontWeight: FontWeight.bold,
                                 ),
                                 onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                               ),
@@ -180,7 +195,10 @@ class _LoginPageState extends State<LoginPage> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                 side: BorderSide(color: Colors.grey[400]!),
                               ),
-                              Text("Keep me signed in", style: TextStyle(fontSize: 13, color: Colors.grey[700])),
+                              Text(
+                                "Keep me signed in",
+                                style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -196,15 +214,19 @@ class _LoginPageState extends State<LoginPage> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 elevation: 0,
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     "Sign In",
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   SizedBox(width: 8),
-                                  Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                                  Icon(Icons.arrow_forward, color: Colors.white, size: 18, fontWeight: FontWeight.w900),
                                 ],
                               ),
                             ),
@@ -214,11 +236,11 @@ class _LoginPageState extends State<LoginPage> {
                             child: RichText(
                               text: TextSpan(
                                 text: "Don't have an account? ",
-                                style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                                children: const [
+                                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], fontWeight: FontWeight.bold),
+                                children: [
                                   TextSpan(
                                     text: "Contact Department",
-                                    style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                                    style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -231,11 +253,11 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Icon(Icons.help_outline, size: 14, color: Colors.grey[500]),
                                 const SizedBox(width: 4),
-                                Text("Help Center", style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                                Text("Help Center", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.bold)),
                                 const SizedBox(width: 16),
                                 Icon(Icons.mail_outline, size: 14, color: Colors.grey[500]),
                                 const SizedBox(width: 4),
-                                Text("Support", style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                                Text("Support", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -243,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                           Center(
                             child: Text(
                               "© 2023 University Academic Internship Portal. All rights reserved.",
-                              style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+                              style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[400], fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           ),

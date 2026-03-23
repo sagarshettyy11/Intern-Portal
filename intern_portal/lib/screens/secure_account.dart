@@ -1,45 +1,40 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/login.dart';
 
 class SecureAccountPage extends StatefulWidget {
   const SecureAccountPage({super.key});
-
   @override
-  _SecureAccountPageState createState() => _SecureAccountPageState();
+  SecureAccountPageState createState() => SecureAccountPageState();
 }
 
-class _SecureAccountPageState extends State<SecureAccountPage> {
+class SecureAccountPageState extends State<SecureAccountPage> {
   bool _showOld = false;
   bool _showNew = false;
   bool _showConfirm = false;
-
-  final _newPasswordController = TextEditingController();
-
-  bool get _hasMinLength => _newPasswordController.text.length >= 8;
-  bool get _hasNumber => RegExp(r'\d').hasMatch(_newPasswordController.text);
-  bool get _hasSpecialChar => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(_newPasswordController.text);
-  bool get _hasUppercase => RegExp(r'[A-Z]').hasMatch(_newPasswordController.text);
-
-  double get _passwordStrength {
+  final newPasswordController = TextEditingController();
+  bool get hasMinLength => newPasswordController.text.length >= 8;
+  bool get hasNumber => RegExp(r'\d').hasMatch(newPasswordController.text);
+  bool get hasSpecialChar => RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(newPasswordController.text);
+  bool get hasUppercase => RegExp(r'[A-Z]').hasMatch(newPasswordController.text);
+  double get passwordStrength {
     int met = 0;
-    if (_hasMinLength) met++;
-    if (_hasNumber) met++;
-    if (_hasSpecialChar) met++;
-    if (_hasUppercase) met++;
+    if (hasMinLength) met++;
+    if (hasNumber) met++;
+    if (hasSpecialChar) met++;
+    if (hasUppercase) met++;
     return met / 4.0;
   }
 
   @override
   void initState() {
     super.initState();
-    _newPasswordController.addListener(() => setState(() {}));
+    newPasswordController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
-    _newPasswordController.dispose();
+    newPasswordController.dispose();
     super.dispose();
   }
 
@@ -50,13 +45,9 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back, color: Color(0xFF3B6EF0)),
-        ),
         title: Text(
           "Secure Your Account",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16),
+          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
@@ -67,7 +58,6 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(
           children: [
-            // Lock icon
             Container(
               width: 70,
               height: 70,
@@ -75,21 +65,17 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
               child: Icon(Icons.lock_reset_outlined, color: Color(0xFF3B6EF0), size: 36),
             ),
             SizedBox(height: 20),
-
-            // Title
             Text(
               "Secure Your Account",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 10),
             Text(
-              "Welcome to your first login. Please update your\ntemporary password to continue to the student\nportal.",
+              "Welcome to your first login. Please update your\ntemporary password to continue to the student portal.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.grey[500], height: 1.6),
+              style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500], height: 1.6),
             ),
             SizedBox(height: 30),
-
-            // Old Password
             _PasswordFieldSection(
               label: "Old Password",
               hint: "Enter current password",
@@ -97,22 +83,20 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
               onToggle: () => setState(() => _showOld = !_showOld),
             ),
             SizedBox(height: 20),
-
-            // New Password
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 "New Password",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
               ),
             ),
             SizedBox(height: 8),
             TextField(
-              controller: _newPasswordController,
+              controller: newPasswordController,
               obscureText: !_showNew,
               decoration: InputDecoration(
                 hintText: "Min. 8 characters",
-                hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+                hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 14),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _showNew ? Icons.visibility_outlined : Icons.visibility_off_outlined,
@@ -137,19 +121,15 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
               ),
             ),
             SizedBox(height: 10),
-
-            // Strength bar
-            _PasswordStrengthBar(strength: _passwordStrength),
+            _PasswordStrengthBar(strength: passwordStrength),
             SizedBox(height: 12),
-
-            // Requirements checklist
             Row(
               children: [
                 Expanded(
-                  child: _RequirementRow(met: _hasMinLength, text: "8+ characters"),
+                  child: _RequirementRow(met: hasMinLength, text: "8+ characters"),
                 ),
                 Expanded(
-                  child: _RequirementRow(met: _hasNumber, text: "One number"),
+                  child: _RequirementRow(met: hasNumber, text: "One number"),
                 ),
               ],
             ),
@@ -157,16 +137,14 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
             Row(
               children: [
                 Expanded(
-                  child: _RequirementRow(met: _hasSpecialChar, text: "One special char"),
+                  child: _RequirementRow(met: hasSpecialChar, text: "One special char"),
                 ),
                 Expanded(
-                  child: _RequirementRow(met: _hasUppercase, text: "Uppercase letter"),
+                  child: _RequirementRow(met: hasUppercase, text: "Uppercase letter"),
                 ),
               ],
             ),
             SizedBox(height: 20),
-
-            // Confirm New Password
             _PasswordFieldSection(
               label: "Confirm New Password",
               hint: "Repeat new password",
@@ -174,8 +152,6 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
               onToggle: () => setState(() => _showConfirm = !_showConfirm),
             ),
             SizedBox(height: 28),
-
-            // Update Button
             SizedBox(
               width: double.infinity,
               height: 52,
@@ -183,7 +159,7 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF3B6EF0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   elevation: 0,
                 ),
                 child: Row(
@@ -195,7 +171,7 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                       },
                       child: Text(
                         "Update Password",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white),
                       ),
                     ),
                     SizedBox(width: 8),
@@ -205,8 +181,6 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
               ),
             ),
             SizedBox(height: 22),
-
-            // Security Tip
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(12)),
@@ -221,12 +195,12 @@ class _SecureAccountPageState extends State<SecureAccountPage> {
                       children: [
                         Text(
                           "Security Tip",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0), fontSize: 14),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0), fontSize: 14),
                         ),
                         SizedBox(height: 4),
                         Text(
                           "Enable two-factor authentication (2FA) for an extra layer of protection on your account.",
-                          style: TextStyle(fontSize: 12, color: Colors.grey[600], height: 1.5),
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600], height: 1.5),
                         ),
                       ],
                     ),
@@ -255,14 +229,14 @@ class _PasswordFieldSection extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
         ),
         SizedBox(height: 8),
         TextField(
           obscureText: obscure,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+            hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 14),
             suffixIcon: IconButton(
               icon: Icon(
                 obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
@@ -333,7 +307,7 @@ class _RequirementRow extends StatelessWidget {
         SizedBox(width: 6),
         Text(
           text,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             fontSize: 12,
             color: met ? Color(0xFF3B6EF0) : Colors.grey[400],
             fontWeight: met ? FontWeight.w500 : FontWeight.normal,
