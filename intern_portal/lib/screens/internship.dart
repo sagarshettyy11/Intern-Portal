@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -13,9 +14,9 @@ class InternshipsPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const Icon(Icons.arrow_back, color: Colors.black87),
-        title: const Text(
+        title: Text(
           "My Internships",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
+          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
         ),
         actions: [
           IconButton(
@@ -62,24 +63,28 @@ class InternshipsPage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Software Engineer Intern",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Text("TechCorp", style: TextStyle(fontSize: 13, color: Colors.grey[600])),
-                          Text(" · ", style: TextStyle(color: Colors.grey[400])),
+                          Text("TechCorp", style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600])),
+                          Text(" · ", style: GoogleFonts.inter(color: Colors.grey[400])),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
                               color: const Color(0xFFE8F1FF),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
+                            child: Text(
                               "IN PROGRESS",
-                              style: TextStyle(fontSize: 10, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                              style: GoogleFonts.inter(
+                                fontSize: 10,
+                                color: Color(0xFF3B6EF0),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
@@ -126,9 +131,9 @@ class InternshipsPage extends StatelessWidget {
               children: [
                 const Icon(Icons.show_chart, color: Color(0xFF3B6EF0), size: 20),
                 const SizedBox(width: 6),
-                const Text(
+                Text(
                   "Internship Milestones",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
               ],
             ),
@@ -153,18 +158,18 @@ class InternshipsPage extends StatelessWidget {
               subtitle: "Scheduled for Nov 10",
             ),
             const SizedBox(height: 22),
-            const Text(
+            Text(
               "Your Mentors",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
             _MentorCard(name: "Dr. Robert Chen", role: "Software Engineer (Industry)"),
             const SizedBox(height: 10),
             _MentorCard(name: "Prof. Sarah Miller", role: "Academic Supervisor"),
             const SizedBox(height: 22),
-            const Text(
+            Text(
               "Helpful Resources",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
             Container(
@@ -221,12 +226,17 @@ class _StatBox extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 9, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.3),
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
           if (showProgress) ...[
             const SizedBox(height: 4),
@@ -241,7 +251,7 @@ class _StatBox extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 4),
-          Text(sub, style: TextStyle(fontSize: 10, color: subColor)),
+          Text(sub, style: GoogleFonts.inter(fontSize: 10, color: subColor)),
         ],
       ),
     );
@@ -254,7 +264,6 @@ class _MilestoneItem extends StatelessWidget {
   final String title;
   final String subtitle;
   const _MilestoneItem({required this.isDone, required this.isFuture, required this.title, required this.subtitle});
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -291,14 +300,14 @@ class _MilestoneItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                     color: isFuture ? Colors.grey[400] : Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                Text(subtitle, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
               ],
             ),
           ),
@@ -310,7 +319,6 @@ class _MilestoneItem extends StatelessWidget {
 
 class _ActiveMilestone extends StatelessWidget {
   const _ActiveMilestone();
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -350,9 +358,9 @@ class _ActiveMilestone extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Mid-term Evaluation",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF3B6EF0)),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF3B6EF0)),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -360,9 +368,9 @@ class _ActiveMilestone extends StatelessWidget {
                         color: const Color(0xFF3B6EF0),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text(
+                      child: Text(
                         "ACTIVE",
-                        style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.inter(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
@@ -376,7 +384,7 @@ class _ActiveMilestone extends StatelessWidget {
                     children: [
                       Text(
                         "REQUIRED TASKS",
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
                           color: Colors.grey[500],
                           fontWeight: FontWeight.w600,
@@ -390,7 +398,7 @@ class _ActiveMilestone extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             "Update Portfolio",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               fontSize: 13,
                               color: Colors.grey[500],
                               decoration: TextDecoration.lineThrough,
@@ -410,9 +418,9 @@ class _ActiveMilestone extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
+                          Text(
                             "Schedule Meeting with Guide",
-                            style: TextStyle(fontSize: 13, color: Colors.black87),
+                            style: GoogleFonts.inter(fontSize: 13, color: Colors.black87),
                           ),
                         ],
                       ),
@@ -473,9 +481,9 @@ class _MentorCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                 ),
-                Text(role, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                Text(role, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
               ],
             ),
           ),
@@ -489,6 +497,7 @@ class _MentorCard extends StatelessWidget {
     );
   }
 }
+
 class _ResourceTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -509,7 +518,7 @@ class _ResourceTile extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
             ),
           ),
           Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),

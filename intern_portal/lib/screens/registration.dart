@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class RegistrationPage extends StatelessWidget {
         leading: Icon(Icons.arrow_back, color: Colors.black87),
         title: Text(
           "Internship Registration",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 17),
+          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 17),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1),
@@ -42,7 +42,7 @@ class RegistrationPage extends StatelessWidget {
                   Expanded(
                     child: Text(
                       "You can track approval status in the Requests Status section after submitting.",
-                      style: TextStyle(fontSize: 13, color: Color(0xFF3B6EF0), height: 1.4),
+                      style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF3B6EF0), height: 1.4),
                     ),
                   ),
                 ],
@@ -92,7 +92,7 @@ class RegistrationPage extends StatelessWidget {
                 expands: true,
                 decoration: InputDecoration(
                   hintText: "Briefly describe what the company does",
-                  hintStyle: TextStyle(color: Colors.grey[400], fontSize: 13),
+                  hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
                   contentPadding: EdgeInsets.all(14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -138,13 +138,10 @@ class RegistrationPage extends StatelessWidget {
                   SizedBox(height: 8),
                   Text(
                     "Click or drag and drop to upload",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
                   ),
                   SizedBox(height: 4),
-                  Text(
-                    "PDF, PNG, JPG (Max 5MB)",
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                  ),
+                  Text("PDF, PNG, JPG (Max 5MB)", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                 ],
               ),
             ),
@@ -161,7 +158,7 @@ class RegistrationPage extends StatelessWidget {
                     ),
                     child: Text(
                       "Save Draft",
-                      style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
                 ),
@@ -177,7 +174,7 @@ class RegistrationPage extends StatelessWidget {
                     ),
                     child: Text(
                       "Submit Application",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
                 ),
@@ -207,7 +204,7 @@ class _SectionHeader extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           title,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ],
     );
@@ -223,7 +220,12 @@ class _FieldLabel extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 6),
       child: Text(
         label,
-        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey[500], letterSpacing: 0.5),
+        style: GoogleFonts.inter(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey[500],
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }
@@ -237,7 +239,7 @@ class _TextField extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey[400], fontSize: 13),
+        hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
         contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

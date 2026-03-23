@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
             SizedBox(width: 8),
             Text(
               "InternPortal",
-              style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
+              style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
             ),
           ],
         ),
@@ -82,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                           children: [
                             Text(
                               "Alex Rivera",
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+                              style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
                             ),
                             SizedBox(width: 6),
                             Container(
@@ -93,9 +93,9 @@ class ProfilePage extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 4),
-                        Text("Internship No:", style: TextStyle(fontSize: 12, color: Colors.white70)),
-                        Text("2021CS101", style: TextStyle(fontSize: 12, color: Colors.white)),
-                        Text("Computer Science", style: TextStyle(fontSize: 12, color: Colors.white)),
+                        Text("Internship No:", style: GoogleFonts.inter(fontSize: 12, color: Colors.white70)),
+                        Text("2021CS101", style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
+                        Text("Computer Science", style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
                         SizedBox(height: 8),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -105,7 +105,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           child: Text(
                             "VERIFIED STUDENT",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -129,7 +129,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       Text(
                         "Personal Information",
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       TextButton(
                         onPressed: () {},
@@ -140,14 +140,14 @@ class ProfilePage extends StatelessWidget {
                         ),
                         child: Text(
                           "Quick Edit",
-                          style: TextStyle(color: Color(0xFF3B6EF0), fontSize: 12, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontSize: 12, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
                   ),
                   Text(
                     "Update your contact details & basic information.",
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
                   ),
                   SizedBox(height: 16),
                   Row(
@@ -164,7 +164,7 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 6),
                   Text(
                     "Your phone number, if be diffid on mime.",
-                    style: TextStyle(fontSize: 11, color: Colors.grey[400]),
+                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400]),
                   ),
                   SizedBox(height: 10),
                   Row(
@@ -183,9 +183,9 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 24),
                   Text(
                     "Academic Record",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
-                  Text("Verified institutional data", style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                  Text("Verified institutional data", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                   SizedBox(height: 14),
                   Row(
                     children: [
@@ -213,7 +213,7 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 24),
                   Text(
                     "Assigned Internship Guide",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   SizedBox(height: 12),
                   Container(
@@ -239,9 +239,16 @@ class ProfilePage extends StatelessWidget {
                             children: [
                               Text(
                                 "Samantha Collins",
-                                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
                               ),
-                              Text("s.collins@university.edu", style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                              Text(
+                                "s.collins@university.edu",
+                                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                              ),
                             ],
                           ),
                         ),
@@ -256,7 +263,7 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 24),
                   Text(
                     "Quick Links",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   SizedBox(height: 12),
                   Container(
@@ -280,7 +287,7 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 24),
                   Text(
                     "Campus Location",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   SizedBox(height: 12),
                   ClipRRect(
@@ -310,9 +317,9 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       "ALEX JOHNSON",
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey[600]),
+                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey[600]),
                     ),
-                    Text("ID: 2024-ST-019", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
+                    Text("ID: 2024-ST-019", style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400])),
                   ],
                 ),
               ),
@@ -338,12 +345,17 @@ class _InfoField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.4),
+          style: GoogleFonts.inter(
+            fontSize: 10,
+            color: Colors.grey[500],
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.4,
+          ),
         ),
         SizedBox(height: 3),
         Text(
           value,
-          style: TextStyle(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w500),
+          style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -368,12 +380,17 @@ class _AcademicBox extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.4),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.4,
+            ),
           ),
           SizedBox(height: 6),
           Text(
             value,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: isBlue ? Color(0xFF3B6EF0) : Colors.black87,
@@ -405,7 +422,7 @@ class _QuickLinkTile extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
             ),
           ),
           Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),

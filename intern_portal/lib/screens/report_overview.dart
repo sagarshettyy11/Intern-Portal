@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/submit_report.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
@@ -6,14 +7,12 @@ import 'package:intern_portal/widgets/bottom_navigation.dart';
 class ReportsOverviewPage extends StatefulWidget {
   const ReportsOverviewPage({super.key});
   @override
-  // ignore: library_private_types_in_public_api
-  _ReportsOverviewPageState createState() => _ReportsOverviewPageState();
+  ReportsOverviewPageState createState() => ReportsOverviewPageState();
 }
 
-class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
+class ReportsOverviewPageState extends State<ReportsOverviewPage> {
   int _selectedFilter = 0;
   final List<String> _filters = ["All Reports", "Pending", "Submitted", "Approved"];
-
   final List<Map<String, dynamic>> _reports = [
     {
       "type": "Safety Audit Q3",
@@ -76,7 +75,7 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
         leading: Icon(Icons.arrow_back, color: Colors.black87),
         title: Text(
           "Reports Overview",
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
+          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
         ),
         actions: [
           IconButton(
@@ -236,12 +235,19 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                   flex: 3,
                                   child: Text(
                                     r["type"],
-                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   flex: 2,
-                                  child: Text(r["due"], style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                                  child: Text(
+                                    r["due"],
+                                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+                                  ),
                                 ),
                                 Expanded(
                                   flex: 2,
@@ -253,7 +259,7 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                     ),
                                     child: Text(
                                       r["status"],
-                                      style: TextStyle(
+                                      style: GoogleFonts.inter(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
                                         color: r["statusColor"] as Color,
@@ -276,7 +282,7 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Showing 5 of 48 reports", style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                Text("Showing 5 of 48 reports", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                 Row(
                   children: [
                     _PageBtn(icon: Icons.chevron_left, isActive: false),
@@ -288,7 +294,7 @@ class _ReportsOverviewPageState extends State<ReportsOverviewPage> {
                       child: Center(
                         child: Text(
                           "1",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                          style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                       ),
                     ),
@@ -333,23 +339,23 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
+          Text(title, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
           SizedBox(height: 4),
           Row(
             children: [
               Text(
                 value,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
               ),
               SizedBox(width: 4),
               Text(
                 badge,
-                style: TextStyle(fontSize: 10, color: badgeColor, fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(fontSize: 10, color: badgeColor, fontWeight: FontWeight.w600),
               ),
             ],
           ),
           SizedBox(height: 2),
-          Text(sub, style: TextStyle(fontSize: 10, color: Colors.grey[400])),
+          Text(sub, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[400])),
         ],
       ),
     );
@@ -377,18 +383,18 @@ class _MetricCardWithProgress extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
+          Text(title, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
           SizedBox(height: 4),
           Row(
             children: [
               Text(
                 value,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
               ),
               SizedBox(width: 4),
               Text(
                 badge,
-                style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w600),
               ),
             ],
           ),

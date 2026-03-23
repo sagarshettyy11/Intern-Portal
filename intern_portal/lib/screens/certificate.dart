@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -25,7 +26,7 @@ class CertificatePage extends StatelessWidget {
               SizedBox(width: 6),
               Text(
                 "InternPortal",
-                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
+                style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
               ),
               SizedBox(width: 12),
             ],
@@ -47,18 +48,18 @@ class CertificatePage extends StatelessWidget {
             SizedBox(height: 10),
             Text(
               "Internship Certificate",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 4),
             Text(
               "VERIFIED ACHIEVEMENT",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF3B6EF0), letterSpacing: 1.5),
+              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF3B6EF0), letterSpacing: 1.5),
             ),
             SizedBox(height: 12),
             Text(
               "This certificate honors your outstanding performance\nand commitment during the Frontend Development\nExcellence program.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.grey[600], height: 1.5),
+              style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], height: 1.5),
             ),
             SizedBox(height: 24),
             Container(
@@ -87,7 +88,7 @@ class CertificatePage extends StatelessWidget {
                   SizedBox(height: 16),
                   Text(
                     "CERTIFICATE OF COMPLETION",
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF3B6EF0),
@@ -95,12 +96,11 @@ class CertificatePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 6),
-                  Text("This is to certify that", style: TextStyle(fontSize: 13, color: Colors.grey[500])),
+                  Text("This is to certify that", style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500])),
                   SizedBox(height: 16),
-
                   Text(
                     "Alex Johnson",
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
@@ -111,7 +111,7 @@ class CertificatePage extends StatelessWidget {
                   Text(
                     "has successfully completed a 12-week\nintensive internship in\nFrontend Development Excellence.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54, height: 1.6),
+                    style: GoogleFonts.inter(fontSize: 14, color: Colors.black54, height: 1.6),
                   ),
                   SizedBox(height: 28),
                   Row(
@@ -123,7 +123,7 @@ class CertificatePage extends StatelessWidget {
                         children: [
                           Text(
                             "J. Miller",
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               fontStyle: FontStyle.italic,
@@ -134,7 +134,7 @@ class CertificatePage extends StatelessWidget {
                           SizedBox(height: 4),
                           Text(
                             "PROGRAM DIRECTOR",
-                            style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
+                            style: GoogleFonts.inter(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
                           ),
                         ],
                       ),
@@ -152,11 +152,11 @@ class CertificatePage extends StatelessWidget {
                             children: [
                               Text(
                                 "TC-2023-8842",
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black87),
+                                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black87),
                               ),
                               Text(
                                 "VERIFICATION ID",
-                                style: TextStyle(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
+                                style: GoogleFonts.inter(fontSize: 9, color: Colors.grey[500], letterSpacing: 1),
                               ),
                             ],
                           ),
@@ -176,7 +176,7 @@ class CertificatePage extends StatelessWidget {
                 icon: Icon(Icons.download_rounded, color: Colors.white),
                 label: Text(
                   "Download as PDF",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF3B6EF0),
@@ -194,7 +194,7 @@ class CertificatePage extends StatelessWidget {
                 icon: Icon(Icons.share_outlined, color: Colors.black87),
                 label: Text(
                   "Share Achievement",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black87),
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.grey[300]!),
@@ -206,7 +206,7 @@ class CertificatePage extends StatelessWidget {
             TextButton.icon(
               onPressed: () {},
               icon: Icon(Icons.arrow_back, color: Colors.grey[600], size: 16),
-              label: Text("View Previous Internships", style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+              label: Text("View Previous Internships", style: GoogleFonts.inter(color: Colors.grey[600], fontSize: 13)),
             ),
             SizedBox(height: 16),
           ],
