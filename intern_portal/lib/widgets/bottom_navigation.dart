@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -16,15 +17,15 @@ class AppBottomNav extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFF3B6EF0),
         unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 9),
+        selectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
+        unselectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
         elevation: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'PROFILE'),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
+          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'INTERNSHIPS'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'REPORTS'),
+          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'CERTIFICATES'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
         ],
       ),
     );

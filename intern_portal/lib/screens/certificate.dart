@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class CertificatePage extends StatelessWidget {
@@ -10,29 +11,26 @@ class CertificatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF0F4FF),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF0F4FF),
-        elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black87),
+      appBar: CommonAppBar(
+        backgroundColor: const Color(0xFFF0F4FF),
+        customTitle: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
+              child: const Icon(Icons.school, color: Colors.white, size: 18),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              "InternPortal",
+              style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
+            ),
+          ],
+        ),
         actions: [
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
-                child: Icon(Icons.school, color: Colors.white, size: 18),
-              ),
-              SizedBox(width: 6),
-              Text(
-                "InternPortal",
-                style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
-              ),
-              SizedBox(width: 12),
-            ],
-          ),
           Padding(
-            padding: EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 12),
             child: CircleAvatar(
               radius: 16,
               backgroundColor: Colors.orange[200],
@@ -53,7 +51,12 @@ class CertificatePage extends StatelessWidget {
             SizedBox(height: 4),
             Text(
               "VERIFIED ACHIEVEMENT",
-              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF3B6EF0), letterSpacing: 1.5),
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF3B6EF0),
+                letterSpacing: 1.5,
+              ),
             ),
             SizedBox(height: 12),
             Text(
@@ -152,7 +155,11 @@ class CertificatePage extends StatelessWidget {
                             children: [
                               Text(
                                 "TC-2023-8842",
-                                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.black87),
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Colors.black87,
+                                ),
                               ),
                               Text(
                                 "VERIFICATION ID",

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/profile.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class InternshipsPage extends StatelessWidget {
@@ -10,32 +12,25 @@ class InternshipsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Colors.black87),
-        title: Text(
-          "My Internships",
-          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
-        ),
+      appBar: CommonAppBar(
+        title: "My Internships",
+        showBack: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black87),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
             onPressed: () {},
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.grey[300],
-              child: Icon(Icons.person, size: 18, color: Colors.grey[600]),
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => ProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

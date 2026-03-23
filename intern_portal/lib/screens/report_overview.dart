@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/submit_report.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ReportsOverviewPage extends StatefulWidget {
@@ -69,34 +70,30 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black87),
-        title: Text(
-          "Reports Overview",
-          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 17),
-        ),
+      appBar: CommonAppBar(
+        title: "Reports Overview",
+        showBack: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black87),
+            icon: const Icon(Icons.search, color: Colors.black87),
             onPressed: () {},
           ),
-          Container(
-            margin: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
-            child: IconButton(
-              icon: Icon(Icons.add, color: Colors.white, size: 20),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const SubmitReportPage()));
-              },
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const SubmitReportPage()));
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Color(0xFF3B6EF0),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

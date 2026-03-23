@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/registration.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -10,44 +11,29 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
-              child: Icon(Icons.school, color: Colors.white, size: 18),
-            ),
-            SizedBox(width: 8),
-            Text(
-              "InternPortal",
-              style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          Container(
-            margin: EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
-            child: IconButton(
-              icon: Icon(Icons.add, color: Colors.white, size: 20),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationPage()));
-              },
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const RegistrationPage()));
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Color(0xFF3B6EF0),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.notifications_outlined, color: Colors.black87),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black87),
             onPressed: () {},
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),

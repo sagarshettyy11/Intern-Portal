@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -9,42 +10,23 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(color: Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(7)),
-              child: Icon(Icons.school, color: Colors.white, size: 17),
-            ),
-            SizedBox(width: 8),
-            Text(
-              "InternPortal",
-              style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showBack: false,
+        showLogo: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_outlined, color: Colors.black87),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
             onPressed: () {},
           ),
           Padding(
-            padding: EdgeInsets.only(right: 12),
+            padding: const EdgeInsets.only(right: 12),
             child: CircleAvatar(
               radius: 16,
-              backgroundColor: Colors.brown[200],
-              child: Icon(Icons.person, size: 18, color: Colors.brown[700]),
+              backgroundColor: Colors.grey,
+              child: Icon(Icons.person, size: 18, color: Colors.black),
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(

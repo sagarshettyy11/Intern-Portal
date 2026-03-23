@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/login.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 
 class SecureAccountPage extends StatefulWidget {
   const SecureAccountPage({super.key});
@@ -42,18 +43,7 @@ class SecureAccountPageState extends State<SecureAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          "Secure Your Account",
-          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[100]),
-        ),
-      ),
+      appBar: CommonAppBar(title: "Secure your Account", showBack: true),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/app_bar.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class RegistrationPage extends StatelessWidget {
@@ -9,19 +10,7 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black87),
-        title: Text(
-          "Internship Registration",
-          style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 17),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
-      ),
+      appBar: CommonAppBar(title: "Internship Registration", showBack: true),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
