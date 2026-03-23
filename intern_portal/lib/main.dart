@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intern_portal/screens/login.dart';
+import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: CustomSnackbar.messengerKey,
+      navigatorKey: NavigationService.navigatorKey,
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
       home: const LoginPage(),
     );

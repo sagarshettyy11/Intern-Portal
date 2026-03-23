@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/dashboard.dart';
 import 'package:intern_portal/screens/secure_account.dart';
+import 'package:intern_portal/services/auth_services.dart';
+import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isLoading = false;
   bool _obscurePassword = true;
   bool _keepSignedIn = false;
   @override
@@ -54,12 +59,12 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Empowering your\nprofessional journey\nthrough academic\nexcellence.",
+                        "Empowering your professional journey through academic excellence.",
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 26,
@@ -69,11 +74,10 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "Connecting students with industry leaders to faster\n"
-                        "growth, innovation, and practical learning.",
+                        "Connecting students with industry leaders to faster growth, innovation, and practical learning.",
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
-                          fontSize: 13,
+                          fontSize: 17,
                           fontWeight: FontWeight.bold,
                           height: 1.5,
                         ),
@@ -81,7 +85,7 @@ class LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.06),
+                SizedBox(height: screenHeight * 0.02),
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -90,8 +94,9 @@ class LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                     ),
                     child: SingleChildScrollView(
+                      // physics: const NeverScrollableScrollPhysics(),
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+                        padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -123,6 +128,7 @@ class LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
+                              controller: emailController,
                               decoration: InputDecoration(
                                 hintText: "Enter your Internship ID",
                                 hintStyle: GoogleFonts.inter(
@@ -180,6 +186,7 @@ class LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 8),
                             TextField(
+                              controller: passwordController,
                               obscureText: _obscurePassword,
                               decoration: InputDecoration(
                                 hintText: "••••••••",
@@ -243,12 +250,22 @@ class LoginPageState extends State<LoginPage> {
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => DashboardPage()),
-                                  );
-                                },
+                                onPressed: isLoading
+                                    ? null
+                                    : () async {
+                                        setState(() => isLoading = true);
+                                        final result = await AuthService.login(
+                                          email: emailController.text.trim(),
+                                          password: passwordController.text.trim(),
+                                        );
+                                        setState(() => isLoading = false);
+                                        if (result['success']) {
+                                          CustomSnackbar.show(message: "Welcome back!", isSuccess: true);
+                                          NavigationService.pushReplacement(DashboardPage());
+                                        } else {
+                                          CustomSnackbar.show(message: result['message'], isSuccess: false);
+                                        }
+                                      },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF3B6EF0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

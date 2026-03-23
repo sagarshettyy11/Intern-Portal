@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
-import 'package:intern_portal/widgets/app_bar.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,14 +17,6 @@ class ProfilePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications_outlined, color: Colors.black),
             onPressed: () {},
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person, size: 18, color: Colors.black),
-            ),
           ),
         ],
       ),

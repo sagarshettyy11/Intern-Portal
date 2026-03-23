@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/login.dart';
-import 'package:intern_portal/widgets/app_bar.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class SecureAccountPage extends StatefulWidget {
   const SecureAccountPage({super.key});
