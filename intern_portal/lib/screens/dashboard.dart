@@ -1,14 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/dashboard_models.dart';
 import 'package:intern_portal/screens/registration.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
   @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  DashboardModel? dashboard;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadDashboard();
+  }
+
+  Future<void> loadDashboard() async {
+    final data = await StudentServices.fetchDashboard();
+    setState(() {
+      dashboard = data;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (dashboard == null) {
+      return Scaffold(body: Center(child: Text("Failed to load dashboard")));
+    }
+    final d = dashboard!;
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       appBar: CommonAppBar(
@@ -54,9 +85,9 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      text: "Good Morning, ",
+                      text: "${d.greeting}, ",
                       style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
-                      children: [TextSpan(text: "Alex Rivera!")],
+                      children: [TextSpan(text: "${d.student.name}!")],
                     ),
                   ),
                   SizedBox(height: 8),
@@ -66,7 +97,7 @@ class DashboardPage extends StatelessWidget {
                       style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600]),
                       children: [
                         TextSpan(
-                          text: "75%",
+                          text: "${d.internship?.completion ?? 0}%",
                           style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: " through your internship progress."),
@@ -77,7 +108,7 @@ class DashboardPage extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
-                      value: 0.75,
+                      value: (d.internship?.completion ?? 0) / 100,
                       backgroundColor: Colors.grey[200],
                       color: Color(0xFF3B6EF0),
                       minHeight: 6,
@@ -129,7 +160,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   child: _StatCard(
                     label: "ACTIVE INTERNSHIP",
-                    value: "TechCorp Solut...",
+                    value: d.internship?.company ?? "Not Assigned",
                     valueStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ),
@@ -137,7 +168,7 @@ class DashboardPage extends StatelessWidget {
                 Expanded(
                   child: _StatCard(
                     label: "PENDING REPORTS",
-                    value: "02",
+                    value: d.reports.pending.toString(),
                     valueStyle: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0)),
                   ),
                 ),

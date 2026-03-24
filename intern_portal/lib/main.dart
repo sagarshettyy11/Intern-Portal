@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intern_portal/screens/login.dart';
+import 'package:intern_portal/pages/login.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 void main() {

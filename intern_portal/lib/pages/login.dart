@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/dashboard.dart';
 import 'package:intern_portal/screens/secure_account.dart';
-import 'package:intern_portal/services/auth_services.dart';
+import 'package:intern_portal/services/authentication/auth_services.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 class LoginPage extends StatefulWidget {

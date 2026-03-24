@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/student_models.dart';
-import 'package:intern_portal/services/student_services.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -34,6 +34,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (profile == null) {
+      return Scaffold(body: Center(child: Text("Failed to load profile")));
+    }
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       appBar: CommonAppBar(
@@ -81,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Row(
                           children: [
                             Text(
-                              "Alex Rivera",
+                              profile!.personal.name,
                               style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
                             ),
                             SizedBox(width: 6),
@@ -94,8 +100,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 4),
                         Text("Internship No:", style: GoogleFonts.inter(fontSize: 12, color: Colors.white70)),
-                        Text("2021CS101", style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
-                        Text("Computer Science", style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
+                        Text(
+                          profile!.personal.registrationNo,
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.white),
+                        ),
+                        Text(profile!.academic.department, style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
                         SizedBox(height: 8),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -153,33 +162,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _InfoField(label: "FULL NAME", value: "Alex Rivera"),
+                        child: _InfoField(label: "FULL NAME", value: profile!.personal.name),
                       ),
                       SizedBox(width: 16),
                       Expanded(
-                        child: _InfoField(label: "REGISTRATION NUMBER", value: "2021CS101"),
+                        child: _InfoField(label: "REGISTRATION NUMBER", value: profile!.personal.registrationNo),
                       ),
                     ],
                   ),
                   SizedBox(height: 6),
-                  Text(
-                    "Your phone number, if be diffid on mime.",
-                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400]),
-                  ),
-                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
-                        child: _InfoField(label: "PHONE NUMBER", value: "+1 (555) 012-3456"),
+                        child: _InfoField(label: "PHONE NUMBER", value: profile!.personal.phone),
                       ),
                       SizedBox(width: 16),
                       Expanded(
-                        child: _InfoField(label: "EMAIL ADDRESS", value: "alex.rivera@university.edu"),
+                        child: _InfoField(label: "EMAIL ADDRESS", value: profile!.personal.email),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-                  _InfoField(label: "RESIDENTIAL ADDRESS", value: "42 Academic Way, University District, State 90210"),
+                  _InfoField(label: "RESIDENTIAL ADDRESS", value: profile!.personal.address),
                   SizedBox(height: 24),
                   Text(
                     "Academic Record",
@@ -190,11 +194,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _AcademicBox(label: "ENROLLMENT", value: "Comp Science", isBlue: true),
+                        child: _AcademicBox(label: "ENROLLMENT", value: profile!.academic.department, isBlue: true),
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: _AcademicBox(label: "YEAR", value: "3rd Year"),
+                        child: _AcademicBox(label: "YEAR", value: profile!.academic.year),
                       ),
                     ],
                   ),
@@ -202,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _AcademicBox(label: "CURRENT CGPA", value: "3.85 / 4.0"),
+                        child: _AcademicBox(label: "CURRENT CGPA", value: profile!.academic.cgpa?.toString() ?? "N/A"),
                       ),
                       SizedBox(width: 12),
                       Expanded(
@@ -238,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Samantha Collins",
+                                profile!.guide?.name ?? "No guide assigned",
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -246,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               Text(
-                                "s.collins@university.edu",
+                                profile!.guide?.email ?? "No guide assigned",
                                 style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
                               ),
                             ],
