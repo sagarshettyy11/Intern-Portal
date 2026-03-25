@@ -1,15 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/internship_models.dart';
 import 'package:intern_portal/screens/profile.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class InternshipsPage extends StatelessWidget {
+class InternshipsPage extends StatefulWidget {
   const InternshipsPage({super.key});
+  @override
+  State<InternshipsPage> createState() => _InternshipsPageState();
+}
+
+class _InternshipsPageState extends State<InternshipsPage> {
+  InternshipModel? data;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    final res = await StudentServices.fetchInternship();
+    setState(() {
+      data = res;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (data == null) {
+      return Scaffold(body: Center(child: Text("Failed to load")));
+    }
+    final d = data!;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: CommonAppBar(
@@ -65,7 +95,10 @@ class InternshipsPage extends StatelessWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Text("TechCorp", style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600])),
+                          Text(
+                            d.internship.company ?? "No Company",
+                            style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600]),
+                          ),
                           Text(" · ", style: GoogleFonts.inter(color: Colors.grey[400])),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -74,7 +107,7 @@ class InternshipsPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              "IN PROGRESS",
+                              d.internship.status.toUpperCase(),
                               style: GoogleFonts.inter(
                                 fontSize: 10,
                                 color: Color(0xFF3B6EF0),
@@ -95,7 +128,7 @@ class InternshipsPage extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     label: "OVERALL COMPLETION",
-                    value: "65%",
+                    value: "${d.progress.completion}%",
                     sub: "+1%",
                     subColor: Colors.green,
                     showProgress: true,
@@ -105,7 +138,7 @@ class InternshipsPage extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     label: "REPORTS SUBMITTED",
-                    value: "12/20",
+                    value: "${d.reports.approved}/${d.reports.total}",
                     sub: "Due in 2 days",
                     subColor: Colors.grey,
                   ),
@@ -114,7 +147,7 @@ class InternshipsPage extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     label: "DAYS REMAINING",
-                    value: "45 Days",
+                    value: "${d.progress.daysRemaining ?? 0} Days",
                     sub: "End Nov 15, 2024",
                     subColor: Colors.grey,
                   ),

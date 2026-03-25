@@ -16,7 +16,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final companyController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
+  final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
   final descController = TextEditingController();
+  final domainController = TextEditingController();
   final guideNameController = TextEditingController();
   final guideEmailController = TextEditingController();
   final guidePhoneController = TextEditingController();
@@ -50,6 +53,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
     'Government / PSU',
     'Other',
   ];
+
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      String formatted = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      controller.text = formatted;
+    }
+  }
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -162,6 +178,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ],
             ),
             SizedBox(height: 14),
+            _FieldLabel("INTERNSHIP DOMAIN"),
+            _TextField(controller: domainController, hint: "e.g. App Developer"),
+            SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(child: _FieldLabel("START DATE")),
+                SizedBox(width: 12),
+                Expanded(child: _FieldLabel("END DATE")),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: _TextField(
+                    hint: "From",
+                    controller: startDateController,
+                    readOnly: true,
+                    onTap: () => _selectDate(context, startDateController),
+                    suffixIcon: Icon(Icons.calendar_today_outlined),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _TextField(
+                    hint: "To",
+                    controller: endDateController,
+                    readOnly: true,
+                    onTap: () => _selectDate(context, endDateController),
+                    suffixIcon: Icon(Icons.calendar_today_outlined),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 14),
             _FieldLabel("PHONE"),
             _TextField(controller: phoneController, hint: "+1 (555) 000-0000"),
             SizedBox(height: 14),
@@ -252,6 +302,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         phone: phoneController.text,
                         address: addressController.text,
                         description: descController.text,
+                        domain: domainController.text,
+                        fromDate: startDateController.text,
+                        toDate: endDateController.text,
                         guideName: guideNameController.text,
                         guideEmail: guideEmailController.text,
                         guidePhone: guidePhoneController.text,
@@ -282,6 +335,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         phone: phoneController.text,
                         address: addressController.text,
                         description: descController.text,
+                        domain: domainController.text,
+                        fromDate: startDateController.text,
+                        toDate: endDateController.text,
                         guideName: guideNameController.text,
                         guideEmail: guideEmailController.text,
                         guidePhone: guidePhoneController.text,
@@ -362,14 +418,20 @@ class _FieldLabel extends StatelessWidget {
 class _TextField extends StatelessWidget {
   final String hint;
   final TextEditingController? controller;
-  const _TextField({required this.hint, this.controller});
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final Widget? suffixIcon;
+  const _TextField({required this.hint, this.controller, this.readOnly = false, this.onTap, this.suffixIcon});
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      readOnly: readOnly,
+      onTap: onTap,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
+        suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
