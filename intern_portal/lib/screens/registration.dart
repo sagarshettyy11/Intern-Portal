@@ -3,9 +3,60 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:file_picker/file_picker.dart';
 
-class RegistrationPage extends StatelessWidget {
+class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
+
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  String? selectedCategory;
+  String? selectedIndustry;
+  PlatformFile? selectedFile;
+  final List<String> categories = [
+    '7 days',
+    '10 days',
+    '15 days',
+    '1 months',
+    '1.5 months',
+    '2 months',
+    '2.5 months',
+    '3 months',
+    '4 months',
+    '6 months',
+    '6 + months',
+  ];
+
+  final List<String> industries = [
+    'Information Technology',
+    'Software Development',
+    'Banking & Finance',
+    'Automobile',
+    'Aerospace',
+    'Pharmaceutical',
+    'Telecommunications',
+    'Retail & E-Commerce',
+    'Hospitality',
+    'Government / PSU',
+    'Other',
+  ];
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedFile = result.files.first;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +101,25 @@ class RegistrationPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _FieldLabel("SELECT CATEGORY"),
-                      _DropdownField(hint: "Choose..."),
+                      DropdownButtonFormField<String>(
+                        initialValue: selectedCategory,
+                        hint: Text("Choose..."),
+                        items: categories.map((item) {
+                          return DropdownMenuItem(value: item, child: Text(item));
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategory = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -60,7 +129,26 @@ class RegistrationPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _FieldLabel("INDUSTRY"),
-                      _DropdownField(hint: "Choose..."),
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        initialValue: selectedIndustry,
+                        hint: Text("Choose..."),
+                        items: industries.map((item) {
+                          return DropdownMenuItem(value: item, child: Text(item));
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedIndustry = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -113,27 +201,45 @@ class RegistrationPage extends StatelessWidget {
             _SectionHeader(icon: Icons.description_outlined, title: "Documentation"),
             SizedBox(height: 14),
             _FieldLabel("OFFER LETTER"),
-            Container(
-              height: 130,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[300]!, style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 36),
-                  SizedBox(height: 8),
-                  Text(
-                    "Click or drag and drop to upload",
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
-                  ),
-                  SizedBox(height: 4),
-                  Text("PDF, PNG, JPG (Max 5MB)", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
-                ],
-              ),
-            ),
+            GestureDetector(
+  onTap: pickFile, // 🔥 CLICK TO PICK FILE
+  child: Container(
+    height: 130,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey[300]!),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 36),
+        SizedBox(height: 8),
+
+        // 🔥 CHANGE TEXT BASED ON FILE
+        Text(
+          selectedFile != null
+              ? selectedFile!.name
+              : "Click to upload file",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w600,
+            fontSize: 13,
+            color: Colors.black87,
+          ),
+        ),
+
+        SizedBox(height: 4),
+
+        Text(
+          selectedFile != null
+              ? "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB"
+              : "PDF, PNG, JPG (Max 5MB)",
+          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+        ),
+      ],
+    ),
+  ),
+),
             SizedBox(height: 30),
             Row(
               children: [
@@ -242,28 +348,6 @@ class _TextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Color(0xFF3B6EF0)),
         ),
-      ),
-    );
-  }
-}
-
-class _DropdownField extends StatelessWidget {
-  final String hint;
-  const _DropdownField({required this.hint});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(hint, style: TextStyle(color: Colors.grey[400], fontSize: 13)),
-          Icon(Icons.keyboard_arrow_down, color: Colors.grey[500], size: 20),
-        ],
       ),
     );
   }
