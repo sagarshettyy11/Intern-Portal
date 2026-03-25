@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:file_picker/file_picker.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
-
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final companyController = TextEditingController();
+  final phoneController = TextEditingController();
+  final addressController = TextEditingController();
+  final descController = TextEditingController();
+  final guideNameController = TextEditingController();
+  final guideEmailController = TextEditingController();
+  final guidePhoneController = TextEditingController();
   String? selectedCategory;
   String? selectedIndustry;
   PlatformFile? selectedFile;
@@ -92,7 +99,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             _SectionHeader(icon: Icons.grid_view_rounded, title: "Company Details"),
             SizedBox(height: 14),
             _FieldLabel("COMPANY NAME"),
-            _TextField(hint: "e.g. Acme Corp"),
+            _TextField(controller: companyController, hint: "e.g. Acme Corp"),
             SizedBox(height: 14),
             Row(
               children: [
@@ -156,10 +163,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             SizedBox(height: 14),
             _FieldLabel("PHONE"),
-            _TextField(hint: "+1 (555) 000-0000"),
+            _TextField(controller: phoneController, hint: "+1 (555) 000-0000"),
             SizedBox(height: 14),
             _FieldLabel("ADDRESS"),
-            _TextField(hint: "Full office address"),
+            _TextField(controller: addressController, hint: "Full office address"),
             SizedBox(height: 14),
             _FieldLabel("COMPANY DESCRIPTION"),
             SizedBox(
@@ -167,6 +174,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               child: TextField(
                 maxLines: null,
                 expands: true,
+                controller: descController,
                 decoration: InputDecoration(
                   hintText: "Briefly describe what the company does",
                   hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
@@ -190,62 +198,67 @@ class _RegistrationPageState extends State<RegistrationPage> {
             _SectionHeader(icon: Icons.person_outline_rounded, title: "Industry Guide Details"),
             SizedBox(height: 14),
             _FieldLabel("GUIDE NAME"),
-            _TextField(hint: "John Doe"),
+            _TextField(controller: guideNameController, hint: "John Doe"),
             SizedBox(height: 14),
             _FieldLabel("EMAIL ADDRESS"),
-            _TextField(hint: "john.doe@company.com"),
+            _TextField(controller: guideEmailController, hint: "john.doe@company.com"),
             SizedBox(height: 14),
             _FieldLabel("PHONE"),
-            _TextField(hint: "+1 (555) 000-0000"),
+            _TextField(controller: guidePhoneController, hint: "+1 (555) 000-0000"),
             SizedBox(height: 24),
             _SectionHeader(icon: Icons.description_outlined, title: "Documentation"),
             SizedBox(height: 14),
             _FieldLabel("OFFER LETTER"),
             GestureDetector(
-  onTap: pickFile, // 🔥 CLICK TO PICK FILE
-  child: Container(
-    height: 130,
-    width: double.infinity,
-    decoration: BoxDecoration(
-      border: Border.all(color: Colors.grey[300]!),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 36),
-        SizedBox(height: 8),
-
-        // 🔥 CHANGE TEXT BASED ON FILE
-        Text(
-          selectedFile != null
-              ? selectedFile!.name
-              : "Click to upload file",
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w600,
-            fontSize: 13,
-            color: Colors.black87,
-          ),
-        ),
-
-        SizedBox(height: 4),
-
-        Text(
-          selectedFile != null
-              ? "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB"
-              : "PDF, PNG, JPG (Max 5MB)",
-          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
-        ),
-      ],
-    ),
-  ),
-),
+              onTap: pickFile,
+              child: Container(
+                height: 130,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 36),
+                    SizedBox(height: 8),
+                    Text(
+                      selectedFile != null ? selectedFile!.name : "Click to upload file",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      selectedFile != null
+                          ? "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB"
+                          : "PDF, PNG, JPG (Max 5MB)",
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(height: 30),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final res = await StudentServices.submitForm(
+                        formAction: "draft",
+                        companyName: companyController.text,
+                        category: selectedCategory ?? "",
+                        industry: selectedIndustry ?? "",
+                        phone: phoneController.text,
+                        address: addressController.text,
+                        description: descController.text,
+                        guideName: guideNameController.text,
+                        guideEmail: guideEmailController.text,
+                        guidePhone: guidePhoneController.text,
+                        file: selectedFile,
+                      );
+                      debugPrint(res.toString());
+                    },
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 14),
                       side: BorderSide(color: Colors.grey[400]!),
@@ -260,7 +273,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final res = await StudentServices.submitForm(
+                        formAction: "submit",
+                        companyName: companyController.text,
+                        category: selectedCategory ?? "",
+                        industry: selectedIndustry ?? "",
+                        phone: phoneController.text,
+                        address: addressController.text,
+                        description: descController.text,
+                        guideName: guideNameController.text,
+                        guideEmail: guideEmailController.text,
+                        guidePhone: guidePhoneController.text,
+                        file: selectedFile,
+                      );
+
+                      if (res['success'] == true) {
+                        debugPrint("SUCCESS");
+                      } else {
+                        debugPrint(res['message']);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF3B6EF0),
                       padding: EdgeInsets.symmetric(vertical: 14),
@@ -328,10 +361,12 @@ class _FieldLabel extends StatelessWidget {
 
 class _TextField extends StatelessWidget {
   final String hint;
-  const _TextField({required this.hint});
+  final TextEditingController? controller;
+  const _TextField({required this.hint, this.controller});
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
