@@ -16,8 +16,8 @@ class InternshipModel {
       internship: InternshipInfo.fromJson(json['internship']),
       reports: ReportStats.fromJson(json['reports']),
       progress: Progress.fromJson(json['progress']),
-      milestones: (json['milestones'] as List).map((e) => Milestone.fromJson(e)).toList(),
-      mentors: (json['mentors'] as List).map((e) => Mentor.fromJson(e)).toList(),
+      milestones: (json['milestones'] ?? []).map<Milestone>((e) => Milestone.fromJson(e)).toList(),
+      mentors: (json['mentors'] ?? []).map<Mentor>((e) => Mentor.fromJson(e)).toList(),
     );
   }
 }
@@ -32,8 +32,8 @@ class InternshipInfo {
     return InternshipInfo(
       company: json['company_name'],
       status: json['status'] ?? '',
-      startDate: json['start_date'],
-      endDate: json['end_date'],
+      startDate: json['start_date'] == "0000-00-00" ? null : json['start_date'],
+      endDate: json['end_date'] == "0000-00-00" ? null : json['end_date'],
     );
   }
 }
@@ -59,8 +59,8 @@ class Progress {
   Progress({required this.completion, this.daysRemaining, required this.grade});
   factory Progress.fromJson(Map<String, dynamic> json) {
     return Progress(
-      completion: json['completion_percentage'] ?? 0,
-      daysRemaining: json['days_remaining'],
+      completion: int.tryParse(json['completion_percentage'].toString()) ?? 0,
+      daysRemaining: json['days_remaining'] != null ? int.tryParse(json['days_remaining'].toString()) : null,
       grade: json['grade'] ?? '',
     );
   }

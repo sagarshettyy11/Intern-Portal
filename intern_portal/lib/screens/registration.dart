@@ -13,6 +13,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final jobTitleController = TextEditingController();
   final companyController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
@@ -24,8 +25,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final guideEmailController = TextEditingController();
   final guidePhoneController = TextEditingController();
   String? selectedCategory;
+  String? selectedMode;
   String? selectedIndustry;
   PlatformFile? selectedFile;
+
+  final List<String> modes = ['On-Site', 'Remote', 'Hybrid'];
+
   final List<String> categories = [
     '7 days',
     '10 days',

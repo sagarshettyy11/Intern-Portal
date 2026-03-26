@@ -180,7 +180,7 @@ class _DashboardPageState extends State<DashboardPage> {
               style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 14),
-            _JourneyTimeline(),
+            _JourneyTimeline(steps: dashboard!.journey),
             SizedBox(height: 22),
             Text(
               "Priority Alerts",
@@ -314,15 +314,18 @@ class _StatCard extends StatelessWidget {
 }
 
 class _JourneyTimeline extends StatelessWidget {
+  final List<JourneyStep> steps;
+  const _JourneyTimeline({required this.steps});
   @override
   Widget build(BuildContext context) {
-    final steps = ["Applied", "Approved", "Active", "Reviewing", "Completed"];
-    final completedCount = 3;
     return Row(
       children: List.generate(steps.length, (i) {
-        bool isCompleted = i < completedCount - 1;
-        bool isActive = i == completedCount - 1;
-        bool isFuture = i >= completedCount;
+        final step = steps[i];
+
+        bool isCompleted = step.status == "done";
+        bool isActive = step.status == "active";
+        bool isFuture = step.status == "pending";
+
         return Expanded(
           child: Column(
             children: [
@@ -332,9 +335,12 @@ class _JourneyTimeline extends StatelessWidget {
                     Expanded(
                       child: Container(
                         height: 2,
-                        color: isCompleted || isActive ? Color(0xFF3B6EF0) : Colors.grey[300],
+                        color: (steps[i - 1].status == "done" || steps[i - 1].status == "active")
+                            ? Color(0xFF3B6EF0)
+                            : Colors.grey[300],
                       ),
                     ),
+
                   Container(
                     width: 28,
                     height: 28,
@@ -365,15 +371,21 @@ class _JourneyTimeline extends StatelessWidget {
                           : Colors.grey[400],
                     ),
                   ),
+
                   if (i < steps.length - 1)
                     Expanded(
-                      child: Container(height: 2, color: i < completedCount - 1 ? Color(0xFF3B6EF0) : Colors.grey[300]),
+                      child: Container(
+                        height: 2,
+                        color: (step.status == "done" || step.status == "active")
+                            ? Color(0xFF3B6EF0)
+                            : Colors.grey[300],
+                      ),
                     ),
                 ],
               ),
               SizedBox(height: 6),
               Text(
-                steps[i],
+                step.label,
                 style: GoogleFonts.inter(
                   fontSize: 10,
                   fontWeight: isActive ? FontWeight.bold : FontWeight.w500,

@@ -191,9 +191,14 @@ class _InternshipsPageState extends State<InternshipsPage> {
               style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
-            _MentorCard(name: "Dr. Robert Chen", role: "Software Engineer (Industry)"),
-            const SizedBox(height: 10),
-            _MentorCard(name: "Prof. Sarah Miller", role: "Academic Supervisor"),
+            Column(
+              children: d.mentors.map((mentor) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _MentorCard(name: mentor.name, role: mentor.role),
+                );
+              }).toList(),
+            ),
             const SizedBox(height: 22),
             Text(
               "Helpful Resources",

@@ -99,6 +99,38 @@ class StudentServices {
     }
   }
 
+  static Future<Map<String, dynamic>> submitReport({
+    required String reportType,
+    required String periodStart,
+    required String periodEnd,
+    required String description,
+    required String learningOutcomes,
+    required String challenges,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      var request = http.MultipartRequest('POST', Uri.parse("${ApiEndpoints.base}/reports/submit_report.php"));
+      request.headers['Authorization'] = 'Bearer $token';
+      request.fields.addAll({
+        "report_type": reportType,
+        "period_start": periodStart,
+        "period_end": periodEnd,
+        "activity_description": description,
+        "learning_outcomes": learningOutcomes,
+        "challenges": challenges,
+      });
+      var response = await request.send();
+      var resBody = await response.stream.bytesToString();
+      debugPrint("REPORT RESPONSE: $resBody");
+      final json = jsonDecode(resBody);
+      return json;
+    } catch (e) {
+      debugPrint("REPORT ERROR: $e");
+      return {"success": false, "message": "Something went wrong"};
+    }
+  }
+
   static Future<StudentProfile?> fetchProfile() async {
     try {
       final token = await AuthStorage.getToken();

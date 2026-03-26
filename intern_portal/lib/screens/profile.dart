@@ -320,10 +320,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   children: [
                     Text(
-                      "ALEX JOHNSON",
-                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.grey[600]),
+                      profile!.personal.name.toUpperCase(),
+                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[500]),
                     ),
-                    Text("ID: 2024-ST-019", style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400])),
+                    Text(
+                      profile!.personal.registrationNo,
+                      style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400]),
+                    ),
                   ],
                 ),
               ),
