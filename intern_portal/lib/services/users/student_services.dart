@@ -106,11 +106,12 @@ class StudentServices {
     required String description,
     required String learningOutcomes,
     required String challenges,
+    PlatformFile? file,
   }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-      var request = http.MultipartRequest('POST', Uri.parse("${ApiEndpoints.base}/reports/submit_report.php"));
+      var request = http.MultipartRequest('POST', Uri.parse(ApiEndpoints.reports));
       request.headers['Authorization'] = 'Bearer $token';
       request.fields.addAll({
         "report_type": reportType,
@@ -120,14 +121,17 @@ class StudentServices {
         "learning_outcomes": learningOutcomes,
         "challenges": challenges,
       });
+      if (file != null && file.path != null) {
+        request.files.add(await http.MultipartFile.fromPath('attachment', file.path!));
+      }
       var response = await request.send();
       var resBody = await response.stream.bytesToString();
-      debugPrint("REPORT RESPONSE: $resBody");
-      final json = jsonDecode(resBody);
-      return json;
+      debugPrint("STATUS: ${response.statusCode}");
+      debugPrint("BODY: $resBody");
+      return jsonDecode(resBody);
     } catch (e) {
-      debugPrint("REPORT ERROR: $e");
-      return {"success": false, "message": "Something went wrong"};
+      debugPrint("ERROR: $e");
+      return {"success": false};
     }
   }
 

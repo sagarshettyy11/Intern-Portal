@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -491,7 +492,38 @@ class SubmitReportPageState extends State<SubmitReportPage> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () async {
+                  if (selectedReportType == null || startDate == null || endDate == null) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Please fill all required fields")));
+                    return;
+                  }
+                  if (descController.text.length < 20) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Description must be at least 20 characters")));
+                    return;
+                  }
+                  String format(DateTime d) => d.toString().split(" ")[0];
+                  final res = await StudentServices.submitReport(
+                    reportType: selectedReportType!,
+                    periodStart: format(startDate!),
+                    periodEnd: format(endDate!),
+                    description: descController.text,
+                    learningOutcomes: learningController.text,
+                    challenges: challengesController.text,
+                    file: selectedFile,
+                  );
+                  if (res['success'] == true) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Report submitted successfully")));
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res['message'] ?? "Failed")));
+                  }
+                },
                 icon: Icon(Icons.send, color: Colors.white, size: 18),
                 label: Text(
                   "Submit Report",
@@ -528,38 +560,6 @@ class SubmitReportPageState extends State<SubmitReportPage> {
       bottomNavigationBar: AppBottomNav(
         currentIndex: 1,
         onTap: (index) => BottomNavController.onItemTapped(context, index),
-      ),
-    );
-  }
-}
-
-class _DropdownBox extends StatelessWidget {
-  final String hint;
-  final bool hasIcon;
-  final bool hasCalendarIcon;
-  const _DropdownBox({required this.hint, this.hasIcon = false, this.hasCalendarIcon = false});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              hint,
-              style: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          hasCalendarIcon
-              ? Icon(Icons.calendar_today_outlined, color: Colors.grey[400], size: 16)
-              : Icon(Icons.keyboard_arrow_down, color: Colors.grey[400], size: 20),
-        ],
       ),
     );
   }
