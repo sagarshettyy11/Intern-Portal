@@ -27,3 +27,6 @@ final List<String> industries = [
   'Government / PSU',
   'Other',
 ];
+
+// Report
+final List<String> filters = ["All Reports", "Pending", "Submitted", "Approved"];

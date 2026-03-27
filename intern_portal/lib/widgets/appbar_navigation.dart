@@ -9,7 +9,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
   final bool showDivider;
   final Widget? customTitle;
-
   const CommonAppBar({
     super.key,
     this.title,
@@ -20,7 +19,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showDivider = true,
     this.customTitle,
   });
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -29,7 +27,6 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       leadingWidth: showBack ? 40 : null,
       titleSpacing: showBack ? 0 : 12,
-
       leading: showBack
           ? IconButton(
               padding: EdgeInsets.zero,
@@ -49,10 +46,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                       decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
                       child: const Icon(Icons.school, color: Colors.white, size: 18),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Text(
                       "InternPortal",
-                      style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
+                      style: GoogleFonts.inter(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
                     ),
                   ],
                 )

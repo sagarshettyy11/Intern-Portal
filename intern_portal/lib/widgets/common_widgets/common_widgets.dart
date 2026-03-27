@@ -10,11 +10,11 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: Color(0xFF3B6EF0), size: 22),
+        Icon(icon, color: Color(0xFF3B6EF0), size: 22, fontWeight: FontWeight.bold),
         SizedBox(width: 8),
         Text(
           title,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ],
     );

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/data/student/registeration_data.dart';
 import 'package:intern_portal/screens/submit_report.dart';
 import 'package:intern_portal/services/users/student_services.dart';
+import 'package:intern_portal/themes/status_utils.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -14,7 +16,6 @@ class ReportsOverviewPage extends StatefulWidget {
 
 class ReportsOverviewPageState extends State<ReportsOverviewPage> {
   int _selectedFilter = 0;
-  final List<String> _filters = ["All Reports", "Pending", "Submitted", "Approved"];
   List<dynamic> reports = [];
   Map<String, dynamic>? stats;
   bool isLoading = true;
@@ -37,40 +38,10 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
 
   List filteredReports() {
     if (_selectedFilter == 0) return reports;
-    String filter = _filters[_selectedFilter].toLowerCase();
+    String filter = filters[_selectedFilter].toLowerCase();
     return reports.where((r) {
       return (r["display_status"] ?? "").toLowerCase().contains(filter);
     }).toList();
-  }
-
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return Colors.green;
-      case "pending":
-        return Colors.blue;
-      case "submitted":
-        return Colors.orange;
-      case "overdue":
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  Color getStatusBg(String status) {
-    switch (status.toLowerCase()) {
-      case "approved":
-        return Color(0xFFEAF7EF);
-      case "pending":
-        return Color(0xFFEFF4FF);
-      case "submitted":
-        return Color(0xFFFFF8E6);
-      case "overdue":
-        return Color(0xFFFFF1F1);
-      default:
-        return Colors.grey.shade200;
-    }
   }
 
   @override
@@ -82,7 +53,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
         showBack: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black87),
+            icon: const Icon(Icons.search, color: Colors.black87, fontWeight: FontWeight.bold),
             onPressed: () {},
           ),
           GestureDetector(
@@ -97,7 +68,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.add, color: Colors.white, size: 18),
+              child: const Icon(Icons.add, color: Colors.white, size: 18, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -141,26 +112,26 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
             ),
             SizedBox(height: 14),
             SizedBox(
-              height: 38,
+              height: 30,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: _filters.length,
+                itemCount: filters.length,
                 separatorBuilder: (_, _) => SizedBox(width: 8),
                 itemBuilder: (context, i) {
                   final selected = _selectedFilter == i;
                   return GestureDetector(
                     onTap: () => setState(() => _selectedFilter = i),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                       decoration: BoxDecoration(
                         color: selected ? Color(0xFF3B6EF0) : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        _filters[i],
+                        filters[i],
                         style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           color: selected ? Colors.white : Colors.grey[700],
                         ),
                       ),
@@ -192,7 +163,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.grey[500],
+                                color: Colors.grey[900],
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -204,7 +175,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.grey[500],
+                                color: Colors.grey[900],
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -216,7 +187,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.grey[500],
+                                color: Colors.grey[900],
                                 letterSpacing: 0.5,
                               ),
                             ),
@@ -241,7 +212,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                   child: Text(
                                     r["report_type"] ?? "",
                                     style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.w700,
                                       fontSize: 13,
                                       color: Colors.black87,
                                     ),
@@ -251,7 +222,11 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                   flex: 2,
                                   child: Text(
                                     r["deadline_date"] ?? "",
-                                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
@@ -260,13 +235,13 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: getStatusBg(r["display_status"] ?? ""),
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
                                       r["display_status"] ?? "",
                                       style: GoogleFonts.inter(
                                         fontSize: 11,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w700,
                                         color: getStatusColor(r["display_status"] ?? ""),
                                       ),
                                       textAlign: TextAlign.center,
@@ -289,7 +264,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
               children: [
                 Text(
                   "Showing ${reports.length} reports",
-                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[900]),
                 ),
                 Row(
                   children: [
@@ -347,23 +322,29 @@ class _MetricCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
+          Text(
+            title,
+            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.bold),
+          ),
           SizedBox(height: 4),
           Row(
             children: [
               Text(
                 value,
-                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
               ),
               SizedBox(width: 4),
               Text(
                 badge,
-                style: GoogleFonts.inter(fontSize: 10, color: badgeColor, fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(fontSize: 12, color: badgeColor, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           SizedBox(height: 2),
-          Text(sub, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[400])),
+          Text(
+            sub,
+            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
@@ -383,7 +364,7 @@ class _PageBtn extends StatelessWidget {
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Icon(icon, size: 18, color: Colors.grey[500]),
+      child: Icon(icon, size: 18, color: Colors.grey[800], fontWeight: FontWeight.bold),
     );
   }
 }

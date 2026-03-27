@@ -5,10 +5,11 @@ import 'package:intern_portal/models/student_models.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
+import 'package:intern_portal/widgets/common_widgets/profile_widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
-
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -16,7 +17,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   StudentProfile? profile;
   bool isLoading = true;
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         showLogo: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black, fontWeight: FontWeight.bold),
             onPressed: () {},
           ),
         ],
@@ -90,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               profile!.personal.name,
                               style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
                             ),
-                            SizedBox(width: 6),
+                            SizedBox(width: 4),
                             Container(
                               width: 14,
                               height: 14,
@@ -98,18 +98,23 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 4),
-                        Text("Internship No:", style: GoogleFonts.inter(fontSize: 12, color: Colors.white70)),
+                        Text(
+                          "Internship No:",
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.bold),
+                        ),
                         Text(
                           profile!.personal.registrationNo,
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.white),
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        Text(profile!.academic.department, style: GoogleFonts.inter(fontSize: 12, color: Colors.white)),
+                        Text(
+                          profile!.academic.department,
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                         SizedBox(height: 8),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: Colors.green.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -117,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -136,37 +141,34 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Personal Information",
-                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
-                      ),
+                      SectionHeader(icon: Icons.person_outline, title: "Personal Information"),
                       TextButton(
                         onPressed: () {},
                         style: TextButton.styleFrom(
                           backgroundColor: Color(0xFFEFF4FF),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: EdgeInsets.symmetric(horizontal: 12),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         ),
                         child: Text(
                           "Quick Edit",
-                          style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontSize: 12, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                   Text(
                     "Update your contact details & basic information.",
-                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
-                        child: _InfoField(label: "FULL NAME", value: profile!.personal.name),
+                        child: InfoField(label: "FULL NAME", value: profile!.personal.name),
                       ),
                       SizedBox(width: 16),
                       Expanded(
-                        child: _InfoField(label: "REGISTRATION NUMBER", value: profile!.personal.registrationNo),
+                        child: InfoField(label: "REGISTRATION NUMBER", value: profile!.personal.registrationNo),
                       ),
                     ],
                   ),
@@ -174,31 +176,32 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _InfoField(label: "PHONE NUMBER", value: profile!.personal.phone),
+                        child: InfoField(label: "PHONE NUMBER", value: profile!.personal.phone),
                       ),
                       SizedBox(width: 16),
                       Expanded(
-                        child: _InfoField(label: "EMAIL ADDRESS", value: profile!.personal.email),
+                        child: InfoField(label: "EMAIL ADDRESS", value: profile!.personal.email),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-                  _InfoField(label: "RESIDENTIAL ADDRESS", value: profile!.personal.address),
+                  InfoField(label: "RESIDENTIAL ADDRESS", value: profile!.personal.address),
                   SizedBox(height: 24),
+                  SectionHeader(icon: Icons.school_outlined, title: "Academic Record"),
+                  SizedBox(height: 6),
                   Text(
-                    "Academic Record",
-                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                    "Verified institutional data",
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.bold),
                   ),
-                  Text("Verified institutional data", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                   SizedBox(height: 14),
                   Row(
                     children: [
                       Expanded(
-                        child: _AcademicBox(label: "ENROLLMENT", value: profile!.academic.department, isBlue: true),
+                        child: AcademicBox(label: "ENROLLMENT", value: profile!.academic.department, isBlue: true),
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: _AcademicBox(label: "YEAR", value: profile!.academic.year),
+                        child: AcademicBox(label: "YEAR", value: profile!.academic.year),
                       ),
                     ],
                   ),
@@ -206,11 +209,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: [
                       Expanded(
-                        child: _AcademicBox(label: "CURRENT CGPA", value: profile!.academic.cgpa?.toString() ?? "N/A"),
+                        child: AcademicBox(label: "CURRENT CGPA", value: profile!.academic.cgpa?.toString() ?? "N/A"),
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: _AcademicBox(label: "CREDITS EARNED", value: "92 Credits"),
+                        child: AcademicBox(label: "CREDITS EARNED", value: "92 Credits"),
                       ),
                     ],
                   ),
@@ -244,14 +247,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               Text(
                                 profile!.guide?.name ?? "No guide assigned",
                                 style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                   color: Colors.black87,
                                 ),
                               ),
                               Text(
                                 profile!.guide?.email ?? "No guide assigned",
-                                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: Colors.grey[500],
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -259,16 +266,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(Icons.mail_outline, color: Color(0xFF3B6EF0), size: 18),
+                          child: Icon(
+                            Icons.mail_outline,
+                            color: Color(0xFF3B6EF0),
+                            size: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text(
-                    "Quick Links",
-                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
-                  ),
+                  SectionHeader(icon: Icons.link, title: "Quick Links"),
                   SizedBox(height: 12),
                   Container(
                     decoration: BoxDecoration(
@@ -280,19 +289,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: Column(
                       children: [
-                        _QuickLinkTile(icon: Icons.help_outline, title: "FAQ & Support"),
+                        QuickLinkTile(icon: Icons.help_outline, title: "FAQ & Support"),
                         Divider(height: 1, indent: 50),
-                        _QuickLinkTile(icon: Icons.article_outlined, title: "Internship Guidelines"),
+                        QuickLinkTile(icon: Icons.article_outlined, title: "Internship Guidelines"),
                         Divider(height: 1, indent: 50),
-                        _QuickLinkTile(icon: Icons.menu_book_outlined, title: "Student Handbook"),
+                        QuickLinkTile(icon: Icons.menu_book_outlined, title: "Student Handbook"),
                       ],
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text(
-                    "Campus Location",
-                    style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
-                  ),
+                  SectionHeader(icon: Icons.location_on, title: "Campus Location"),
                   SizedBox(height: 12),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
@@ -302,10 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Color(0xFF2D6B6B),
                       child: Stack(
                         alignment: Alignment.center,
-                        children: [
-                          CustomPaint(painter: _MapGridPainter()),
-                          Icon(Icons.location_on, color: Color(0xFF3B6EF0), size: 36),
-                        ],
+                        children: [Icon(Icons.location_on, color: Color(0xFF3B6EF0), size: 36)],
                       ),
                     ),
                   ),
@@ -340,124 +343,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
-
-class _InfoField extends StatelessWidget {
-  final String label, value;
-  const _InfoField({required this.label, required this.value});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 10,
-            color: Colors.grey[500],
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-          ),
-        ),
-        SizedBox(height: 3),
-        Text(
-          value,
-          style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w500),
-        ),
-      ],
-    );
-  }
-}
-
-class _AcademicBox extends StatelessWidget {
-  final String label, value;
-  final bool isBlue;
-  const _AcademicBox({required this.label, required this.value, this.isBlue = false});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 6, offset: Offset(0, 2))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: 10,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.4,
-            ),
-          ),
-          SizedBox(height: 6),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isBlue ? Color(0xFF3B6EF0) : Colors.black87,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _QuickLinkTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const _QuickLinkTile({required this.icon, required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-            child: Icon(icon, color: const Color(0xFF3B6EF0), size: 18),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              title,
-              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-            ),
-          ),
-          Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
-        ],
-      ),
-    );
-  }
-}
-
-class _MapGridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.12)
-      ..strokeWidth = 1;
-    for (double x = 0; x < size.width; x += 20) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-    for (double y = 0; y < size.height; y += 20) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-    final roadPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.08)
-      ..strokeWidth = 6;
-    canvas.drawLine(Offset(0, size.height * 0.4), Offset(size.width, size.height * 0.4), roadPaint);
-    canvas.drawLine(Offset(size.width * 0.5, 0), Offset(size.width * 0.5, size.height), roadPaint);
-  }
-
-  @override
-  bool shouldRepaint(_) => false;
 }

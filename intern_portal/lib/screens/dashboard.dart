@@ -59,24 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
-          Stack(
-            children: [
-              Icon(Icons.notifications_outlined, size: 30),
-              if (d.alerts.isNotEmpty)
-                Positioned(
-                  right: 0,
-                  top: 12,
-                  child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                    child: Text(
-                      d.alerts.length.toString(),
-                      style: GoogleFonts.inter(fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+          Icon(Icons.add, color: Colors.white, size: 18),
         ],
       ),
       body: SingleChildScrollView(
