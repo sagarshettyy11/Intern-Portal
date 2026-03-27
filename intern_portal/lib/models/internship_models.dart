@@ -25,11 +25,13 @@ class InternshipModel {
 class InternshipInfo {
   final String? company;
   final String status;
+  final String? jobTitle;
   final String? startDate;
   final String? endDate;
-  InternshipInfo({this.company, required this.status, this.startDate, this.endDate});
+  InternshipInfo({this.company, this.jobTitle, required this.status, this.startDate, this.endDate});
   factory InternshipInfo.fromJson(Map<String, dynamic> json) {
     return InternshipInfo(
+      jobTitle: json['job_title'],
       company: json['company_name'],
       status: json['status'] ?? '',
       startDate: json['start_date'] == "0000-00-00" ? null : json['start_date'],

@@ -48,6 +48,7 @@ class FieldLabel extends StatelessWidget {
 }
 
 class CustomTextField extends StatelessWidget {
+  final IconData? icon;
   final String hint;
   final TextEditingController? controller;
   final bool readOnly;
@@ -58,6 +59,7 @@ class CustomTextField extends StatelessWidget {
   final bool expands;
   const CustomTextField({
     super.key,
+    this.icon,
     required this.hint,
     this.controller,
     this.readOnly = false,

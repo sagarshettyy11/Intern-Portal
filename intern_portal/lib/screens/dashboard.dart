@@ -317,6 +317,7 @@ class _StatCard extends StatelessWidget {
 class _JourneyTimeline extends StatelessWidget {
   final List<JourneyStep> steps;
   const _JourneyTimeline({required this.steps});
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -330,12 +331,12 @@ class _JourneyTimeline extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  if (i > 0)
+                  if (i != 0)
                     Expanded(
                       child: Container(
                         height: 2,
                         color: (steps[i - 1].status == "done" || steps[i - 1].status == "active")
-                            ? Color(0xFF3B6EF0)
+                            ? const Color(0xFF3B6EF0)
                             : Colors.grey[300],
                       ),
                     ),
@@ -344,12 +345,12 @@ class _JourneyTimeline extends StatelessWidget {
                     height: 28,
                     decoration: BoxDecoration(
                       color: isCompleted
-                          ? Color(0xFF3B6EF0)
+                          ? const Color(0xFF3B6EF0)
                           : isActive
                           ? Colors.white
                           : Colors.grey[200],
                       shape: BoxShape.circle,
-                      border: Border.all(color: isActive ? Color(0xFF3B6EF0) : Colors.transparent, width: 2),
+                      border: Border.all(color: isActive ? const Color(0xFF3B6EF0) : Colors.transparent, width: 2),
                     ),
                     child: Icon(
                       isCompleted
@@ -365,33 +366,44 @@ class _JourneyTimeline extends StatelessWidget {
                       color: isCompleted
                           ? Colors.white
                           : isActive
-                          ? Color(0xFF3B6EF0)
+                          ? const Color(0xFF3B6EF0)
                           : Colors.grey[400],
                     ),
                   ),
-
-                  if (i < steps.length - 1)
+                  if (i != steps.length - 1)
                     Expanded(
                       child: Container(
                         height: 2,
                         color: (step.status == "done" || step.status == "active")
-                            ? Color(0xFF3B6EF0)
+                            ? const Color(0xFF3B6EF0)
                             : Colors.grey[300],
                       ),
                     ),
                 ],
               ),
-              SizedBox(height: 6),
-              Text(
-                step.label,
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                  color: isActive
-                      ? Color(0xFF3B6EF0)
-                      : isFuture
-                      ? Colors.grey[400]
-                      : Colors.black87,
+              const SizedBox(height: 6),
+              Align(
+                alignment: i == 0
+                    ? Alignment.centerLeft
+                    : i == steps.length - 1
+                    ? Alignment.centerRight
+                    : Alignment.center,
+                child: Text(
+                  step.label,
+                  textAlign: i == 0
+                      ? TextAlign.left
+                      : i == steps.length - 1
+                      ? TextAlign.right
+                      : TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                    color: isActive
+                        ? const Color(0xFF0000FF)
+                        : isFuture
+                        ? Colors.grey[400]
+                        : Colors.black87,
+                  ),
                 ),
               ),
             ],

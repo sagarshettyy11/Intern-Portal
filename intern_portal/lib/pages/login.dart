@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/dashboard.dart';
 import 'package:intern_portal/screens/secure_account.dart';
 import 'package:intern_portal/services/authentication/auth_services.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,7 +29,7 @@ class LoginPageState extends State<LoginPage> {
             height: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF5B8BFB), Color(0xFF3B6EF0)],
+                colors: [Color(0xFF0000FF), Color(0xFF3B6EF0)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -119,7 +120,7 @@ class LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              "Internship ID",
+                              "Email ID",
                               style: GoogleFonts.inter(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -127,36 +128,7 @@ class LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            TextField(
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                hintText: "Enter your Internship ID",
-                                hintStyle: GoogleFonts.inter(
-                                  color: Colors.grey[400],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.badge_outlined,
-                                  color: Colors.grey[400],
-                                  size: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color(0xFF3B6EF0)),
-                                ),
-                              ),
-                            ),
+                            CustomTextField(hint: "Enter your Email ID", controller: emailController),
                             const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +149,7 @@ class LoginPageState extends State<LoginPage> {
                                     "Forgot Password?",
                                     style: GoogleFonts.inter(
                                       fontSize: 13,
-                                      color: Color(0xFF3B6EF0),
+                                      color: Color(0xFF0000FF),
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -185,44 +157,12 @@ class LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            TextField(
+                            CustomTextField(
+                              hint: "••••••••",
                               controller: passwordController,
-                              obscureText: _obscurePassword,
-                              decoration: InputDecoration(
-                                hintText: "••••••••",
-                                hintStyle: GoogleFonts.inter(
-                                  color: Colors.grey[500],
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.lock_outline,
-                                  color: Colors.grey[400],
-                                  size: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                    color: Colors.grey[400],
-                                    size: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color(0xFF3B6EF0)),
-                                ),
+                              suffixIcon: IconButton(
+                                icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -267,7 +207,7 @@ class LoginPageState extends State<LoginPage> {
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF3B6EF0),
+                                  backgroundColor: const Color(0xFF0000FF),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   elevation: 0,
                                 ),
@@ -306,7 +246,7 @@ class LoginPageState extends State<LoginPage> {
                                   children: [
                                     TextSpan(
                                       text: "Contact Department",
-                                      style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.bold),
+                                      style: GoogleFonts.inter(color: Color(0xFF0000FF), fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -344,7 +284,7 @@ class LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 8),
                             Center(
                               child: Text(
-                                "© 2023 University Academic Internship Portal. All rights reserved.",
+                                "© 2026 University Academic Internship Portal. All rights reserved.",
                                 style: GoogleFonts.inter(
                                   fontSize: 10,
                                   color: Colors.grey[400],

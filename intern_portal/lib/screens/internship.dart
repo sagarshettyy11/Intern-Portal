@@ -89,7 +89,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Software Engineer Intern",
+                        d.internship.jobTitle ?? "Intern",
                         style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),

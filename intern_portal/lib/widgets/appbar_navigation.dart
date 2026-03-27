@@ -55,7 +55,12 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 )
               : Text(
                   title ?? "",
-                  style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 16),
+                  style: GoogleFonts.inter(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    letterSpacing: 0.2,
+                  ),
                 )),
       actions: actions,
       bottom: showDivider

@@ -263,7 +263,7 @@ class SubmitReportPageState extends State<SubmitReportPage> {
                   style: GoogleFonts.inter(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF3B6EF0),
+                  backgroundColor: Color(0xFF0000FF),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   elevation: 0,
                 ),
