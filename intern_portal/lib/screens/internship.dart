@@ -40,6 +40,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
       return Scaffold(body: Center(child: Text("Failed to load")));
     }
     final d = data!;
+    final milestones = d.milestones;
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: CommonAppBar(
@@ -166,24 +167,25 @@ class _InternshipsPageState extends State<InternshipsPage> {
               ],
             ),
             const SizedBox(height: 16),
-            _MilestoneItem(
-              isDone: true,
-              isFuture: false,
-              title: "Orientation & Onboarding",
-              subtitle: "Completed on Aug 15",
-            ),
-            _MilestoneItem(
-              isDone: true,
-              isFuture: false,
-              title: "Initial Training & Project Approval",
-              subtitle: "Completed on Sep 02",
-            ),
-            const _ActiveMilestone(),
-            _MilestoneItem(
-              isDone: false,
-              isFuture: true,
-              title: "Final Report Submission",
-              subtitle: "Scheduled for Nov 10",
+            const SizedBox(height: 16),
+
+            Column(
+              children: List.generate(milestones.length, (index) {
+                final m = milestones[index];
+
+                final isDone = m.status == "done";
+                final isActive = m.status == "active";
+                final isFuture = m.status == "pending";
+
+                return _MilestoneItem(
+                  isDone: isDone,
+                  isFuture: isFuture,
+                  isActive: isActive,
+                  title: m.title,
+                  date: m.date,
+                  isLast: index == milestones.length - 1,
+                );
+              }),
             ),
             const SizedBox(height: 22),
             Text(
@@ -305,11 +307,31 @@ class _StatBox extends StatelessWidget {
 class _MilestoneItem extends StatelessWidget {
   final bool isDone;
   final bool isFuture;
+  final bool isActive;
   final String title;
-  final String subtitle;
-  const _MilestoneItem({required this.isDone, required this.isFuture, required this.title, required this.subtitle});
+  final String? date;
+  final bool isLast;
+
+  const _MilestoneItem({
+    required this.isDone,
+    required this.isFuture,
+    required this.isActive,
+    required this.title,
+    this.date,
+    required this.isLast,
+  });
   @override
   Widget build(BuildContext context) {
+    String subtitle;
+    if (isDone && date != null) {
+      subtitle = "Completed on $date";
+    } else if (isActive) {
+      subtitle = "In progress";
+    } else if (date != null) {
+      subtitle = "Scheduled for $date";
+    } else {
+      subtitle = "";
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -359,144 +381,6 @@ class _MilestoneItem extends StatelessWidget {
       ],
     );
   }
-}
-
-class _ActiveMilestone extends StatelessWidget {
-  const _ActiveMilestone();
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 24,
-          child: Column(
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF3B6EF0), width: 2.5),
-                ),
-                child: Center(
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
-                  ),
-                ),
-              ),
-              CustomPaint(size: const Size(2, 148), painter: _DashedLinePainter()),
-            ],
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Mid-term Evaluation",
-                      style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF3B6EF0)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF3B6EF0),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        "ACTIVE",
-                        style: GoogleFonts.inter(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: const Color(0xFFF0F5FF), borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "REQUIRED TASKS",
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.check_circle, color: Color(0xFF3B6EF0), size: 18),
-                          const SizedBox(width: 8),
-                          Text(
-                            "Update Portfolio",
-                            style: GoogleFonts.inter(
-                              fontSize: 13,
-                              color: Colors.grey[500],
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Container(
-                            width: 18,
-                            height: 18,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.grey[400]!),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            "Schedule Meeting with Guide",
-                            style: GoogleFonts.inter(fontSize: 13, color: Colors.black87),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DashedLinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    const dashHeight = 4.0;
-    const dashSpace = 4.0;
-    final paint = Paint()
-      ..color = const Color(0xFF3B6EF0).withValues(alpha: 0.4)
-      ..strokeWidth = 2;
-    double startY = 0;
-    while (startY < size.height) {
-      canvas.drawLine(Offset(size.width / 2, startY), Offset(size.width / 2, startY + dashHeight), paint);
-      startY += dashHeight + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _MentorCard extends StatelessWidget {

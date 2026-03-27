@@ -92,13 +92,16 @@ class _DashboardPageState extends State<DashboardPage> {
                   RichText(
                     text: TextSpan(
                       text: "You are ",
-                      style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600]),
+                      style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], fontWeight: FontWeight.bold),
                       children: [
                         TextSpan(
                           text: "${d.internship?.completion ?? 0}%",
                           style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.bold),
                         ),
-                        TextSpan(text: " through your internship progress."),
+                        TextSpan(
+                          text: " through your internship progress.",
+                          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
@@ -153,24 +156,30 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    label: "ACTIVE INTERNSHIP",
-                    value: d.internship?.company ?? "Not Assigned",
-                    valueStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+            IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      label: "ACTIVE INTERNSHIP",
+                      value: d.internship?.company ?? "Not Assigned",
+                      valueStyle: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
                   ),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: _StatCard(
-                    label: "PENDING REPORTS",
-                    value: d.reports.pending.toString(),
-                    valueStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF3B6EF0)),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: _StatCard(
+                      label: "PENDING REPORTS",
+                      value: d.reports.pending.toString(),
+                      valueStyle: GoogleFonts.inter(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF3B6EF0),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 22),
             Text(
@@ -300,8 +309,8 @@ class _StatCard extends StatelessWidget {
           Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 10,
-              color: Colors.grey[700],
+              fontSize: 11,
+              color: Colors.grey[900],
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5,
             ),
