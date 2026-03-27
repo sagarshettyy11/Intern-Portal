@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/data/student/registeration_data.dart';
+import 'package:intern_portal/screens/dashboard.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -28,36 +31,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String? selectedMode;
   String? selectedIndustry;
   PlatformFile? selectedFile;
-
-  final List<String> modes = ['On-Site', 'Remote', 'Hybrid'];
-
-  final List<String> categories = [
-    '7 days',
-    '10 days',
-    '15 days',
-    '1 months',
-    '1.5 months',
-    '2 months',
-    '2.5 months',
-    '3 months',
-    '4 months',
-    '6 months',
-    '6 + months',
-  ];
-
-  final List<String> industries = [
-    'Information Technology',
-    'Software Development',
-    'Banking & Finance',
-    'Automobile',
-    'Aerospace',
-    'Pharmaceutical',
-    'Telecommunications',
-    'Retail & E-Commerce',
-    'Hospitality',
-    'Government / PSU',
-    'Other',
-  ];
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime? pickedDate = await showDatePicker(
@@ -117,10 +90,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
             SizedBox(height: 22),
-            _SectionHeader(icon: Icons.grid_view_rounded, title: "Company Details"),
+            SectionHeader(icon: Icons.grid_view_rounded, title: "Company Details"),
             SizedBox(height: 14),
-            _FieldLabel("COMPANY NAME"),
-            _TextField(controller: companyController, hint: "e.g. Acme Corp"),
+            FieldLabel(label: "COMPANY NAME"),
+            CustomTextField(controller: companyController, hint: "e.g. Acme Corp"),
             SizedBox(height: 14),
             Row(
               children: [
@@ -128,25 +101,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _FieldLabel("SELECT CATEGORY"),
-                      DropdownButtonFormField<String>(
-                        initialValue: selectedCategory,
-                        hint: Text("Choose..."),
-                        items: categories.map((item) {
-                          return DropdownMenuItem(value: item, child: Text(item));
-                        }).toList(),
+                      FieldLabel(label: "SELECT CATEGORY"),
+                      CustomDropdown(
+                        value: selectedCategory,
+                        hint: "Choose...",
+                        items: categories,
                         onChanged: (value) {
                           setState(() {
                             selectedCategory = value;
                           });
                         },
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.grey[300]!),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -156,26 +120,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _FieldLabel("INDUSTRY"),
-                      DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        initialValue: selectedIndustry,
-                        hint: Text("Choose..."),
-                        items: industries.map((item) {
-                          return DropdownMenuItem(value: item, child: Text(item));
-                        }).toList(),
+                      FieldLabel(label: "INDUSTRY"),
+                      CustomDropdown(
+                        value: selectedIndustry,
+                        hint: "Choose...",
+                        items: industries,
                         onChanged: (value) {
                           setState(() {
                             selectedIndustry = value;
                           });
                         },
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.grey[300]!),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -183,20 +137,53 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ],
             ),
             SizedBox(height: 14),
-            _FieldLabel("INTERNSHIP DOMAIN"),
-            _TextField(controller: domainController, hint: "e.g. App Developer"),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FieldLabel(label: "JOB TITLE"),
+                      CustomTextField(controller: jobTitleController, hint: "e.g. Mobile App Developer"),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FieldLabel(label: "WORK MODE"),
+                      CustomDropdown(
+                        value: selectedMode,
+                        hint: "Choose...",
+                        items: modes,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedMode = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 14),
+            FieldLabel(label: "INTERNSHIP DOMAIN"),
+            CustomTextField(controller: domainController, hint: "e.g. App Developer"),
             SizedBox(height: 14),
             Row(
               children: [
-                Expanded(child: _FieldLabel("START DATE")),
+                Expanded(child: FieldLabel(label: "START DATE")),
                 SizedBox(width: 12),
-                Expanded(child: _FieldLabel("END DATE")),
+                Expanded(child: FieldLabel(label: "END DATE")),
               ],
             ),
             Row(
               children: [
                 Expanded(
-                  child: _TextField(
+                  child: CustomTextField(
                     hint: "From",
                     controller: startDateController,
                     readOnly: true,
@@ -206,7 +193,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _TextField(
+                  child: CustomTextField(
                     hint: "To",
                     controller: endDateController,
                     readOnly: true,
@@ -217,82 +204,35 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ],
             ),
             SizedBox(height: 14),
-            _FieldLabel("PHONE"),
-            _TextField(controller: phoneController, hint: "+1 (555) 000-0000"),
+            FieldLabel(label: "PHONE"),
+            CustomTextField(controller: phoneController, hint: "+1 (555) 000-0000"),
             SizedBox(height: 14),
-            _FieldLabel("ADDRESS"),
-            _TextField(controller: addressController, hint: "Full office address"),
+            FieldLabel(label: "ADDRESS"),
+            CustomTextField(controller: addressController, hint: "Full office address"),
             SizedBox(height: 14),
-            _FieldLabel("COMPANY DESCRIPTION"),
-            SizedBox(
+            FieldLabel(label: "COMPANY DESCRIPTION"),
+            CustomTextField(
+              controller: descController,
+              hint: "Briefly describe what the company does",
               height: 90,
-              child: TextField(
-                maxLines: null,
-                expands: true,
-                controller: descController,
-                decoration: InputDecoration(
-                  hintText: "Briefly describe what the company does",
-                  hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
-                  contentPadding: EdgeInsets.all(14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFF3B6EF0)),
-                  ),
-                ),
-              ),
+              maxLines: 3,
             ),
             SizedBox(height: 24),
-            _SectionHeader(icon: Icons.person_outline_rounded, title: "Industry Guide Details"),
+            SectionHeader(icon: Icons.person_outline_rounded, title: "Industry Guide Details"),
             SizedBox(height: 14),
-            _FieldLabel("GUIDE NAME"),
-            _TextField(controller: guideNameController, hint: "John Doe"),
+            FieldLabel(label: "GUIDE NAME"),
+            CustomTextField(controller: guideNameController, hint: "John Doe"),
             SizedBox(height: 14),
-            _FieldLabel("EMAIL ADDRESS"),
-            _TextField(controller: guideEmailController, hint: "john.doe@company.com"),
+            FieldLabel(label: "EMAIL ADDRESS"),
+            CustomTextField(controller: guideEmailController, hint: "john.doe@company.com"),
             SizedBox(height: 14),
-            _FieldLabel("PHONE"),
-            _TextField(controller: guidePhoneController, hint: "+1 (555) 000-0000"),
+            FieldLabel(label: "PHONE"),
+            CustomTextField(controller: guidePhoneController, hint: "+1 (555) 000-0000"),
             SizedBox(height: 24),
-            _SectionHeader(icon: Icons.description_outlined, title: "Documentation"),
+            SectionHeader(icon: Icons.description_outlined, title: "Documentation"),
             SizedBox(height: 14),
-            _FieldLabel("OFFER LETTER"),
-            GestureDetector(
-              onTap: pickFile,
-              child: Container(
-                height: 130,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 36),
-                    SizedBox(height: 8),
-                    Text(
-                      selectedFile != null ? selectedFile!.name : "Click to upload file",
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      selectedFile != null
-                          ? "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB"
-                          : "PDF, PNG, JPG (Max 5MB)",
-                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            FieldLabel(label: "OFFER LETTER", icon: Icons.attach_file),
+            FileUploadBox(file: selectedFile, onTap: pickFile),
             SizedBox(height: 30),
             Row(
               children: [
@@ -304,6 +244,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         companyName: companyController.text,
                         category: selectedCategory ?? "",
                         industry: selectedIndustry ?? "",
+                        mode: selectedMode ?? "",
+                        jobtitle: jobTitleController.text,
                         phone: phoneController.text,
                         address: addressController.text,
                         description: descController.text,
@@ -315,7 +257,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         guidePhone: guidePhoneController.text,
                         file: selectedFile,
                       );
-                      debugPrint(res.toString());
+                      if (res['success'] == true) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Draft saved successfully")));
+                        await Future.delayed(Duration(seconds: 1));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DashboardPage()));
+                      } else {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(res['message'] ?? "Something went wrong")));
+                      }
                     },
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 14),
@@ -339,6 +289,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         industry: selectedIndustry ?? "",
                         phone: phoneController.text,
                         address: addressController.text,
+                        mode: selectedMode ?? "",
+                        jobtitle: jobTitleController.text,
                         description: descController.text,
                         domain: domainController.text,
                         fromDate: startDateController.text,
@@ -348,11 +300,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         guidePhone: guidePhoneController.text,
                         file: selectedFile,
                       );
-
                       if (res['success'] == true) {
-                        debugPrint("SUCCESS");
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text("Application submitted successfully")));
+                        await Future.delayed(Duration(seconds: 1));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DashboardPage()));
                       } else {
-                        debugPrint(res['message']);
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(res['message'] ?? "Something went wrong")));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -369,87 +326,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
           ],
         ),
       ),
       bottomNavigationBar: AppBottomNav(
         currentIndex: 1,
         onTap: (index) => BottomNavController.onItemTapped(context, index),
-      ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const _SectionHeader({required this.icon, required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: Color(0xFF3B6EF0), size: 22),
-        SizedBox(width: 8),
-        Text(
-          title,
-          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-      ],
-    );
-  }
-}
-
-class _FieldLabel extends StatelessWidget {
-  final String label;
-  const _FieldLabel(this.label);
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 6),
-      child: Text(
-        label,
-        style: GoogleFonts.inter(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: Colors.grey[500],
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-}
-
-class _TextField extends StatelessWidget {
-  final String hint;
-  final TextEditingController? controller;
-  final bool readOnly;
-  final VoidCallback? onTap;
-  final Widget? suffixIcon;
-  const _TextField({required this.hint, this.controller, this.readOnly = false, this.onTap, this.suffixIcon});
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      readOnly: readOnly,
-      onTap: onTap,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
-        suffixIcon: suffixIcon,
-        contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 14),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Color(0xFF3B6EF0)),
-        ),
       ),
     );
   }

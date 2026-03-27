@@ -35,7 +35,9 @@ class StudentServices {
     required String companyName,
     required String category,
     required String industry,
+    required String mode,
     required String domain,
+    required String jobtitle,
     required String phone,
     required String address,
     required String description,
@@ -55,7 +57,8 @@ class StudentServices {
       request.fields['company_name'] = companyName;
       request.fields['company_category'] = category;
       request.fields['company_industry'] = industry;
-      request.fields['company_industry'] = industry;
+      request.fields['job_title'] = jobtitle;
+      request.fields['work_mode'] = mode;
       request.fields['company_phone'] = phone;
       request.fields['company_address'] = address;
       request.fields['company_desc'] = description;

@@ -16,7 +16,6 @@ class InternshipsPage extends StatefulWidget {
 class _InternshipsPageState extends State<InternshipsPage> {
   InternshipModel? data;
   bool isLoading = true;
-
   @override
   void initState() {
     super.initState();

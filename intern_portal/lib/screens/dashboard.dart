@@ -16,7 +16,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   DashboardModel? dashboard;
   bool isLoading = true;
-
   @override
   void initState() {
     super.initState();

@@ -5,6 +5,7 @@ import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class SubmitReportPage extends StatefulWidget {
   const SubmitReportPage({super.key});
@@ -95,14 +96,9 @@ class SubmitReportPageState extends State<SubmitReportPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Submit New Report",
-              style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
-            ),
-            SizedBox(height: 6),
-            Text(
-              "Complete the fields below finalize your official\nreporting documentation.",
-              style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500], height: 1.5),
+            PageHeader(
+              title: "Submit New Report",
+              subtitle: "Complete the fields below finalize your official reporting documentation.",
             ),
             SizedBox(height: 20),
             Container(
@@ -158,39 +154,16 @@ class SubmitReportPageState extends State<SubmitReportPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.work_outline, size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Text(
-                            "REPORT TYPE",
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey[500],
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        initialValue: selectedReportType,
-                        items: types.map((type) {
-                          return DropdownMenuItem(value: type, child: Text(type));
-                        }).toList(),
+                      FieldLabel(label: "REPORT TYPE", icon: Icons.work_outline),
+                      CustomDropdown(
+                        value: selectedReportType,
+                        hint: "Select report type",
+                        items: types,
                         onChanged: (value) {
                           setState(() {
                             selectedReportType = value;
                           });
                         },
-                        decoration: InputDecoration(
-                          hintText: "Select report type",
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        icon: Icon(Icons.keyboard_arrow_down),
                       ),
                     ],
                   ),
@@ -201,292 +174,48 @@ class SubmitReportPageState extends State<SubmitReportPage> {
             Row(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Text(
-                            "PERIOD START DATE",
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey[500],
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: pickStartDate,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[300]!),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey[600]),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  startDate != null ? startDate.toString().split(" ")[0] : "Select date",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 13,
-                                    color: startDate == null ? Colors.grey : Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Icon(Icons.calendar_today_outlined, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: CustomDateField(
+                    label: "PERIOD START DATE",
+                    icon: Icons.calendar_today_outlined,
+                    value: startDate,
+                    onTap: pickStartDate,
                   ),
                 ),
                 SizedBox(width: 14),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Text(
-                            "PERIOD END DATE",
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey[500],
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: pickEndDate,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[300]!),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey[600]),
-                              SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  endDate != null ? endDate.toString().split(" ")[0] : "Select date",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 13,
-                                    color: endDate == null ? Colors.grey : Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Icon(Icons.calendar_today_outlined, color: Colors.grey),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: CustomDateField(
+                    label: "PERIOD END DATE",
+                    icon: Icons.calendar_today_outlined,
+                    value: endDate,
+                    onTap: pickEndDate,
                   ),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
-                    SizedBox(width: 4),
-                    Text(
-                      "DETAILED DESCRIPTION",
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.grey[500],
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-                Text("$_charCount / 2000", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
-              ],
-            ),
-            SizedBox(height: 8),
-            TextField(
+            FormTextArea(
+              label: "DETAILED DESCRIPTION",
+              icon: Icons.description_outlined,
               controller: descController,
-              maxLines: 6,
-              maxLength: 2000,
-              buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-              decoration: InputDecoration(
-                hintText: "Provide a comprehensive summary of findings, data points, and recommendations...",
-                hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13, height: 1.5),
-                contentPadding: EdgeInsets.all(14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF3B6EF0)),
-                ),
-              ),
+              hint: "Provide a comprehensive summary...",
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
-                    SizedBox(width: 4),
-                    Text(
-                      "LEARNING OUTCOMES",
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.grey[500],
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-                Text("$_charCount / 2000", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
-              ],
-            ),
-            SizedBox(height: 8),
-            TextField(
+            FormTextArea(
+              label: "LEARNING OUTCOMES",
+              icon: Icons.school_outlined,
               controller: learningController,
-              maxLines: 6,
-              maxLength: 2000,
-              buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-              decoration: InputDecoration(
-                hintText: "Provide a comprehensive summary of findings, data points, and recommendations...",
-                hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13, height: 1.5),
-                contentPadding: EdgeInsets.all(14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF3B6EF0)),
-                ),
-              ),
+              hint: "What did you learn?",
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
-                    SizedBox(width: 4),
-                    Text(
-                      "CHALLENGES",
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.grey[500],
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-                Text("$_charCount / 2000", style: TextStyle(fontSize: 11, color: Colors.grey[400])),
-              ],
-            ),
-            SizedBox(height: 8),
-            TextField(
+            FormTextArea(
+              label: "CHALLENGES",
+              icon: Icons.warning_amber_outlined,
               controller: challengesController,
-              maxLines: 6,
-              maxLength: 2000,
-              buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-              decoration: InputDecoration(
-                hintText: "Provide a comprehensive summary of findings, data points, and recommendations...",
-                hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13, height: 1.5),
-                contentPadding: EdgeInsets.all(14),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Color(0xFF3B6EF0)),
-                ),
-              ),
+              hint: "Challenges faced...",
             ),
             SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(Icons.description_outlined, size: 14, color: Colors.grey[600]),
-                SizedBox(width: 4),
-                Text(
-                  "SUPPORTING ATTACHMENTS",
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey[500],
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            GestureDetector(
-              onTap: pickFile,
-              child: Container(
-                height: 140,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.cloud_upload_outlined, color: Color(0xFF3B6EF0), size: 38),
-                    SizedBox(height: 8),
-                    Text(
-                      selectedFile != null ? selectedFile!.name : "Click to upload file",
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      selectedFile != null
-                          ? "${(selectedFile!.size / 1024).toStringAsFixed(2)} KB"
-                          : "PDF, CSV, PNG (MAX 25MB)",
-                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            FieldLabel(label: "SUPPORTING ATTACHMENTS", icon: Icons.attach_file),
+            FileUploadBox(file: selectedFile, onTap: pickFile),
             SizedBox(height: 28),
             SizedBox(
               width: double.infinity,
@@ -553,7 +282,7 @@ class SubmitReportPageState extends State<SubmitReportPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
           ],
         ),
       ),
