@@ -124,36 +124,38 @@ class _InternshipsPageState extends State<InternshipsPage> {
               ),
             ),
             const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: _StatBox(
-                    label: "OVERALL COMPLETION",
-                    value: "${d.progress.completion}%",
-                    sub: "+1%",
-                    subColor: Colors.green,
-                    showProgress: true,
+            IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _StatBox(
+                      label: "OVERALL COMPLETION",
+                      value: "${d.progress.completion}%",
+                      sub: "+1%",
+                      subColor: Colors.green,
+                      showProgress: true,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _StatBox(
-                    label: "REPORTS SUBMITTED",
-                    value: "${d.reports.approved}/${d.reports.total}",
-                    sub: "Due in 2 days",
-                    subColor: Colors.grey,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _StatBox(
+                      label: "REPORTS SUBMITTED",
+                      value: "${d.reports.approved}/${d.reports.total}",
+                      sub: "Due in 2 days",
+                      subColor: Colors.grey,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _StatBox(
-                    label: "DAYS REMAINING",
-                    value: "${d.progress.daysRemaining ?? 0} Days",
-                    sub: "End Nov 15, 2024",
-                    subColor: Colors.grey,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _StatBox(
+                      label: "DAYS REMAINING",
+                      value: "${d.progress.daysRemaining ?? 0} Days",
+                      sub: "End Nov 15, 2024",
+                      subColor: Colors.grey,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 22),
             Row(
@@ -296,7 +298,7 @@ class _StatBox extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             sub,
-            style: GoogleFonts.inter(fontSize: 11, color: subColor, fontWeight: FontWeight.bold),
+            style: GoogleFonts.inter(fontSize: 12, color: subColor, fontWeight: FontWeight.w800),
           ),
         ],
       ),
