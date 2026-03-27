@@ -76,7 +76,6 @@ class SubmitReportPageState extends State<SubmitReportPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File too large (Max 25MB)")));
         return;
       }
-
       setState(() {
         selectedFile = file;
       });
@@ -123,13 +122,21 @@ class SubmitReportPageState extends State<SubmitReportPage> {
                         RichText(
                           text: TextSpan(
                             text: "This report must be filed by ",
-                            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600], height: 1.4),
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              height: 1.4,
+                              fontWeight: FontWeight.bold,
+                            ),
                             children: [
                               TextSpan(
                                 text: "October 25th, 2023",
-                                style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                                style: GoogleFonts.inter(color: Color(0xFF3B6EF0), fontWeight: FontWeight.bold),
                               ),
-                              TextSpan(text: ". Late entries are subject to penalty fees."),
+                              TextSpan(
+                                text: ". Late entries are subject to penalty fees.",
+                                style: GoogleFonts.inter(color: Colors.grey[600], fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
                         ),

@@ -6,6 +6,7 @@ import 'package:intern_portal/screens/profile.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class InternshipsPage extends StatefulWidget {
   const InternshipsPage({super.key});
@@ -214,9 +215,17 @@ class _InternshipsPageState extends State<InternshipsPage> {
               ),
               child: Column(
                 children: [
-                  _ResourceTile(icon: Icons.description_outlined, title: "Internship Guidelines"),
+                  ResourceItem(
+                    icon: Icons.description_outlined,
+                    title: "Internship Guidelines",
+                    trailing: Icons.chevron_right,
+                  ),
                   Divider(height: 1, indent: 50, color: Colors.grey[200]),
-                  _ResourceTile(icon: Icons.help_outline, title: "Support Contacts"),
+                  ResourceItem(
+                    icon: Icons.description_outlined,
+                    title: "Support Contects",
+                    trailing: Icons.chevron_right,
+                  ),
                 ],
               ),
             ),
@@ -259,10 +268,10 @@ class _StatBox extends StatelessWidget {
           Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 9,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3,
+              fontSize: 10,
+              color: Colors.grey[700],
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
           ),
           const SizedBox(height: 6),
@@ -283,7 +292,10 @@ class _StatBox extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 4),
-          Text(sub, style: GoogleFonts.inter(fontSize: 10, color: subColor)),
+          Text(
+            sub,
+            style: GoogleFonts.inter(fontSize: 11, color: subColor, fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
@@ -504,7 +516,7 @@ class _MentorCard extends StatelessWidget {
           CircleAvatar(
             radius: 22,
             backgroundColor: Colors.grey[300],
-            child: Icon(Icons.person, color: Colors.grey[600]),
+            child: Icon(Icons.person, color: Colors.grey[800], fontWeight: FontWeight.bold),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -513,47 +525,25 @@ class _MentorCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
                 ),
-                Text(role, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                Text(
+                  role,
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(color: const Color(0xFFF0F5FF), borderRadius: BorderRadius.circular(8)),
-            child: const Icon(Icons.chat_bubble_outline, color: Color(0xFF3B6EF0), size: 18),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ResourceTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const _ResourceTile({required this.icon, required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-            child: Icon(icon, color: const Color(0xFF3B6EF0), size: 18),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              title,
-              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+            child: const Icon(
+              Icons.chat_bubble_outline,
+              color: Color(0xFF3B6EF0),
+              size: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
         ],
       ),
     );

@@ -36,8 +36,8 @@ class FieldLabel extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey[500],
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[600],
               letterSpacing: 0.5,
             ),
           ),
@@ -75,9 +75,10 @@ class CustomTextField extends StatelessWidget {
       onTap: onTap,
       maxLines: expands ? null : maxLines,
       expands: expands,
+      style: GoogleFonts.inter(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 13),
+        hintStyle: GoogleFonts.inter(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.bold),
         suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.symmetric(vertical: 13, horizontal: 14),
         border: OutlineInputBorder(
@@ -118,11 +119,17 @@ class CustomDropdown extends StatelessWidget {
     return DropdownButtonFormField<String>(
       isExpanded: true,
       initialValue: value,
-      hint: Text(hint, style: GoogleFonts.inter(fontSize: 13)),
+      hint: Text(
+        hint,
+        style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500], fontWeight: FontWeight.bold),
+      ),
       items: items.map((item) {
         return DropdownMenuItem(
           value: item,
-          child: Text(item, style: GoogleFonts.inter(fontSize: 13)),
+          child: Text(
+            item,
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
         );
       }).toList(),
       onChanged: onChanged,
@@ -167,7 +174,7 @@ class CustomDateField extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(icon, size: 16, color: Colors.grey[600]),
+                Icon(icon, size: 16, color: Colors.grey[600], fontWeight: FontWeight.bold),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -175,7 +182,7 @@ class CustomDateField extends StatelessWidget {
                     style: GoogleFonts.inter(fontSize: 13, color: value == null ? Colors.grey : Colors.black),
                   ),
                 ),
-                Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+                Icon(Icons.keyboard_arrow_down, color: Colors.grey, fontWeight: FontWeight.bold),
               ],
             ),
           ),
@@ -293,8 +300,35 @@ class PageHeader extends StatelessWidget {
           style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         SizedBox(height: 6),
-        Text(subtitle, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500], height: 1.5)),
+        Text(
+          subtitle,
+          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], height: 1.5, fontWeight: FontWeight.bold),
+        ),
       ],
+    );
+  }
+}
+
+class ResourceItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final IconData trailing;
+  const ResourceItem({super.key, required this.icon, required this.title, required this.trailing});
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 34,
+        height: 34,
+        decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
+        child: Icon(icon, color: Color(0xFF3B6EF0), size: 18, fontWeight: FontWeight.bold),
+      ),
+      title: Text(
+        title,
+        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
+      ),
+      trailing: Icon(trailing, color: Colors.grey[700], size: 18, fontWeight: FontWeight.bold),
+      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
     );
   }
 }

@@ -13,7 +13,7 @@ class InfoField extends StatelessWidget {
           label,
           style: GoogleFonts.inter(
             fontSize: 10,
-            color: Colors.grey[500],
+            color: Colors.grey[600],
             fontWeight: FontWeight.w800,
             letterSpacing: 0.4,
           ),

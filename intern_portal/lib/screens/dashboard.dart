@@ -6,6 +6,7 @@ import 'package:intern_portal/screens/registration.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -59,7 +60,8 @@ class _DashboardPageState extends State<DashboardPage> {
               child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
-          Icon(Icons.add, color: Colors.white, size: 18),
+          Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
+          const SizedBox(width: 4),
         ],
       ),
       body: SingleChildScrollView(
@@ -122,7 +124,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     icon: Icon(Icons.assignment_outlined, size: 16, color: Colors.white),
                     label: Text(
                       "View Assignment",
-                      style: GoogleFonts.inter(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      style: GoogleFonts.inter(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF3B6EF0),
@@ -139,7 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     icon: Icon(Icons.calendar_month_outlined, size: 16, color: Colors.grey[700]),
                     label: Text(
                       "Weekly Log",
-                      style: GoogleFonts.inter(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.w600),
+                      style: GoogleFonts.inter(color: Colors.grey[700], fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 13),
@@ -252,17 +254,17 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               child: Column(
                 children: [
-                  _ResourceItem(icon: Icons.description_outlined, title: "Guidelines", trailing: Icons.open_in_new),
+                  ResourceItem(icon: Icons.description_outlined, title: "Guidelines", trailing: Icons.open_in_new),
                   Divider(height: 1, indent: 52),
-                  _ResourceItem(
+                  ResourceItem(
                     icon: Icons.article_outlined,
                     title: "Report Template",
                     trailing: Icons.download_outlined,
                   ),
                   Divider(height: 1, indent: 52),
-                  _ResourceItem(icon: Icons.help_outline, title: "Student FAQ", trailing: Icons.chevron_right),
+                  ResourceItem(icon: Icons.help_outline, title: "Student FAQ", trailing: Icons.chevron_right),
                   Divider(height: 1, indent: 52),
-                  _ResourceItem(icon: Icons.group_outlined, title: "Peer Support", trailing: Icons.chevron_right),
+                  ResourceItem(icon: Icons.group_outlined, title: "Peer Support", trailing: Icons.chevron_right),
                 ],
               ),
             ),
@@ -299,7 +301,7 @@ class _StatCard extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: Colors.grey[500],
+              color: Colors.grey[700],
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5,
             ),
@@ -320,11 +322,9 @@ class _JourneyTimeline extends StatelessWidget {
     return Row(
       children: List.generate(steps.length, (i) {
         final step = steps[i];
-
         bool isCompleted = step.status == "done";
         bool isActive = step.status == "active";
         bool isFuture = step.status == "pending";
-
         return Expanded(
           child: Column(
             children: [
@@ -339,7 +339,6 @@ class _JourneyTimeline extends StatelessWidget {
                             : Colors.grey[300],
                       ),
                     ),
-
                   Container(
                     width: 28,
                     height: 28,
@@ -399,30 +398,6 @@ class _JourneyTimeline extends StatelessWidget {
           ),
         );
       }),
-    );
-  }
-}
-
-class _ResourceItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final IconData trailing;
-  const _ResourceItem({required this.icon, required this.title, required this.trailing});
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        width: 34,
-        height: 34,
-        decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-        child: Icon(icon, color: Color(0xFF3B6EF0), size: 18),
-      ),
-      title: Text(
-        title,
-        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-      ),
-      trailing: Icon(trailing, color: Colors.grey[400], size: 18),
-      contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
     );
   }
 }

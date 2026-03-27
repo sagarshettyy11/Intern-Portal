@@ -48,8 +48,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "InternPortal",
-                      style: GoogleFonts.inter(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
+                      "Intern Portal",
+                      style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 20),
                     ),
                   ],
                 )
