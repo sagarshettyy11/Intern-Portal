@@ -20,7 +20,7 @@ class DashboardModel {
       internship: json['internship'] != null ? InternshipData.fromJson(json['internship']) : null,
       reports: ReportStats.fromJson(json['reports']),
       journey: (json['journey'] as List).map((e) => JourneyStep.fromJson(e)).toList(),
-      alerts: (json['alerts'] as List).map((e) => AlertModel.fromJson(e)).toList(),
+      alerts: (json['alerts'] ?? []).map<AlertModel>((e) => AlertModel.fromJson(e)).toList(),
     );
   }
 }
@@ -79,8 +79,28 @@ class AlertModel {
   final String title;
   final String description;
   final String type;
-  AlertModel({required this.title, required this.description, required this.type});
+  final int? reportId;
+  final String? deadline;
+  final int? daysLeft;
+  final String? status;
+  AlertModel({
+    required this.title,
+    required this.description,
+    required this.type,
+    this.reportId,
+    this.deadline,
+    this.daysLeft,
+    this.status,
+  });
   factory AlertModel.fromJson(Map<String, dynamic> json) {
-    return AlertModel(title: json['title'] ?? '', description: json['description'] ?? '', type: json['type'] ?? '');
+    return AlertModel(
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      type: json['type'] ?? '',
+      reportId: json['report_id'],
+      deadline: json['deadline'],
+      daysLeft: json['days_left'],
+      status: json['status'],
+    );
   }
 }

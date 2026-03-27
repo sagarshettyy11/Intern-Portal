@@ -21,14 +21,11 @@ class SubmitReportPageState extends State<SubmitReportPage> {
   String? selectedReportType;
   DateTime? startDate;
   DateTime? endDate;
-  int _charCount = 0;
   final List<String> types = ['Daily', 'Weekly', 'Monthly', 'Final', 'Other'];
   @override
   void initState() {
     super.initState();
-    descController.addListener(() {
-      setState(() => _charCount = descController.text.length);
-    });
+    descController.addListener(() {});
   }
 
   @override

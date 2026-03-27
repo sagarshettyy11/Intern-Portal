@@ -59,9 +59,23 @@ class _DashboardPageState extends State<DashboardPage> {
               child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black87),
-            onPressed: () {},
+          Stack(
+            children: [
+              Icon(Icons.notifications_outlined, size: 30),
+              if (d.alerts.isNotEmpty)
+                Positioned(
+                  right: 0,
+                  top: 12,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                    child: Text(
+                      d.alerts.length.toString(),
+                      style: GoogleFonts.inter(fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -160,7 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: _StatCard(
                     label: "ACTIVE INTERNSHIP",
                     value: d.internship?.company ?? "Not Assigned",
-                    valueStyle: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                    valueStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ),
                 SizedBox(width: 12),
@@ -168,7 +182,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: _StatCard(
                     label: "PENDING REPORTS",
                     value: d.reports.pending.toString(),
-                    valueStyle: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0)),
+                    valueStyle: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF3B6EF0)),
                   ),
                 ),
               ],
@@ -186,56 +200,59 @@ class _DashboardPageState extends State<DashboardPage> {
               style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             SizedBox(height: 12),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(color: Color(0xFFFFF1F1), borderRadius: BorderRadius.circular(12)),
-              child: Row(
-                children: [
-                  Icon(Icons.warning_amber_rounded, color: Color(0xFFE53935), size: 24),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            if (d.alerts.isEmpty)
+              Container(
+                padding: EdgeInsets.all(14),
+                decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+                child: Text("No alerts right now 🎉", style: GoogleFonts.inter(color: Colors.grey[600])),
+              )
+            else
+              Column(
+                children: d.alerts.map((alert) {
+                  final isUrgent = alert.type == "urgent";
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: isUrgent ? Color(0xFFFFF1F1) : Color(0xFFFFF8E6),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
                       children: [
-                        Text(
-                          "Submit Weekly Report 12",
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: Color(0xFFE53935), fontSize: 14),
+                        Icon(
+                          isUrgent ? Icons.warning_amber_rounded : Icons.access_time_rounded,
+                          color: isUrgent ? Color(0xFFE53935) : Color(0xFFE67E00),
+                          size: 24,
                         ),
-                        Text(
-                          "Due by end of day today",
-                          style: GoogleFonts.inter(fontSize: 12, color: Color(0xFFE53935)),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                alert.title,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: isUrgent ? Color(0xFFE53935) : Color(0xFFE67E00),
+                                ),
+                              ),
+                              Text(
+                                alert.description,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: isUrgent ? Color(0xFFE53935) : Color(0xFFE67E00),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        Icon(Icons.chevron_right, color: isUrgent ? Color(0xFFE53935) : Color(0xFFE67E00)),
                       ],
                     ),
-                  ),
-                  Icon(Icons.chevron_right, color: Color(0xFFE53935)),
-                ],
+                  );
+                }).toList(),
               ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              decoration: BoxDecoration(color: Color(0xFFFFF8E6), borderRadius: BorderRadius.circular(12)),
-              child: Row(
-                children: [
-                  Icon(Icons.access_time_rounded, color: Color(0xFFE67E00), size: 24),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Mentor Meeting",
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: Color(0xFFE67E00), fontSize: 14),
-                        ),
-                        Text("Tomorrow at 10:00 AM", style: GoogleFonts.inter(fontSize: 12, color: Color(0xFFE67E00))),
-                      ],
-                    ),
-                  ),
-                  Icon(Icons.chevron_right, color: Color(0xFFE67E00)),
-                ],
-              ),
-            ),
             SizedBox(height: 22),
             Text(
               "Resources for You",

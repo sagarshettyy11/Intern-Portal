@@ -138,6 +138,56 @@ class StudentServices {
     }
   }
 
+  static Future<Map<String, dynamic>> fetchReports({
+    String? status,
+    String? type,
+    String sort = "newest",
+    int page = 1,
+    int perPage = 10,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final queryParams = {"page": page.toString(), "per_page": perPage.toString(), "sort": sort};
+      if (status != null && status.isNotEmpty) {
+        queryParams["status"] = status;
+      }
+      if (type != null && type.isNotEmpty) {
+        queryParams["type"] = type;
+      }
+      final uri = Uri.parse(ApiEndpoints.overview).replace(queryParameters: queryParams);
+      final response = await http.get(
+        uri,
+        headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+      );
+      final json = jsonDecode(response.body);
+      if (response.statusCode == 200 && json['success'] == true) {
+        return json['data']; // 🔥 contains stats + reports + pagination
+      }
+      return {"success": false};
+    } catch (e) {
+      debugPrint("REPORT OVERVIEW ERROR: $e");
+      return {"success": false};
+    }
+  }
+
+  static Future<Map<String, dynamic>?> fetchReportById(int reportId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final uri = Uri.parse(ApiEndpoints.overview).replace(queryParameters: {"report_id": reportId.toString()});
+      final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
+      final json = jsonDecode(response.body);
+      if (json['success'] == true) {
+        return json['data']['report'];
+      }
+      return null;
+    } catch (e) {
+      debugPrint("FETCH REPORT ERROR: $e");
+      return null;
+    }
+  }
+
   static Future<StudentProfile?> fetchProfile() async {
     try {
       final token = await AuthStorage.getToken();

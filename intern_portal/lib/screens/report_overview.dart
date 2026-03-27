@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/submit_report.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -14,57 +15,63 @@ class ReportsOverviewPage extends StatefulWidget {
 class ReportsOverviewPageState extends State<ReportsOverviewPage> {
   int _selectedFilter = 0;
   final List<String> _filters = ["All Reports", "Pending", "Submitted", "Approved"];
-  final List<Map<String, dynamic>> _reports = [
-    {
-      "type": "Safety Audit Q3",
-      "due": "Oct 24, 2023",
-      "status": "Approved",
-      "statusColor": Color(0xFF27AE60),
-      "bgColor": Color(0xFFEAF7EF),
-    },
-    {
-      "type": "Monthly Expense Review",
-      "due": "Oct 20, 2023",
-      "status": "Overdue",
-      "statusColor": Color(0xFFE53935),
-      "bgColor": Color(0xFFFFF1F1),
-    },
-    {
-      "type": "Compliance Checklist",
-      "due": "Oct 28, 2023",
-      "status": "Pending",
-      "statusColor": Color(0xFF3B6EF0),
-      "bgColor": Color(0xFFEFF4FF),
-    },
-    {
-      "type": "Internal Audit v1",
-      "due": "Oct 22, 2023",
-      "status": "Late",
-      "statusColor": Color(0xFFE67E00),
-      "bgColor": Color(0xFFFFF8E6),
-    },
-    {
-      "type": "Quarterly Performance",
-      "due": "Oct 25, 2023",
-      "status": "Rejected",
-      "statusColor": Color(0xFFE53935),
-      "bgColor": Color(0xFFFFF1F1),
-    },
-    {
-      "type": "Compliance Checklist",
-      "due": "Oct 28, 2023",
-      "status": "Pending",
-      "statusColor": Color(0xFF3B6EF0),
-      "bgColor": Color(0xFFEFF4FF),
-    },
-    {
-      "type": "Internal Audit v2",
-      "due": "Oct 22, 2023",
-      "status": "Late",
-      "statusColor": Color(0xFFE67E00),
-      "bgColor": Color(0xFFFFF8E6),
-    },
-  ];
+  List<dynamic> reports = [];
+  Map<String, dynamic>? stats;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadReports();
+  }
+
+  Future<void> loadReports() async {
+    final data = await StudentServices.fetchReports();
+    if (data['reports'] != null) {
+      setState(() {
+        reports = data['reports'];
+        stats = data['stats'];
+        isLoading = false;
+      });
+    }
+  }
+
+  List filteredReports() {
+    if (_selectedFilter == 0) return reports;
+    String filter = _filters[_selectedFilter].toLowerCase();
+    return reports.where((r) {
+      return (r["display_status"] ?? "").toLowerCase().contains(filter);
+    }).toList();
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return Colors.green;
+      case "pending":
+        return Colors.blue;
+      case "submitted":
+        return Colors.orange;
+      case "overdue":
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Color getStatusBg(String status) {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return Color(0xFFEAF7EF);
+      case "pending":
+        return Color(0xFFEFF4FF);
+      case "submitted":
+        return Color(0xFFFFF8E6);
+      case "overdue":
+        return Color(0xFFFFF1F1);
+      default:
+        return Colors.grey.shade200;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,30 +110,31 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
               children: [
                 Expanded(
                   child: _MetricCard(
-                    title: "Daily Reports",
-                    value: "24",
-                    badge: "+5%",
+                    title: "Total Reports",
+                    value: "${stats?['total'] ?? 0}",
+                    badge: "${stats?['approval_rate'] ?? 0}%",
                     badgeColor: Colors.green,
-                    sub: "Target: 30 reports",
+                    sub: "Approved: ${stats?['approved'] ?? 0}",
                   ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   child: _MetricCard(
-                    title: "Weekly Trends",
-                    value: "142",
-                    badge: "-2%",
-                    badgeColor: Colors.red,
-                    sub: "Avg: 145/week",
+                    title: "Pending",
+                    value: "${stats?['pending'] ?? 0}",
+                    badge: "Waiting",
+                    badgeColor: Colors.orange,
+                    sub: "Needs action",
                   ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  child: _MetricCardWithProgress(
-                    title: "Monthly Completion",
-                    value: "92%",
-                    badge: "-8%",
-                    progress: 0.92,
+                  child: _MetricCard(
+                    title: "Overdue",
+                    value: "${stats?['overdue'] ?? 0}",
+                    badge: "Late",
+                    badgeColor: Colors.red,
+                    sub: "Missed deadline",
                   ),
                 ),
               ],
@@ -219,10 +227,10 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                     Divider(height: 1, color: Colors.grey[100]),
                     Expanded(
                       child: ListView.separated(
-                        itemCount: _reports.length,
+                        itemCount: filteredReports().length,
                         separatorBuilder: (_, _) => Divider(height: 1, color: Colors.grey[100], indent: 16),
                         itemBuilder: (context, i) {
-                          final r = _reports[i];
+                          final r = filteredReports()[i];
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                             child: Row(
@@ -231,7 +239,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                 Expanded(
                                   flex: 3,
                                   child: Text(
-                                    r["type"],
+                                    r["report_type"] ?? "",
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 13,
@@ -242,7 +250,7 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                 Expanded(
                                   flex: 2,
                                   child: Text(
-                                    r["due"],
+                                    r["deadline_date"] ?? "",
                                     style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
                                   ),
                                 ),
@@ -251,15 +259,15 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: (r["bgColor"] as Color),
+                                      color: getStatusBg(r["display_status"] ?? ""),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
-                                      r["status"],
+                                      r["display_status"] ?? "",
                                       style: GoogleFonts.inter(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
-                                        color: r["statusColor"] as Color,
+                                        color: getStatusColor(r["display_status"] ?? ""),
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
@@ -279,7 +287,10 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Showing 5 of 48 reports", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                Text(
+                  "Showing ${reports.length} reports",
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                ),
                 Row(
                   children: [
                     _PageBtn(icon: Icons.chevron_left, isActive: false),
@@ -359,63 +370,10 @@ class _MetricCard extends StatelessWidget {
   }
 }
 
-class _MetricCardWithProgress extends StatelessWidget {
-  final String title, value, badge;
-  final double progress;
-  const _MetricCardWithProgress({
-    required this.title,
-    required this.value,
-    required this.badge,
-    required this.progress,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: Offset(0, 2))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
-          SizedBox(height: 4),
-          Row(
-            children: [
-              Text(
-                value,
-                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
-              ),
-              SizedBox(width: 4),
-              Text(
-                badge,
-                style: GoogleFonts.inter(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w600),
-              ),
-            ],
-          ),
-          SizedBox(height: 6),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.grey[200],
-              color: Color(0xFF3B6EF0),
-              minHeight: 4,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PageBtn extends StatelessWidget {
   final IconData icon;
   final bool isActive;
   const _PageBtn({required this.icon, required this.isActive});
-
   @override
   Widget build(BuildContext context) {
     return Container(

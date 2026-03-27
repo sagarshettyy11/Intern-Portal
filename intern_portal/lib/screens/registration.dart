@@ -50,7 +50,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       type: FileType.custom,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
     );
-
     if (result != null) {
       setState(() {
         selectedFile = result.files.first;
