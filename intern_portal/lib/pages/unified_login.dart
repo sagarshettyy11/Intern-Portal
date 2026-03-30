@@ -6,13 +6,13 @@ import 'package:intern_portal/services/authentication/auth_services.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class UnifiedLoginPage extends StatefulWidget {
+  const UnifiedLoginPage({super.key});
   @override
-  LoginPageState createState() => LoginPageState();
+  UnifiedLoginPageState createState() => UnifiedLoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class UnifiedLoginPageState extends State<UnifiedLoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isLoading = false;
@@ -60,12 +60,12 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Empowering your professional journey through academic excellence.",
+                        "Empowering your administrative journey through academic excellence.",
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 26,
@@ -75,7 +75,7 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "Connecting students with industry leaders to faster growth, innovation, and practical learning.",
+                        "Connecting academic leaders with structured tools for efficient management, collaboration, and oversight.",
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.85),
                           fontSize: 17,
@@ -86,7 +86,7 @@ class LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.005),
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -102,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Student Login",
+                              "Welcome Back!",
                               style: GoogleFonts.inter(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w900,
@@ -111,14 +111,14 @@ class LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "Welcome back! Please enter your details.",
+                              "Sign in to access your internship dashboard",
                               style: GoogleFonts.inter(
                                 fontSize: 15,
                                 color: Colors.grey[600],
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
                             Text(
                               "Email ID",
                               style: GoogleFonts.inter(
@@ -127,9 +127,9 @@ class LoginPageState extends State<LoginPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             CustomTextField(hint: "Enter your Email ID", controller: emailController),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -156,7 +156,7 @@ class LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             CustomTextField(
                               hint: "••••••••",
                               controller: passwordController,
@@ -165,13 +165,14 @@ class LoginPageState extends State<LoginPage> {
                                 onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 2),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Checkbox(
                                   value: _keepSignedIn,
                                   onChanged: (v) => setState(() => _keepSignedIn = v!),
-                                  activeColor: const Color(0xFF3B6EF0),
+                                  activeColor: const Color(0xFF0000FF),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                   side: BorderSide(color: Colors.grey[400]!),
                                 ),
@@ -185,7 +186,7 @@ class LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 6),
                             SizedBox(
                               width: double.infinity,
                               height: 50,
@@ -233,7 +234,32 @@ class LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
+                            Center(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "UNIFIED ACCESS FOR",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      letterSpacing: 2,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildAccessItem(Icons.people_alt_outlined, "Guide"),
+                                      _buildAccessItem(Icons.account_balance_outlined, "HOD"),
+                                      _buildAccessItem(Icons.admin_panel_settings_outlined, "Admin"),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 14),
                             Center(
                               child: RichText(
                                 text: TextSpan(
@@ -252,7 +278,7 @@ class LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 8),
                             Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -281,7 +307,7 @@ class LoginPageState extends State<LoginPage> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Center(
                               child: Text(
                                 "© 2026 University Academic Internship Portal. All rights reserved.",
@@ -307,6 +333,23 @@ class LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+Widget _buildAccessItem(IconData icon, String label) {
+  return Column(
+    children: [
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
+        child: Icon(icon, size: 22, color: Colors.grey[700]),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        label,
+        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]),
+      ),
+    ],
+  );
 }
 
 class _ColumnPatternPainter extends CustomPainter {

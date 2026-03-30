@@ -339,7 +339,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       bottomNavigationBar: AppBottomNav(
         currentIndex: 4,
-        onTap: (index) => BottomNavController.onItemTapped(context, index),
+        onTap: (index) => StudentBottomNavController.onItemTapped(context, index),
       ),
     );
   }
