@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class FacultyPerformancePage extends StatelessWidget {
   const FacultyPerformancePage({super.key});
@@ -15,26 +17,19 @@ class FacultyPerformancePage extends StatelessWidget {
             Container(
               width: 28,
               height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF3B6EF0),
-                borderRadius: BorderRadius.circular(6),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(6)),
               child: const Icon(Icons.school, color: Colors.white, size: 16),
             ),
             const SizedBox(width: 8),
             const Text(
               'Intern Portal',
-              style: TextStyle(
-                  color: Color(0xFF3B6EF0),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15),
+              style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700, fontSize: 15),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Colors.black54),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black54),
             onPressed: () {},
           ),
         ],
@@ -57,29 +52,21 @@ class FacultyPerformancePage extends StatelessWidget {
                 children: [
                   Text(
                     'HOD Dashboard',
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[500],
-                        fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 13, color: Colors.grey[500], fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 6),
                   const Text(
                     'Faculty Performance',
-                    style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF3B6EF0)),
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0)),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Real-time academic oversight dashboard',
-                    style:
-                        TextStyle(fontSize: 13, color: Colors.grey[500]),
+                    style: TextStyle(fontSize: 13, color: Colors.grey[500]),
                   ),
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -89,19 +76,11 @@ class FacultyPerformancePage extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _FacultyStatCard(
-                          icon: Icons.badge_outlined,
-                          label: 'ACTIVE GUIDES',
-                          value: '24',
-                        ),
+                        child: _FacultyStatCard(icon: Icons.badge_outlined, label: 'ACTIVE GUIDES', value: '24'),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _FacultyStatCard(
-                          icon: Icons.group_outlined,
-                          label: 'TOTAL STUDENTS',
-                          value: '286',
-                        ),
+                        child: _FacultyStatCard(icon: Icons.group_outlined, label: 'TOTAL STUDENTS', value: '286'),
                       ),
                     ],
                   ),
@@ -134,17 +113,11 @@ class FacultyPerformancePage extends StatelessWidget {
                     children: [
                       const Text(
                         'Faculty Guide Roster',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87),
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       const Text(
                         'Sort by Rating',
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF3B6EF0),
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 13, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -184,12 +157,13 @@ class FacultyPerformancePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HodBottomNav(currentIndex: 2),
+      bottomNavigationBar: HodAppBottomNav(
+        currentIndex: 2,
+        onTap: (index) => HodBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
-
-// ── Faculty stat card ─────────────────────────────────────────────────────────
 
 class _FacultyStatCard extends StatelessWidget {
   final IconData icon;
@@ -197,12 +171,7 @@ class _FacultyStatCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const _FacultyStatCard({
-    required this.icon,
-    this.iconColor,
-    required this.label,
-    required this.value,
-  });
+  const _FacultyStatCard({required this.icon, this.iconColor, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -211,31 +180,22 @@ class _FacultyStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon,
-              color: iconColor ?? const Color(0xFF3B6EF0), size: 24),
+          Icon(icon, color: iconColor ?? const Color(0xFF3B6EF0), size: 24),
           const SizedBox(height: 12),
-          Text(label,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey[500],
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4)),
+          Text(
+            label,
+            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.4),
+          ),
           const SizedBox(height: 4),
-          Text(value,
-              style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
         ],
       ),
     );
@@ -266,12 +226,7 @@ class _FacultyCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         children: [
@@ -292,24 +247,18 @@ class _FacultyCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.black87)),
+                    Text(
+                      name,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                    ),
                     const SizedBox(height: 2),
-                    Text(role,
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey[500])),
+                    Text(role, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Icon(Icons.school_outlined,
-                            size: 13, color: Colors.grey[400]),
+                        Icon(Icons.school_outlined, size: 13, color: Colors.grey[400]),
                         const SizedBox(width: 4),
-                        Text(students,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey[500])),
+                        Text(students, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
                       ],
                     ),
                   ],
@@ -317,22 +266,16 @@ class _FacultyCard extends StatelessWidget {
               ),
               // Rating badge
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF8E1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(color: const Color(0xFFFFF8E1), borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   children: [
-                    const Icon(Icons.star_rounded,
-                        color: Colors.amber, size: 14),
+                    const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
                     const SizedBox(width: 3),
-                    Text(rating.toString(),
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87)),
+                    Text(
+                      rating.toString(),
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
                   ],
                 ),
               ),
@@ -349,32 +292,24 @@ class _FacultyCard extends StatelessWidget {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF3B6EF0),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       elevation: 0,
                     ),
                     child: const Text(
                       'View Workload',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   )
                 : OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Colors.grey[200]!),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       backgroundColor: const Color(0xFFF4F6FB),
                     ),
                     child: const Text(
                       'View Workload',
-                      style: TextStyle(
-                          color: Color(0xFF3B6EF0),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14),
+                      style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                   ),
           ),
@@ -392,12 +327,7 @@ class _FacultyCardNoButton extends StatelessWidget {
   final String students;
   final double rating;
 
-  const _FacultyCardNoButton({
-    required this.name,
-    required this.role,
-    required this.students,
-    required this.rating,
-  });
+  const _FacultyCardNoButton({required this.name, required this.role, required this.students, required this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -406,12 +336,7 @@ class _FacultyCardNoButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Row(
         children: [
@@ -429,46 +354,34 @@ class _FacultyCardNoButton extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.black87)),
+                Text(
+                  name,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                ),
                 const SizedBox(height: 2),
-                Text(role,
-                    style:
-                        TextStyle(fontSize: 12, color: Colors.grey[500])),
+                Text(role, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Icon(Icons.school_outlined,
-                        size: 13, color: Colors.grey[400]),
+                    Icon(Icons.school_outlined, size: 13, color: Colors.grey[400]),
                     const SizedBox(width: 4),
-                    Text(students,
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey[500])),
+                    Text(students, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
                   ],
                 ),
               ],
             ),
           ),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFF8E1),
-              borderRadius: BorderRadius.circular(20),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(color: const Color(0xFFFFF8E1), borderRadius: BorderRadius.circular(20)),
             child: Row(
               children: [
-                const Icon(Icons.star_rounded,
-                    color: Colors.amber, size: 14),
+                const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
                 const SizedBox(width: 3),
-                Text(rating.toString(),
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87)),
+                Text(
+                  rating.toString(),
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                ),
               ],
             ),
           ),
@@ -488,60 +401,44 @@ class _HodBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey[200]!))),
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle:
-            const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
         unselectedLabelStyle: const TextStyle(fontSize: 10),
         elevation: 0,
         backgroundColor: Colors.white,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined,
-                color: currentIndex == 0
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.grey[500]),
+            icon: Icon(Icons.home_outlined, color: currentIndex == 0 ? const Color(0xFF3B6EF0) : Colors.grey[500]),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group_outlined,
-                color: currentIndex == 1
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.grey[500]),
+            icon: Icon(Icons.group_outlined, color: currentIndex == 1 ? const Color(0xFF3B6EF0) : Colors.grey[500]),
             label: 'Students',
           ),
           // Active "Guides" pill
           BottomNavigationBarItem(
             icon: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: currentIndex == 2
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.transparent,
+                color: currentIndex == 2 ? const Color(0xFF3B6EF0) : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Icon(Icons.person_pin_outlined,
-                  color: currentIndex == 2 ? Colors.white : Colors.grey[500]),
+              child: Icon(Icons.person_pin_outlined, color: currentIndex == 2 ? Colors.white : Colors.grey[500]),
             ),
             label: 'Guides',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded,
-                color: currentIndex == 3
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.grey[500]),
+            icon: Icon(Icons.bar_chart_rounded, color: currentIndex == 3 ? const Color(0xFF3B6EF0) : Colors.grey[500]),
             label: 'Analytics',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline,
-                color: currentIndex == 4
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.grey[500]),
+            icon: Icon(Icons.person_outline, color: currentIndex == 4 ? const Color(0xFF3B6EF0) : Colors.grey[500]),
             label: 'Profile',
           ),
         ],

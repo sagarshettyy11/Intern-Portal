@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intern_portal/screens/faculty/guide/dashboard.dart';
+import 'package:intern_portal/screens/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/faculty/guide/internship_review.dart';
-import 'package:intern_portal/screens/faculty/guide/report.dart';
+import 'package:intern_portal/screens/faculty/guide/report_review.dart';
 import 'package:intern_portal/screens/faculty/guide/internship_request.dart';
 import 'package:intern_portal/screens/faculty/guide/student_report.dart';
+import 'package:intern_portal/screens/faculty/hod/faculty_performance.dart';
+import 'package:intern_portal/screens/faculty/hod/hod_dashboard.dart';
+import 'package:intern_portal/screens/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/screens/faculty/hod/overall_analytics.dart';
+import 'package:intern_portal/screens/faculty/hod/student_performance.dart';
 import 'package:intern_portal/screens/students/certificate.dart';
 import 'package:intern_portal/screens/students/dashboard.dart';
 import 'package:intern_portal/screens/students/internship.dart';
@@ -58,19 +63,19 @@ class HodBottomNavController {
   static void onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const DashboardPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const HodDashboardPage()));
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentPerformancePage()));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsOverviewPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyPerformancePage()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const CertificatePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const OverallAnalyticsPage()));
         break;
       case 4:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfilePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const HodProfilePage()));
         break;
     }
   }

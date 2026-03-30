@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class HodProfilePage extends StatelessWidget {
   const HodProfilePage({super.key});
@@ -12,38 +14,22 @@ class HodProfilePage extends StatelessWidget {
         elevation: 0,
         title: Row(
           children: [
-            const Icon(
-              Icons.grid_view_rounded,
-              color: Colors.black87,
-              size: 20,
-            ),
+            const Icon(Icons.grid_view_rounded, color: Colors.black87, size: 20),
             const SizedBox(width: 8),
             const Text(
               'HOD Dashboard',
-              style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.w700,
-                fontSize: 15,
-              ),
+              style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15),
             ),
           ],
         ),
         actions: [
           const Text(
             'HORIZON',
-            style: TextStyle(
-              color: Color(0xFF3B6EF0),
-              fontWeight: FontWeight.w800,
-              fontSize: 13,
-              letterSpacing: 1,
-            ),
+            style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800, fontSize: 13, letterSpacing: 1),
           ),
           const SizedBox(width: 8),
           IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.black54,
-            ),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black54),
             onPressed: () {},
           ),
         ],
@@ -66,11 +52,7 @@ class HodProfilePage extends StatelessWidget {
                     width: 72,
                     height: 72,
                     color: Colors.grey[300],
-                    child: Icon(
-                      Icons.person,
-                      size: 44,
-                      color: Colors.grey[600],
-                    ),
+                    child: Icon(Icons.person, size: 44, color: Colors.grey[600]),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -80,17 +62,10 @@ class HodProfilePage extends StatelessWidget {
                     children: [
                       const Text(
                         'Dr. Aristhanes Murthy',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        'Academic Lead & Administrator',
-                        style: TextStyle(fontSize: 13, color: Colors.grey[500]),
-                      ),
+                      Text('Academic Lead & Administrator', style: TextStyle(fontSize: 13, color: Colors.grey[500])),
                     ],
                   ),
                 ),
@@ -102,10 +77,7 @@ class HodProfilePage extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF0F4FF),
-                borderRadius: BorderRadius.circular(14),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFFF0F4FF), borderRadius: BorderRadius.circular(14)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -119,20 +91,12 @@ class HodProfilePage extends StatelessWidget {
                           color: const Color(0xFF3B6EF0),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Icon(
-                          Icons.badge_outlined,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+                        child: const Icon(Icons.badge_outlined, color: Colors.white, size: 18),
                       ),
                       const SizedBox(width: 10),
                       const Text(
                         'Personal Information',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                     ],
                   ),
@@ -141,17 +105,11 @@ class HodProfilePage extends StatelessWidget {
                   const SizedBox(height: 12),
                   _InfoRow(label: 'CONTACT NUMBER', value: '+91 98450 12345'),
                   const SizedBox(height: 12),
-                  _InfoRow(
-                    label: 'EMAIL ADDRESS',
-                    value: 'hod.cse@horizon.edu',
-                  ),
+                  _InfoRow(label: 'EMAIL ADDRESS', value: 'hod.cse@horizon.edu'),
                   const SizedBox(height: 12),
                   _InfoRow(label: 'DESIGNATION', value: 'Head of Department'),
                   const SizedBox(height: 12),
-                  _InfoRow(
-                    label: 'BRANCH',
-                    value: 'Computer Science & Engineering',
-                  ),
+                  _InfoRow(label: 'BRANCH', value: 'Computer Science & Engineering'),
                 ],
               ),
             ),
@@ -160,11 +118,7 @@ class HodProfilePage extends StatelessWidget {
             // Quick Links
             const Text(
               'Quick Links',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
             Container(
@@ -172,29 +126,16 @@ class HodProfilePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
                 children: [
-                  _QuickLinkRow(
-                    icon: Icons.help_outline,
-                    title: 'FAQ & Support',
-                  ),
+                  _QuickLinkRow(icon: Icons.help_outline, title: 'FAQ & Support'),
                   Divider(height: 1, color: Colors.grey[100]),
-                  _QuickLinkRow(
-                    icon: Icons.check_box_outlined,
-                    title: 'Internship Guidelines',
-                  ),
+                  _QuickLinkRow(icon: Icons.check_box_outlined, title: 'Internship Guidelines'),
                   Divider(height: 1, color: Colors.grey[100]),
-                  _QuickLinkRow(
-                    icon: Icons.menu_book_outlined,
-                    title: 'Student Handbook',
-                  ),
+                  _QuickLinkRow(icon: Icons.menu_book_outlined, title: 'Student Handbook'),
                 ],
               ),
             ),
@@ -206,19 +147,11 @@ class HodProfilePage extends StatelessWidget {
               children: [
                 const Text(
                   'Campus Location',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
                 const Text(
                   'Main Block, Level 4',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF3B6EF0),
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 13, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -234,38 +167,21 @@ class HodProfilePage extends StatelessWidget {
                 child: Stack(
                   children: [
                     // Map grid
-                    CustomPaint(
-                      size: const Size(double.infinity, 180),
-                      painter: _MapPainter(),
-                    ),
+                    CustomPaint(size: const Size(double.infinity, 180), painter: _MapPainter()),
                     // Get Directions button
                     Positioned(
                       bottom: 12,
                       right: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
                         child: Row(
                           children: const [
-                            Icon(
-                              Icons.location_on,
-                              color: Color(0xFF3B6EF0),
-                              size: 14,
-                            ),
+                            Icon(Icons.location_on, color: Color(0xFF3B6EF0), size: 14),
                             SizedBox(width: 4),
                             Text(
                               'Get Directions',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
                             ),
                           ],
                         ),
@@ -283,24 +199,14 @@ class HodProfilePage extends StatelessWidget {
               height: 52,
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: const Icon(
-                  Icons.logout_rounded,
-                  color: Colors.red,
-                  size: 20,
-                ),
+                icon: const Icon(Icons.logout_rounded, color: Colors.red, size: 20),
                 label: const Text(
                   'Logout',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFF1F1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   elevation: 0,
                 ),
               ),
@@ -309,7 +215,10 @@ class HodProfilePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HodBottomNav(currentIndex: 4),
+      bottomNavigationBar: HodAppBottomNav(
+        currentIndex: 4,
+        onTap: (index) => HodBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -328,21 +237,12 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.grey[500],
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-          ),
+          style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.4),
         ),
         const SizedBox(height: 3),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
         ),
       ],
     );
@@ -365,21 +265,14 @@ class _QuickLinkRow extends StatelessWidget {
           Container(
             width: 34,
             height: 34,
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF4FF),
-              borderRadius: BorderRadius.circular(8),
-            ),
+            decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
             child: Icon(icon, color: const Color(0xFF3B6EF0), size: 18),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
             ),
           ),
           Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
@@ -408,29 +301,13 @@ class _MapPainter extends CustomPainter {
     final roadPaint = Paint()
       ..color = Colors.white.withValues(alpha: 0.15)
       ..strokeWidth = 8;
-    canvas.drawLine(
-      Offset(0, size.height * 0.45),
-      Offset(size.width, size.height * 0.45),
-      roadPaint,
-    );
-    canvas.drawLine(
-      Offset(size.width * 0.45, 0),
-      Offset(size.width * 0.45, size.height),
-      roadPaint,
-    );
+    canvas.drawLine(Offset(0, size.height * 0.45), Offset(size.width, size.height * 0.45), roadPaint);
+    canvas.drawLine(Offset(size.width * 0.45, 0), Offset(size.width * 0.45, size.height), roadPaint);
 
     // Pin
     final pinPaint = Paint()..color = const Color(0xFF3B6EF0);
-    canvas.drawCircle(
-      Offset(size.width * 0.45, size.height * 0.45),
-      10,
-      pinPaint,
-    );
-    canvas.drawCircle(
-      Offset(size.width * 0.45, size.height * 0.45),
-      6,
-      Paint()..color = Colors.white,
-    );
+    canvas.drawCircle(Offset(size.width * 0.45, size.height * 0.45), 10, pinPaint);
+    canvas.drawCircle(Offset(size.width * 0.45, size.height * 0.45), 6, Paint()..color = Colors.white);
   }
 
   @override
@@ -454,34 +331,16 @@ class _HodBottomNav extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFF3B6EF0),
         unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-        ),
+        selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
         unselectedLabelStyle: const TextStyle(fontSize: 10),
         elevation: 0,
         backgroundColor: Colors.white,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_outlined),
-            label: 'Students',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_pin_outlined),
-            label: 'Guides',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), label: 'Students'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_pin_outlined), label: 'Guides'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'Analytics'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
     );

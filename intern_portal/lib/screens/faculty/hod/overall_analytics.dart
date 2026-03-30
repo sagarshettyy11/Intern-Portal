@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'dart:math' as math;
 
-class AnalyticsPage extends StatelessWidget {
-  const AnalyticsPage({super.key});
+import 'package:intern_portal/widgets/bottom_navigation.dart';
+
+class OverallAnalyticsPage extends StatelessWidget {
+  const OverallAnalyticsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +385,10 @@ class AnalyticsPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HodBottomNav(currentIndex: 3),
+      bottomNavigationBar: HodAppBottomNav(
+        currentIndex: 3,
+        onTap: (index) => HodBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }

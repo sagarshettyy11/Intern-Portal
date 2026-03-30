@@ -85,9 +85,9 @@ class HodAppBottomNav extends StatelessWidget {
         elevation: 0,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'CERTIFICATES'),
+          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'STUDENTS'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'FACULTY'),
+          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'ANALYTICS'),
           BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
         ],
       ),

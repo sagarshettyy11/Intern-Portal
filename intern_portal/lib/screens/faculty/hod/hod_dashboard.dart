@@ -1,68 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class HodHomePage extends StatelessWidget {
-  const HodHomePage({super.key});
-
+class HodDashboardPage extends StatelessWidget {
+  const HodDashboardPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF3B6EF0),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Icon(Icons.school, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Intern Portal',
-              style: TextStyle(
-                color: Color(0xFF3B6EF0),
-                fontWeight: FontWeight.w700,
-                fontSize: 15,
-              ),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.black54,
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
             ),
-            onPressed: () {},
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // HOD Dashboard title
-            const Text(
+            Text(
               'HOD Dashboard',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF3B6EF0),
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 16),
-
-            // Overview Analytics card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -70,11 +43,7 @@ class HodHomePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -82,7 +51,7 @@ class HodHomePage extends StatelessWidget {
                 children: [
                   Text(
                     'ACADEMIC YEAR 2023-24',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: Colors.grey[500],
@@ -90,17 +59,11 @@ class HodHomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Overview Analytics',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
+                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 16),
-
-                  // Stat grid
                   Row(
                     children: [
                       Expanded(
@@ -157,8 +120,6 @@ class HodHomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Departmental Progress card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -166,11 +127,7 @@ class HodHomePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -179,19 +136,12 @@ class HodHomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Departmental\nProgress',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF4F6FB),
                           borderRadius: BorderRadius.circular(10),
@@ -200,70 +150,38 @@ class HodHomePage extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              'Semester 6',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            Text('Semester 6', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500)),
                             const SizedBox(width: 4),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 16,
-                              color: Colors.grey[600],
-                            ),
+                            Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.grey[600]),
                           ],
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-
-                  // Bar chart simulation
                   SizedBox(
                     height: 100,
                     width: double.infinity,
                     child: CustomPaint(painter: _BarChartPainter()),
                   ),
                   const SizedBox(height: 8),
-
-                  // X-axis labels
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text('2021-22', style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
+                      Text('2022-23', style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
                       Text(
-                        '2021-22',
-                        style: TextStyle(fontSize: 11, color: Colors.grey[500]),
-                      ),
-                      Text(
-                        '2022-23',
-                        style: TextStyle(fontSize: 11, color: Colors.grey[500]),
-                      ),
-                      const Text(
                         '2023-24',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF3B6EF0),
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: GoogleFonts.inter(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-
-                  // Legend
                   Row(
                     children: [
-                      _LegendDot(
-                        color: const Color(0xFF3B6EF0),
-                        label: 'Applied',
-                      ),
+                      _LegendDot(color: const Color(0xFF3B6EF0), label: 'Applied'),
                       const SizedBox(width: 16),
-                      _LegendDot(
-                        color: const Color(0xFF1A1A2E),
-                        label: 'Ongoing',
-                      ),
+                      _LegendDot(color: const Color(0xFF1A1A2E), label: 'Ongoing'),
                       const SizedBox(width: 16),
                       _LegendDot(color: Colors.grey[300]!, label: 'Completed'),
                     ],
@@ -272,41 +190,26 @@ class HodHomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Recent Approvals
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Recent Approvals',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+                  style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
-                const Text(
+                Text(
                   'VIEW ALL',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF3B6EF0),
-                  ),
+                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF3B6EF0)),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -359,18 +262,11 @@ class HodHomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Faculty Guide Load
-            const Text(
+            Text(
               'Faculty Guide Load',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+              style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
-
             _GuideLoadCard(
               name: 'Dr. Sarah Chen',
               mentees: '8 Mentees',
@@ -390,12 +286,13 @@ class HodHomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HodBottomNav(currentIndex: 0),
+      bottomNavigationBar: HodAppBottomNav(
+        currentIndex: 0,
+        onTap: (index) => HodBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
-
-// ── Stat card ────────────────────────────────────────────────────────────────
 
 class _StatCard extends StatelessWidget {
   final IconData icon;
@@ -405,7 +302,6 @@ class _StatCard extends StatelessWidget {
   final String label;
   final String value;
   final double valueFontSize;
-
   const _StatCard({
     required this.icon,
     required this.iconColor,
@@ -415,15 +311,11 @@ class _StatCard extends StatelessWidget {
     required this.value,
     this.valueFontSize = 22,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF4F6FB),
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -439,11 +331,7 @@ class _StatCard extends StatelessWidget {
                 ),
                 child: Text(
                   badge,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: badgeColor,
-                  ),
+                  style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: badgeColor),
                 ),
               ),
             ],
@@ -451,7 +339,7 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 10,
               color: Colors.grey[500],
               fontWeight: FontWeight.w600,
@@ -461,11 +349,7 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
-              fontSize: valueFontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            style: GoogleFonts.inter(fontSize: valueFontSize, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
         ],
       ),
@@ -473,13 +357,10 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-// ── Legend dot ───────────────────────────────────────────────────────────────
-
 class _LegendDot extends StatelessWidget {
   final Color color;
   final String label;
   const _LegendDot({required this.color, required this.label});
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -490,13 +371,11 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 5),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+        Text(label, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
       ],
     );
   }
 }
-
-// ── Bar chart painter ────────────────────────────────────────────────────────
 
 class _BarChartPainter extends CustomPainter {
   @override
@@ -504,42 +383,27 @@ class _BarChartPainter extends CustomPainter {
     final bluePaint = Paint()..color = const Color(0xFF3B6EF0);
     final darkPaint = Paint()..color = const Color(0xFF1A1A2E);
     final greyPaint = Paint()..color = Colors.grey.shade300;
-
     final barWidth = size.width * 0.09;
     final gap = size.width * 0.02;
-
     final groups = [
       [0.45, 0.55, 0.35],
       [0.55, 0.60, 0.42],
       [0.72, 0.75, 0.50],
     ];
-
     final groupWidth = size.width / 3;
-
     for (int g = 0; g < groups.length; g++) {
       final startX = g * groupWidth + groupWidth * 0.15;
       final heights = groups[g];
-
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            startX,
-            size.height * (1 - heights[0]),
-            barWidth,
-            size.height * heights[0],
-          ),
+          Rect.fromLTWH(startX, size.height * (1 - heights[0]), barWidth, size.height * heights[0]),
           const Radius.circular(3),
         ),
         bluePaint,
       );
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            startX + barWidth + gap,
-            size.height * (1 - heights[1]),
-            barWidth,
-            size.height * heights[1],
-          ),
+          Rect.fromLTWH(startX + barWidth + gap, size.height * (1 - heights[1]), barWidth, size.height * heights[1]),
           const Radius.circular(3),
         ),
         darkPaint,
@@ -563,8 +427,6 @@ class _BarChartPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-// ── Approval row ─────────────────────────────────────────────────────────────
-
 class _ApprovalRow extends StatelessWidget {
   final String initials;
   final Color initialsColor;
@@ -575,7 +437,6 @@ class _ApprovalRow extends StatelessWidget {
   final Color tagBg;
   final String time;
   final bool isLast;
-
   const _ApprovalRow({
     required this.initials,
     required this.initialsColor,
@@ -587,7 +448,6 @@ class _ApprovalRow extends StatelessWidget {
     required this.time,
     required this.isLast,
   });
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -601,11 +461,7 @@ class _ApprovalRow extends StatelessWidget {
                 backgroundColor: initialsColor.withValues(alpha: 0.15),
                 child: Text(
                   initials,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: initialsColor,
-                  ),
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.bold, color: initialsColor),
                 ),
               ),
               const SizedBox(width: 12),
@@ -615,16 +471,9 @@ class _ApprovalRow extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                     ),
-                    Text(
-                      guide,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                    ),
+                    Text(guide, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                   ],
                 ),
               ),
@@ -632,28 +481,15 @@ class _ApprovalRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: tagBg,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(20)),
                     child: Text(
                       tag,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: tagColor,
-                      ),
+                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: tagColor),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    time,
-                    style: TextStyle(fontSize: 11, color: Colors.grey[400]),
-                  ),
+                  Text(time, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400])),
                 ],
               ),
             ],
@@ -665,15 +501,12 @@ class _ApprovalRow extends StatelessWidget {
   }
 }
 
-// ── Guide load card ──────────────────────────────────────────────────────────
-
 class _GuideLoadCard extends StatelessWidget {
   final String name;
   final String mentees;
   final String responseTime;
   final double progress;
   final Color progressColor;
-
   const _GuideLoadCard({
     required this.name,
     required this.mentees,
@@ -681,7 +514,6 @@ class _GuideLoadCard extends StatelessWidget {
     required this.progress,
     required this.progressColor,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -689,13 +521,7 @@ class _GuideLoadCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -708,16 +534,9 @@ class _GuideLoadCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                   ),
-                  Text(
-                    mentees,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                  ),
+                  Text(mentees, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                 ],
               ),
               Column(
@@ -725,7 +544,7 @@ class _GuideLoadCard extends StatelessWidget {
                 children: [
                   Text(
                     'RESPONSE TIME',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 9,
                       color: Colors.grey[500],
                       fontWeight: FontWeight.w600,
@@ -734,11 +553,7 @@ class _GuideLoadCard extends StatelessWidget {
                   ),
                   Text(
                     responseTime,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
+                    style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
                   ),
                 ],
               ),
@@ -753,89 +568,6 @@ class _GuideLoadCard extends StatelessWidget {
               color: progressColor,
               minHeight: 5,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Bottom nav ───────────────────────────────────────────────────────────────
-
-class _HodBottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _HodBottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-        ),
-        unselectedLabelStyle: const TextStyle(fontSize: 10),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                color: currentIndex == 0
-                    ? const Color(0xFF3B6EF0)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                Icons.home_outlined,
-                color: currentIndex == 0 ? Colors.white : Colors.grey[500],
-              ),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.group_outlined,
-              color: currentIndex == 1
-                  ? const Color(0xFF3B6EF0)
-                  : Colors.grey[500],
-            ),
-            label: 'Students',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_pin_outlined,
-              color: currentIndex == 2
-                  ? const Color(0xFF3B6EF0)
-                  : Colors.grey[500],
-            ),
-            label: 'Guides',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bar_chart_rounded,
-              color: currentIndex == 3
-                  ? const Color(0xFF3B6EF0)
-                  : Colors.grey[500],
-            ),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_outline,
-              color: currentIndex == 4
-                  ? const Color(0xFF3B6EF0)
-                  : Colors.grey[500],
-            ),
-            label: 'Profile',
           ),
         ],
       ),

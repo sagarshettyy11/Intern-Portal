@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'dart:math' as math;
 
-class DeptPerformancePage extends StatelessWidget {
-  const DeptPerformancePage({super.key});
+import 'package:intern_portal/widgets/bottom_navigation.dart';
+
+class StudentPerformancePage extends StatelessWidget {
+  const StudentPerformancePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +19,13 @@ class DeptPerformancePage extends StatelessWidget {
             Container(
               width: 28,
               height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF3B6EF0),
-                borderRadius: BorderRadius.circular(6),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(6)),
               child: const Icon(Icons.school, color: Colors.white, size: 16),
             ),
             const SizedBox(width: 8),
             const Text(
               'Intern Portal',
-              style: TextStyle(
-                  color: Color(0xFF3B6EF0),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15),
+              style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700, fontSize: 15),
             ),
           ],
         ),
@@ -50,18 +47,12 @@ class DeptPerformancePage extends StatelessWidget {
           children: [
             const Text(
               'HOD Dashboard',
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black54),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54),
             ),
             const SizedBox(height: 4),
             const Text(
               'Department\nPerformance Analytics',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 16),
 
@@ -69,36 +60,28 @@ class DeptPerformancePage extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF3B6EF0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     children: [
-                      const Text('Academic Year 2023-24',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600)),
+                      const Text(
+                        'Academic Year 2023-24',
+                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.keyboard_arrow_down,
-                          size: 16, color: Colors.white),
+                      const Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.white),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.grey[300]!),
                   ),
-                  child: const Text('Semester 7↑',
-                      style: TextStyle(fontSize: 12, color: Colors.black87)),
+                  child: const Text('Semester 7↑', style: TextStyle(fontSize: 12, color: Colors.black87)),
                 ),
               ],
             ),
@@ -108,11 +91,7 @@ class DeptPerformancePage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _DeptStatCard(
-                    icon: Icons.group_outlined,
-                    label: 'TOTAL INTERNS',
-                    value: '1,248',
-                  ),
+                  child: _DeptStatCard(icon: Icons.group_outlined, label: 'TOTAL INTERNS', value: '1,248'),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -129,11 +108,7 @@ class DeptPerformancePage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _DeptStatCard(
-                    icon: Icons.business_outlined,
-                    label: 'ACTIVE COMPANIES',
-                    value: '156',
-                  ),
+                  child: _DeptStatCard(icon: Icons.business_outlined, label: 'ACTIVE COMPANIES', value: '156'),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -156,20 +131,14 @@ class DeptPerformancePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
                 children: [
                   const Text(
                     'Internship Completion %',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -181,16 +150,11 @@ class DeptPerformancePage extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('65%',
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87)),
-                            Text('COMPLETED',
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey,
-                                    letterSpacing: 0.5)),
+                            Text(
+                              '65%',
+                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
+                            ),
+                            Text('COMPLETED', style: TextStyle(fontSize: 10, color: Colors.grey, letterSpacing: 0.5)),
                           ],
                         ),
                       ),
@@ -206,8 +170,6 @@ class DeptPerformancePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Report Submission Consistency
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -215,10 +177,7 @@ class DeptPerformancePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -229,22 +188,17 @@ class DeptPerformancePage extends StatelessWidget {
                     children: [
                       const Text(
                         'Report Submission\nConsistency',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       Row(
                         children: const [
-                          Text('MONTHLY\nTREND',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF3B6EF0),
-                                  fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.right),
+                          Text(
+                            'MONTHLY\nTREND',
+                            style: TextStyle(fontSize: 10, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.right,
+                          ),
                           SizedBox(width: 4),
-                          Icon(Icons.trending_up,
-                              size: 16, color: Color(0xFF3B6EF0)),
+                          Icon(Icons.trending_up, size: 16, color: Color(0xFF3B6EF0)),
                         ],
                       ),
                     ],
@@ -252,19 +206,19 @@ class DeptPerformancePage extends StatelessWidget {
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 80,
-                    child: CustomPaint(
-                      size: const Size(double.infinity, 80),
-                      painter: _LineChartPainter(),
-                    ),
+                    child: CustomPaint(size: const Size(double.infinity, 80), painter: _LineChartPainter()),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN']
-                        .map((m) => Text(m,
-                            style: TextStyle(
-                                fontSize: 10, color: Colors.grey[500])))
-                        .toList(),
+                    children: [
+                      'JAN',
+                      'FEB',
+                      'MAR',
+                      'APR',
+                      'MAY',
+                      'JUN',
+                    ].map((m) => Text(m, style: TextStyle(fontSize: 10, color: Colors.grey[500]))).toList(),
                   ),
                 ],
               ),
@@ -279,10 +233,7 @@ class DeptPerformancePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -290,10 +241,7 @@ class DeptPerformancePage extends StatelessWidget {
                 children: [
                   const Text(
                     'Grade Distribution',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 16),
                   _GradeBar(grade: 'GRADE A+', value: 342, max: 500, color: const Color(0xFF1A1A7E)),
@@ -318,10 +266,7 @@ class DeptPerformancePage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -329,43 +274,31 @@ class DeptPerformancePage extends StatelessWidget {
                 children: [
                   const Text(
                     'Department Comparison',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 200,
-                    child: CustomPaint(
-                      size: const Size(double.infinity, 200),
-                      painter: _RadarChartPainter(),
-                    ),
+                    child: CustomPaint(size: const Size(double.infinity, 200), painter: _RadarChartPainter()),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       Container(
-                          width: 10,
-                          height: 10,
-                          decoration: const BoxDecoration(
-                              color: Color(0xFF3B6EF0),
-                              shape: BoxShape.circle)),
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
+                      ),
                       const SizedBox(width: 6),
-                      Text('CURRENT DEPT',
-                          style:
-                              TextStyle(fontSize: 11, color: Colors.grey[600])),
+                      Text('CURRENT DEPT', style: TextStyle(fontSize: 11, color: Colors.grey[600])),
                       const SizedBox(width: 16),
                       Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              shape: BoxShape.circle)),
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(color: Colors.grey[400], shape: BoxShape.circle),
+                      ),
                       const SizedBox(width: 6),
-                      Text('AVERAGE',
-                          style:
-                              TextStyle(fontSize: 11, color: Colors.grey[600])),
+                      Text('AVERAGE', style: TextStyle(fontSize: 11, color: Colors.grey[600])),
                     ],
                   ),
                 ],
@@ -379,16 +312,12 @@ class DeptPerformancePage extends StatelessWidget {
               children: [
                 const Text(
                   'Performance Alerts',
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
-                const Text('VIEW ALL',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF3B6EF0),
-                        fontWeight: FontWeight.w700)),
+                const Text(
+                  'VIEW ALL',
+                  style: TextStyle(fontSize: 12, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700),
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -414,7 +343,10 @@ class DeptPerformancePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HodBottomNav(currentIndex: 1),
+      bottomNavigationBar: HodAppBottomNav(
+        currentIndex: 1,
+        onTap: (index) => HodBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -427,12 +359,7 @@ class _DeptStatCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const _DeptStatCard({
-    required this.icon,
-    this.iconColor,
-    required this.label,
-    required this.value,
-  });
+  const _DeptStatCard({required this.icon, this.iconColor, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -441,30 +368,22 @@ class _DeptStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 6,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: iconColor ?? const Color(0xFF3B6EF0), size: 22),
           const SizedBox(height: 8),
-          Text(label,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey[500],
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.3)),
+          Text(
+            label,
+            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.3),
+          ),
           const SizedBox(height: 4),
-          Text(value,
-              style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
         ],
       ),
     );
@@ -536,10 +455,7 @@ class _LineChartPainter extends CustomPainter {
 
     final path = Path()..moveTo(points[0].dx, points[0].dy);
     for (int i = 0; i < points.length - 1; i++) {
-      final mid = Offset(
-        (points[i].dx + points[i + 1].dx) / 2,
-        (points[i].dy + points[i + 1].dy) / 2,
-      );
+      final mid = Offset((points[i].dx + points[i + 1].dx) / 2, (points[i].dy + points[i + 1].dy) / 2);
       path.quadraticBezierTo(points[i].dx, points[i].dy, mid.dx, mid.dy);
     }
     path.lineTo(points.last.dx, points.last.dy);
@@ -558,11 +474,7 @@ class _GradeBar extends StatelessWidget {
   final int max;
   final Color color;
 
-  const _GradeBar(
-      {required this.grade,
-      required this.value,
-      required this.max,
-      required this.color});
+  const _GradeBar({required this.grade, required this.value, required this.max, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -570,11 +482,10 @@ class _GradeBar extends StatelessWidget {
       children: [
         SizedBox(
           width: 72,
-          child: Text(grade,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.w600)),
+          child: Text(
+            grade,
+            style: TextStyle(fontSize: 10, color: Colors.grey[600], fontWeight: FontWeight.w600),
+          ),
         ),
         Expanded(
           child: ClipRRect(
@@ -588,9 +499,10 @@ class _GradeBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        Text(value.toString(),
-            style: const TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87)),
+        Text(
+          value.toString(),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
+        ),
       ],
     );
   }
@@ -636,19 +548,16 @@ class _RadarChartPainter extends CustomPainter {
       final angle = -math.pi / 2 + (2 * math.pi * i / sides);
       canvas.drawLine(
         center,
-        Offset(center.dx + radius * math.cos(angle),
-            center.dy + radius * math.sin(angle)),
+        Offset(center.dx + radius * math.cos(angle), center.dy + radius * math.sin(angle)),
         gridPaint,
       );
     }
 
     // Draw average shape
-    _drawRadarShape(canvas, center, radius, avgValues,
-        Colors.grey.shade400, sides);
+    _drawRadarShape(canvas, center, radius, avgValues, Colors.grey.shade400, sides);
 
     // Draw current dept shape
-    _drawRadarShape(canvas, center, radius, currentValues,
-        const Color(0xFF3B6EF0), sides);
+    _drawRadarShape(canvas, center, radius, currentValues, const Color(0xFF3B6EF0), sides);
 
     // Labels
     final labelPaint = TextPainter(textDirection: TextDirection.ltr);
@@ -661,14 +570,11 @@ class _RadarChartPainter extends CustomPainter {
         style: TextStyle(fontSize: 8, color: Colors.grey[600]),
       );
       labelPaint.layout();
-      labelPaint.paint(
-          canvas,
-          Offset(x - labelPaint.width / 2, y - labelPaint.height / 2));
+      labelPaint.paint(canvas, Offset(x - labelPaint.width / 2, y - labelPaint.height / 2));
     }
   }
 
-  void _drawRadarShape(Canvas canvas, Offset center, double radius,
-      List<double> values, Color color, int sides) {
+  void _drawRadarShape(Canvas canvas, Offset center, double radius, List<double> values, Color color, int sides) {
     final fillPaint = Paint()
       ..color = color.withValues(alpha: 0.15)
       ..style = PaintingStyle.fill;
@@ -734,14 +640,12 @@ class _AlertCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: Colors.black87)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                ),
                 const SizedBox(height: 2),
-                Text(subtitle,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
               ],
             ),
           ),
@@ -762,28 +666,23 @@ class _HodBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey[200]!))),
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: const Color(0xFF3B6EF0),
         unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle:
-            const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
         unselectedLabelStyle: const TextStyle(fontSize: 10),
         elevation: 0,
         backgroundColor: Colors.white,
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.group_outlined), label: 'Students'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_pin_outlined), label: 'Guides'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart_rounded), label: 'Analytics'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), label: 'Students'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_pin_outlined), label: 'Guides'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'Analytics'),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
     );
