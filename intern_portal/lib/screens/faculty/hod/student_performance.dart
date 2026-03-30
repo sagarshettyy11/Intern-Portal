@@ -655,36 +655,3 @@ class _AlertCard extends StatelessWidget {
     );
   }
 }
-
-// ── Bottom nav ────────────────────────────────────────────────────────────────
-
-class _HodBottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _HodBottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF3B6EF0),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontSize: 10),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.group_outlined), label: 'Students'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_pin_outlined), label: 'Guides'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_rounded), label: 'Analytics'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
-      ),
-    );
-  }
-}
