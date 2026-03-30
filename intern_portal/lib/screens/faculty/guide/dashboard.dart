@@ -1,48 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class GuideDashboardPage extends StatelessWidget {
   const GuideDashboardPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: const BoxDecoration(
-                color: Color(0xFF1A3A5C),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.person, color: Colors.white, size: 20),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'InternPortal',
-              style: TextStyle(
-                color: Color(0xFF2563EB),
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
-              ),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Colors.black54, size: 24),
-            onPressed: () {},
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => FacultyProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
+            ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -52,36 +34,28 @@ class GuideDashboardPage extends StatelessWidget {
             // Search bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF4F6FB),
-                borderRadius: BorderRadius.circular(30),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(30)),
               child: Row(
                 children: [
                   Icon(Icons.search, color: Colors.grey[400], size: 20),
                   const SizedBox(width: 10),
                   Text(
                     'Search by student name or company...',
-                    style: TextStyle(fontSize: 13, color: Colors.grey[400]),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[400]),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Mentorship Reach blue card
+            const SizedBox(height: 14),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2563EB),
-                borderRadius: BorderRadius.circular(14),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFF2563EB), borderRadius: BorderRadius.circular(14)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
                         width: 40,
@@ -92,9 +66,20 @@ class GuideDashboardPage extends StatelessWidget {
                         ),
                         child: const Icon(Icons.group, color: Colors.white, size: 22),
                       ),
+                      const SizedBox(width: 10),
+                      Text(
+                        '42',
+                        style: GoogleFonts.inter(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          height: 1,
+                        ),
+                      ),
+                      const SizedBox(width: 120),
                       Text(
                         'MENTORSHIP REACH',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: Colors.white.withValues(alpha: 0.85),
@@ -103,67 +88,55 @@ class GuideDashboardPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
-                  const Text(
-                    '42',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                  ),
                   const SizedBox(height: 4),
                   Text(
                     'Total Approved Internships',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white.withValues(alpha: 0.85),
-                    ),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.white.withValues(alpha: 0.85)),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 12),
-
-            // Active / Completed row
             Row(
               children: [
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration: BoxDecoration(color: const Color(0xFFEFF6FF), borderRadius: BorderRadius.circular(12)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2563EB).withValues(alpha: 0.15),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.play_arrow_rounded,
-                              color: Color(0xFF2563EB), size: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          '38',
-                          style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2563EB).withValues(alpha: 0.15),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.play_arrow_rounded, color: Color(0xFF2563EB), size: 18),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '38',
+                              style: GoogleFonts.inter(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           'CURRENTLY ACTIVE',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[500],
-                              letterSpacing: 0.4),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[500],
+                            letterSpacing: 0.4,
+                          ),
                         ),
                       ],
                     ),
@@ -173,38 +146,41 @@ class GuideDashboardPage extends StatelessWidget {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF4F6FB),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(12)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: Colors.amber.withValues(alpha: 0.2),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.check_circle_outline,
-                              color: Colors.amber, size: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          '04',
-                          style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: Colors.amber.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.check_circle_outline, color: Colors.amber, size: 18),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '04',
+                              style: GoogleFonts.inter(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
                           'COMPLETED',
-                          style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[500],
-                              letterSpacing: 0.4),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[500],
+                            letterSpacing: 0.4,
+                          ),
                         ),
                       ],
                     ),
@@ -213,8 +189,6 @@ class GuideDashboardPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 22),
-
-            // Assigned Mentees header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -223,30 +197,25 @@ class GuideDashboardPage extends StatelessWidget {
                   children: [
                     Text(
                       'YOUR NETWORK',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF2563EB),
-                          letterSpacing: 0.8),
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF2563EB),
+                        letterSpacing: 0.8,
+                      ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'Assigned Mentees',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                     ),
                   ],
                 ),
                 Row(
-                  children: const [
+                  children: [
                     Text(
                       'See All',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF2563EB)),
+                      style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
                     ),
                     SizedBox(width: 4),
                     Icon(Icons.arrow_forward, size: 14, color: Color(0xFF2563EB)),
@@ -255,8 +224,6 @@ class GuideDashboardPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 14),
-
-            // Mentee cards
             _MenteeCard(
               name: 'Alex Rivera',
               email: 'alex.rivera@university.edu',
@@ -293,12 +260,13 @@ class GuideDashboardPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _GuideBottomNav(currentIndex: 0),
+      bottomNavigationBar: GuideAppBottomNav(
+        currentIndex: 0,
+        onTap: (index) => GuideBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
-
-// ── Mentee card ───────────────────────────────────────────────────────────────
 
 class _MenteeCard extends StatelessWidget {
   final String name;
@@ -309,7 +277,6 @@ class _MenteeCard extends StatelessWidget {
   final Color statusColor;
   final Color statusBg;
   final String footerNote;
-
   const _MenteeCard({
     required this.name,
     required this.email,
@@ -320,7 +287,6 @@ class _MenteeCard extends StatelessWidget {
     required this.statusBg,
     required this.footerNote,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -329,17 +295,11 @@ class _MenteeCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: Colors.grey[200]!),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top row
           Row(
             children: [
               ClipRRect(
@@ -356,51 +316,45 @@ class _MenteeCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.black87)),
-                    Text(email,
-                        style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      name,
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                    ),
+                    Text(email, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                   ],
                 ),
               ),
               Container(
                 width: 36,
                 height: 36,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.visibility_outlined,
-                    color: Color(0xFF2563EB), size: 18),
+                decoration: BoxDecoration(color: const Color(0xFFEFF6FF), shape: BoxShape.circle),
+                child: const Icon(Icons.visibility_outlined, color: Color(0xFF2563EB), size: 18),
               ),
             ],
           ),
           const SizedBox(height: 14),
           Divider(height: 1, color: Colors.grey[100]),
           const SizedBox(height: 12),
-
-          // Info row
           Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('INTERNSHIP ID',
-                        style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey[500],
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.4)),
+                    Text(
+                      'INTERNSHIP ID',
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
                     const SizedBox(height: 3),
-                    Text(internshipId,
-                        style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black87)),
+                    Text(
+                      internshipId,
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black87),
+                    ),
                   ],
                 ),
               ),
@@ -408,87 +362,45 @@ class _MenteeCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('COMPANY',
-                        style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey[500],
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.4)),
+                    Text(
+                      'COMPANY',
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
                     const SizedBox(height: 3),
-                    Text(company,
-                        style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87)),
+                    Text(
+                      company,
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-
-          // Status + footer
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                decoration: BoxDecoration(
-                  color: statusBg,
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(color: statusBg, borderRadius: BorderRadius.circular(20)),
                 child: Text(
                   statusLabel,
-                  style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: statusColor,
-                      letterSpacing: 0.3),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: statusColor,
+                    letterSpacing: 0.3,
+                  ),
                 ),
               ),
-              Text(footerNote,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[400])),
+              Text(footerNote, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[400])),
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Bottom nav ────────────────────────────────────────────────────────────────
-
-class _GuideBottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _GuideBottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey[200]!))),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF2563EB),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle:
-            const TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
-        unselectedLabelStyle: const TextStyle(fontSize: 9),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.group_outlined), label: 'MENTEES'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.description_outlined), label: 'REPORTS'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.check_box_outlined), label: 'EVAL'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.verified_outlined), label: 'CERT'),
         ],
       ),
     );

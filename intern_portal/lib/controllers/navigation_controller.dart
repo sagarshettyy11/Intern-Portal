@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/screens/faculty/guide/dashboard.dart';
+import 'package:intern_portal/screens/faculty/guide/internship_review.dart';
+import 'package:intern_portal/screens/faculty/guide/report.dart';
+import 'package:intern_portal/screens/faculty/guide/internship_request.dart';
+import 'package:intern_portal/screens/faculty/guide/student_report.dart';
 import 'package:intern_portal/screens/students/certificate.dart';
 import 'package:intern_portal/screens/students/dashboard.dart';
 import 'package:intern_portal/screens/students/internship.dart';
@@ -31,19 +36,19 @@ class GuideBottomNavController {
   static void onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const DashboardPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const GuideDashboardPage()));
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipRequestsPage()));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsOverviewPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const CertificatePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipReviewPage()));
         break;
       case 4:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfilePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportDetailsPage()));
         break;
     }
   }

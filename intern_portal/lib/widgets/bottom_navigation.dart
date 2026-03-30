@@ -53,10 +53,10 @@ class GuideAppBottomNav extends StatelessWidget {
         elevation: 0,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
+          BottomNavigationBarItem(icon: Icon(Icons.group, fontWeight: FontWeight.bold), label: 'MENTEES'),
+          BottomNavigationBarItem(icon: Icon(Icons.fact_check, fontWeight: FontWeight.bold), label: 'REPORTS'),
+          BottomNavigationBarItem(icon: Icon(Icons.checklist, fontWeight: FontWeight.bold), label: 'REVIEW'),
+          BottomNavigationBarItem(icon: Icon(Icons.verified, fontWeight: FontWeight.bold), label: 'CERTS'),
         ],
       ),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class StudentReportsPage extends StatefulWidget {
   const StudentReportsPage({super.key});
@@ -22,20 +24,13 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
             Container(
               width: 28,
               height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF2563EB),
-                borderRadius: BorderRadius.circular(6),
-              ),
+              decoration: BoxDecoration(color: const Color(0xFF2563EB), borderRadius: BorderRadius.circular(6)),
               child: const Icon(Icons.school, color: Colors.white, size: 16),
             ),
             const SizedBox(width: 8),
             const Text(
               'The Curator',
-              style: TextStyle(
-                color: Color(0xFF2563EB),
-                fontWeight: FontWeight.w800,
-                fontSize: 17,
-              ),
+              style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.w800, fontSize: 17),
             ),
           ],
         ),
@@ -49,10 +44,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
             child: Container(
               width: 32,
               height: 32,
-              decoration: const BoxDecoration(
-                color: Color(0xFF1A3A5C),
-                shape: BoxShape.circle,
-              ),
+              decoration: const BoxDecoration(color: Color(0xFF1A3A5C), shape: BoxShape.circle),
               child: const Icon(Icons.person, color: Colors.white, size: 18),
             ),
           ),
@@ -85,11 +77,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                   const SizedBox(height: 4),
                   const Text(
                     'Student Reports',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ],
               ),
@@ -137,10 +125,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2563EB),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    decoration: BoxDecoration(color: const Color(0xFF2563EB), borderRadius: BorderRadius.circular(12)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -168,11 +153,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                             ),
                             Text(
                               '%',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ],
                         ),
@@ -248,7 +229,10 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const _GuideBottomNav(currentIndex: 2),
+      bottomNavigationBar: GuideAppBottomNav(
+        currentIndex: 2,
+        onTap: (index) => GuideBottomNavController.onItemTapped(context, index),
+      ),
     );
   }
 }
@@ -261,12 +245,7 @@ class _ReportStatCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const _ReportStatCard({
-    required this.icon,
-    required this.iconColor,
-    required this.label,
-    required this.value,
-  });
+  const _ReportStatCard({required this.icon, required this.iconColor, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -275,13 +254,7 @@ class _ReportStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,21 +263,12 @@ class _ReportStatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3,
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.3),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
         ],
       ),
@@ -319,11 +283,7 @@ class _TabItem extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _TabItem({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _TabItem({required this.label, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -341,12 +301,7 @@ class _TabItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          if (isSelected)
-            Container(
-              height: 2,
-              width: label.length * 7.2,
-              color: const Color(0xFF2563EB),
-            ),
+          if (isSelected) Container(height: 2, width: label.length * 7.2, color: const Color(0xFF2563EB)),
         ],
       ),
     );
@@ -379,13 +334,7 @@ class _ReportRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 6, offset: const Offset(0, 2))],
       ),
       child: Row(
         children: [
@@ -405,84 +354,19 @@ class _ReportRow extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                 ),
-                Text(
-                  '$role • $time',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                ),
+                Text('$role • $time', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: statusBg,
-              borderRadius: BorderRadius.circular(20),
-            ),
+            decoration: BoxDecoration(color: statusBg, borderRadius: BorderRadius.circular(20)),
             child: Text(
               status,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: statusColor,
-              ),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: statusColor),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Bottom nav ────────────────────────────────────────────────────────────────
-
-class _GuideBottomNav extends StatelessWidget {
-  final int currentIndex;
-  const _GuideBottomNav({required this.currentIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey[200]!)),
-      ),
-      child: BottomNavigationBar(
-        currentIndex: currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF2563EB),
-        unselectedItemColor: Colors.grey[500],
-        selectedLabelStyle: const TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w700,
-        ),
-        unselectedLabelStyle: const TextStyle(fontSize: 9),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view_rounded),
-            label: 'DASHBOARD',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_outlined),
-            label: 'MENTEES',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description_outlined),
-            label: 'REPORTS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'EVALUATION',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.verified_outlined),
-            label: 'CERTIFICATES',
           ),
         ],
       ),
