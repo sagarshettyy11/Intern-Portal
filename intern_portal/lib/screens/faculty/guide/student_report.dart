@@ -1,64 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class StudentReportsPage extends StatefulWidget {
   const StudentReportsPage({super.key});
-
   @override
   State<StudentReportsPage> createState() => _StudentReportsPageState();
 }
 
 class _StudentReportsPageState extends State<StudentReportsPage> {
   int _selectedTab = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(color: const Color(0xFF2563EB), borderRadius: BorderRadius.circular(6)),
-              child: const Icon(Icons.school, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'The Curator',
-              style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.w800, fontSize: 17),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black54),
-            onPressed: () {},
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(color: Color(0xFF1A3A5C), shape: BoxShape.circle),
-              child: const Icon(Icons.person, color: Colors.white, size: 18),
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => FacultyProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header section
             Container(
               color: Colors.white,
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -67,7 +44,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                 children: [
                   Text(
                     'ACADEMIC INSIGHTS',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF2563EB),
@@ -75,20 +52,18 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Student Reports',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 3-stat row
                   Row(
                     children: [
                       Expanded(
@@ -120,8 +95,6 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                     ],
                   ),
                   const SizedBox(height: 12),
-
-                  // Average Score blue card
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
@@ -131,7 +104,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                       children: [
                         Text(
                           'AVERAGE SCORE',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             color: Colors.white.withValues(alpha: 0.8),
@@ -141,10 +114,10 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                         const SizedBox(height: 6),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: const [
+                          children: [
                             Text(
                               '88.4',
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 fontSize: 38,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -153,7 +126,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                             ),
                             Text(
                               '%',
-                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ],
                         ),
@@ -161,8 +134,6 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Tab row
                   Row(
                     children: [
                       _TabItem(
@@ -185,8 +156,6 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // Report list
                   _ReportRow(
                     name: 'James Wilson',
                     role: 'Architecture Intern',
@@ -237,16 +206,12 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
   }
 }
 
-// ── Report stat card ──────────────────────────────────────────────────────────
-
 class _ReportStatCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String label;
   final String value;
-
   const _ReportStatCard({required this.icon, required this.iconColor, required this.label, required this.value});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -263,12 +228,17 @@ class _ReportStatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.3),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
         ],
       ),
@@ -276,15 +246,11 @@ class _ReportStatCard extends StatelessWidget {
   }
 }
 
-// ── Tab item ──────────────────────────────────────────────────────────────────
-
 class _TabItem extends StatelessWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
-
   const _TabItem({required this.label, required this.isSelected, required this.onTap});
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -308,8 +274,6 @@ class _TabItem extends StatelessWidget {
   }
 }
 
-// ── Report row ────────────────────────────────────────────────────────────────
-
 class _ReportRow extends StatelessWidget {
   final String name;
   final String role;
@@ -317,7 +281,6 @@ class _ReportRow extends StatelessWidget {
   final String status;
   final Color statusColor;
   final Color statusBg;
-
   const _ReportRow({
     required this.name,
     required this.role,
@@ -326,7 +289,6 @@ class _ReportRow extends StatelessWidget {
     required this.statusColor,
     required this.statusBg,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(

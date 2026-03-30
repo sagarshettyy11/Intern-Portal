@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class InternshipReviewPage extends StatelessWidget {
   const InternshipReviewPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Color(0xFF2563EB)),
-        title: const Text(
-          'Student Review',
-          style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.w700, fontSize: 17),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.grey[600]),
-            onPressed: () {},
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
-      ),
+      appBar: CommonAppBar(title: "Student Internship Review", showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Student Profile section
-            _SectionHeader(icon: Icons.person_outline, title: 'Student Profile'),
+            SectionHeader(icon: Icons.person_outline, title: 'Student Profile'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -49,20 +32,20 @@ class InternshipReviewPage extends StatelessWidget {
                       CircleAvatar(
                         radius: 24,
                         backgroundColor: const Color(0xFFEFF6FF),
-                        child: const Text(
+                        child: Text(
                           'JD',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2563EB)),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2563EB)),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Johnnathan Doe',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
                           ),
-                          Text('ID: STU-2024-0891', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                          Text('ID: STU-2024-0891', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                         ],
                       ),
                     ],
@@ -76,7 +59,7 @@ class InternshipReviewPage extends StatelessWidget {
                       children: [
                         Text(
                           'PROGRAM & YEAR',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 10,
                             color: Colors.grey[500],
                             fontWeight: FontWeight.w600,
@@ -84,11 +67,14 @@ class InternshipReviewPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
+                        Text(
                           'B.S. Computer Science',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
                         ),
-                        Text('Academic Year: 2023-2024', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                        Text(
+                          'Academic Year: 2023-2024',
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                        ),
                       ],
                     ),
                   ),
@@ -97,7 +83,10 @@ class InternshipReviewPage extends StatelessWidget {
                     children: [
                       Icon(Icons.mail_outline, size: 14, color: Colors.grey[500]),
                       const SizedBox(width: 6),
-                      Text('johnnathan.doe@university.edu', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                      Text(
+                        'johnnathan.doe@university.edu',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -105,16 +94,14 @@ class InternshipReviewPage extends StatelessWidget {
                     children: [
                       Icon(Icons.phone_outlined, size: 14, color: Colors.grey[500]),
                       const SizedBox(width: 6),
-                      Text('+1 (555) 234-5678', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                      Text('+1 (555) 234-5678', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-
-            // Company Details
-            _SectionHeader(icon: Icons.business_outlined, title: 'Company Details'),
+            SectionHeader(icon: Icons.business_outlined, title: 'Company Details'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -135,10 +122,14 @@ class InternshipReviewPage extends StatelessWidget {
                           color: const Color(0xFFF4F6FB),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'T',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF2563EB)),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color(0xFF2563EB),
+                            ),
                           ),
                         ),
                       ),
@@ -146,13 +137,13 @@ class InternshipReviewPage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'TechVision Systems Inc.',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
                           ),
                           Text(
                             'Software Development & AI Solutions',
-                            style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                            style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500]),
                           ),
                         ],
                       ),
@@ -168,16 +159,16 @@ class InternshipReviewPage extends StatelessWidget {
                         children: [
                           Text(
                             'LOCATION',
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.grey[500],
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
                             ),
                           ),
-                          const Text(
+                          Text(
                             'Palo Alto, California, USA',
-                            style: TextStyle(fontSize: 13, color: Colors.black87),
+                            style: GoogleFonts.inter(fontSize: 13, color: Colors.black87),
                           ),
                         ],
                       ),
@@ -192,7 +183,7 @@ class InternshipReviewPage extends StatelessWidget {
                       children: [
                         Text(
                           'SUPERVISOR CONTACT',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                             fontSize: 10,
                             color: const Color(0xFF2563EB),
                             fontWeight: FontWeight.w700,
@@ -200,13 +191,13 @@ class InternshipReviewPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
+                        Text(
                           'Sarah Mitchell',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
                         ),
                         Text(
                           'Engineering Manager | s.mitchell@techvision.com',
-                          style: TextStyle(fontSize: 11, color: Colors.grey[500]),
+                          style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500]),
                         ),
                       ],
                     ),
@@ -215,9 +206,7 @@ class InternshipReviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Role Specifications
-            _SectionHeader(icon: Icons.work_outline, title: 'Role Specifications'),
+            SectionHeader(icon: Icons.work_outline, title: 'Role Specifications'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -237,7 +226,7 @@ class InternshipReviewPage extends StatelessWidget {
                           children: [
                             Text(
                               'JOB TITLE',
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 fontSize: 10,
                                 color: Colors.grey[500],
                                 fontWeight: FontWeight.w600,
@@ -245,9 +234,13 @@ class InternshipReviewPage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text(
+                            Text(
                               'Backend Intern',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black87,
+                              ),
                             ),
                           ],
                         ),
@@ -257,7 +250,7 @@ class InternshipReviewPage extends StatelessWidget {
                         children: [
                           Text(
                             'WORK MODE',
-                            style: TextStyle(
+                            style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.grey[500],
                               fontWeight: FontWeight.w600,
@@ -271,9 +264,13 @@ class InternshipReviewPage extends StatelessWidget {
                               color: const Color(0xFFFFF8E1),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Hybrid',
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFFB7950B)),
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFFB7950B),
+                              ),
                             ),
                           ),
                         ],
@@ -287,7 +284,7 @@ class InternshipReviewPage extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         'DURATION',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
                           color: Colors.grey[500],
                           fontWeight: FontWeight.w600,
@@ -297,17 +294,15 @@ class InternshipReviewPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'Jun 01, 2024 — Aug 31, 2024 (12 Weeks)',
-                    style: TextStyle(fontSize: 13, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.black87),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-
-            // Job Description
-            _SectionHeader(icon: Icons.format_list_bulleted, title: 'Job Description'),
+            SectionHeader(icon: Icons.format_list_bulleted, title: 'Job Description'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(14),
@@ -318,13 +313,11 @@ class InternshipReviewPage extends StatelessWidget {
               ),
               child: Text(
                 'As a Backend Engineering Intern, the candidate will be responsible for assisting the core platform team in developing scalable microservices using Go and Node.js. Key responsibilities include optimizing database queries for PostgreSQL, implementing RESTful API endpoints, and contributing to the containerization strategy using Docker. The intern will participate in daily stand-ups and bi-weekly sprint planning sessions.',
-                style: TextStyle(fontSize: 13, color: Colors.grey[700], height: 1.6),
+                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
               ),
             ),
             const SizedBox(height: 20),
-
-            // Attachments
-            _SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
+            SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
             const SizedBox(height: 12),
             _AttachmentRow(
               icon: Icons.picture_as_pdf_outlined,
@@ -347,9 +340,7 @@ class InternshipReviewPage extends StatelessWidget {
               trailingIcon: Icons.open_in_new,
             ),
             const SizedBox(height: 20),
-
-            // Audit Trail
-            _SectionHeader(icon: Icons.history, title: 'Audit Trail'),
+            SectionHeader(icon: Icons.history, title: 'Audit Trail'),
             const SizedBox(height: 12),
             _AuditRow(
               dotColor: const Color(0xFF2563EB),
@@ -369,8 +360,6 @@ class InternshipReviewPage extends StatelessWidget {
           ],
         ),
       ),
-
-      // Bottom action buttons
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
         decoration: BoxDecoration(
@@ -387,9 +376,9 @@ class InternshipReviewPage extends StatelessWidget {
                   side: BorderSide(color: Colors.grey[300]!),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                child: const Text(
+                child: Text(
                   'Reject Registration',
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: GoogleFonts.inter(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 14),
                 ),
               ),
             ),
@@ -403,9 +392,9 @@ class InternshipReviewPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   elevation: 0,
                 ),
-                child: const Text(
+                child: Text(
                   'Approve Internship',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
                 ),
               ),
             ),
@@ -416,43 +405,17 @@ class InternshipReviewPage extends StatelessWidget {
   }
 }
 
-// ── Section header ────────────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const _SectionHeader({required this.icon, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: const Color(0xFF2563EB), size: 20),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Attachment row ────────────────────────────────────────────────────────────
-
 class _AttachmentRow extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String fileName;
   final IconData trailingIcon;
-
   const _AttachmentRow({
     required this.icon,
     required this.iconColor,
     required this.fileName,
     required this.trailingIcon,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -467,7 +430,7 @@ class _AttachmentRow extends StatelessWidget {
           Icon(icon, color: iconColor, size: 18),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(fileName, style: const TextStyle(fontSize: 13, color: Colors.black87)),
+            child: Text(fileName, style: GoogleFonts.inter(fontSize: 13, color: Colors.black87)),
           ),
           Icon(trailingIcon, color: Colors.grey[400], size: 18),
         ],
@@ -476,15 +439,12 @@ class _AttachmentRow extends StatelessWidget {
   }
 }
 
-// ── Audit row ─────────────────────────────────────────────────────────────────
-
 class _AuditRow extends StatelessWidget {
   final Color dotColor;
   final String title;
   final String date;
   final String sub;
   final bool isLast;
-
   const _AuditRow({
     required this.dotColor,
     required this.title,
@@ -492,7 +452,6 @@ class _AuditRow extends StatelessWidget {
     required this.sub,
     required this.isLast,
   });
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -520,13 +479,13 @@ class _AuditRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
                 ),
                 const SizedBox(height: 2),
-                Text(date, style: TextStyle(fontSize: 11, color: Colors.grey[400])),
+                Text(date, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400])),
                 if (sub.isNotEmpty) ...[
                   const SizedBox(height: 2),
-                  Text(sub, style: TextStyle(fontSize: 11, color: Colors.grey[500])),
+                  Text(sub, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
                 ],
               ],
             ),

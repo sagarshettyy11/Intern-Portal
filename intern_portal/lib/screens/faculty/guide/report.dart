@@ -1,42 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class ReportDetailsPage extends StatelessWidget {
   const ReportDetailsPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Color(0xFF2563EB)),
-        title: const Text(
-          'Report Details',
-          style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.w700, fontSize: 17),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(color: Color(0xFF1A3A5C), shape: BoxShape.circle),
-              child: const Icon(Icons.person, color: Colors.white, size: 18),
-            ),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
-      ),
+      appBar: CommonAppBar(title: "Student Report Details", showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header: Reporting period + status
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -46,7 +24,7 @@ class ReportDetailsPage extends StatelessWidget {
                     children: [
                       Text(
                         'REPORTING PERIOD',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 10,
                           color: Colors.grey[500],
                           fontWeight: FontWeight.w600,
@@ -54,29 +32,27 @@ class ReportDetailsPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'Week 12: System\nIntegration',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
-                      Text('Oct 24 - Oct 30, 2023', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                      Text('Oct 24 - Oct 30, 2023', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                     ],
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(color: const Color(0xFFB7950B), borderRadius: BorderRadius.circular(20)),
-                  child: const Text(
+                  child: Text(
                     'PENDING\nREVIEW',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                    style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-
-            // Student info row
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(10)),
@@ -95,20 +71,21 @@ class ReportDetailsPage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Alex Johnston',
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                       ),
-                      Text('Junior Software Engineer Intern', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                      Text(
+                        'Junior Software Engineer Intern',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-
-            // Activity Description
-            _SectionHeader(icon: Icons.description_outlined, title: 'Activity Description'),
+            SectionHeader(icon: Icons.description_outlined, title: 'Activity Description'),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(14),
@@ -119,13 +96,11 @@ class ReportDetailsPage extends StatelessWidget {
               ),
               child: Text(
                 'This week focused primarily on the final integration of the payment gateway microservice. I spent Monday and Tuesday debugging the webhook listener that handles asynchronous transaction updates. On Wednesday, I collaborated with the QA team to draft a regression testing suite for the checkout flow. Thursday and Friday were dedicated to documentation and peer-reviewing code for the upcoming sprint.',
-                style: TextStyle(fontSize: 13, color: Colors.grey[700], height: 1.6),
+                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
               ),
             ),
             const SizedBox(height: 20),
-
-            // Learning Outcomes
-            _SectionHeader(icon: Icons.lightbulb_outline, title: 'Learning Outcomes'),
+            SectionHeader(icon: Icons.lightbulb_outline, title: 'Learning Outcomes'),
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
@@ -145,9 +120,7 @@ class ReportDetailsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Attachments
-            _SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
+            SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -171,8 +144,6 @@ class ReportDetailsPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-
-            // Evaluation
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(12)),
@@ -186,22 +157,26 @@ class ReportDetailsPage extends StatelessWidget {
                         children: [
                           Icon(Icons.assessment_outlined, color: const Color(0xFF2563EB), size: 20),
                           const SizedBox(width: 8),
-                          const Text(
+                          Text(
                             'Evaluation',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                            style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
                         ],
                       ),
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           children: [
                             TextSpan(
                               text: '85',
-                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
+                              style: GoogleFonts.inter(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2563EB),
+                              ),
                             ),
                             TextSpan(
                               text: ' /100',
-                              style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
+                              style: GoogleFonts.inter(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -209,10 +184,9 @@ class ReportDetailsPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 14),
-
                   Text(
                     'GUIDE FEEDBACK',
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       fontSize: 10,
                       color: Colors.grey[500],
                       fontWeight: FontWeight.w700,
@@ -231,11 +205,10 @@ class ReportDetailsPage extends StatelessWidget {
                     ),
                     child: Text(
                       'Provide constructive feedback for Alex...',
-                      style: TextStyle(fontSize: 13, color: Colors.grey[400]),
+                      style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[400]),
                     ),
                   ),
                   const SizedBox(height: 10),
-
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(color: const Color(0xFFFFF8E1), borderRadius: BorderRadius.circular(8)),
@@ -247,7 +220,7 @@ class ReportDetailsPage extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Feedback will be visible to the student once the report is approved or returned for revision.',
-                            style: TextStyle(fontSize: 11, color: Colors.amber[800], height: 1.4),
+                            style: GoogleFonts.inter(fontSize: 11, color: Colors.amber[800], height: 1.4),
                           ),
                         ),
                       ],
@@ -260,8 +233,6 @@ class ReportDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-
-      // Bottom actions
       bottomNavigationBar: Container(
         padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
         decoration: BoxDecoration(
@@ -307,35 +278,10 @@ class ReportDetailsPage extends StatelessWidget {
   }
 }
 
-// ── Section header ────────────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  const _SectionHeader({required this.icon, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, color: const Color(0xFF2563EB), size: 20),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Outcome row ───────────────────────────────────────────────────────────────
-
 class _OutcomeRow extends StatelessWidget {
   final String text;
   final bool isLast;
   const _OutcomeRow({required this.text, required this.isLast});
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -348,7 +294,7 @@ class _OutcomeRow extends StatelessWidget {
               const Icon(Icons.check_circle_outline, color: Color(0xFF2563EB), size: 18),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(text, style: const TextStyle(fontSize: 13, color: Colors.black87, height: 1.4)),
+                child: Text(text, style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, height: 1.4)),
               ),
             ],
           ),
@@ -359,16 +305,12 @@ class _OutcomeRow extends StatelessWidget {
   }
 }
 
-// ── File chip ─────────────────────────────────────────────────────────────────
-
 class _FileChip extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String fileName;
   final String fileSize;
-
   const _FileChip({required this.icon, required this.iconColor, required this.fileName, required this.fileSize});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -388,10 +330,10 @@ class _FileChip extends StatelessWidget {
               children: [
                 Text(
                   fileName,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(fileSize, style: TextStyle(fontSize: 10, color: Colors.grey[500])),
+                Text(fileSize, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
               ],
             ),
           ),

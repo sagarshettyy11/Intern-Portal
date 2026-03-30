@@ -3,20 +3,28 @@ import 'package:google_fonts/google_fonts.dart';
 
 class InfoField extends StatelessWidget {
   final String label, value;
-  const InfoField({super.key, required this.label, required this.value});
+  final IconData? icon;
+
+  const InfoField({super.key, required this.label, required this.value, this.icon});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: GoogleFonts.inter(
-            fontSize: 10,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.4,
-          ),
+        Row(
+          children: [
+            if (icon != null) ...[Icon(icon, size: 12, color: Colors.grey[600]), SizedBox(width: 4)],
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 3),
         Text(
