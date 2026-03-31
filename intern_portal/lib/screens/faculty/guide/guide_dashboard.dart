@@ -4,7 +4,6 @@ import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
 import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
 import 'package:intern_portal/services/users/guide_services.dart';
-import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -67,16 +66,16 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
               decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(30)),
               child: Row(
                 children: [
-                  Icon(Icons.search, color: Colors.grey[400], size: 20),
+                  Icon(Icons.search, color: Colors.grey[800], size: 20),
                   const SizedBox(width: 10),
                   Text(
                     'Search by student name or company...',
-                    style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[400]),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700]),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -94,24 +93,24 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                           color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Icon(Icons.group, color: Colors.white, size: 22),
+                        child: Icon(Icons.group, color: Colors.white, size: 22, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 10),
                       Text(
                         d.totalApproved.toString(),
                         style: GoogleFonts.inter(
                           fontSize: 40,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white,
                           height: 1,
                         ),
                       ),
-                      const SizedBox(width: 120),
+                      const SizedBox(width: 130),
                       Text(
                         'MENTORSHIP REACH',
                         style: GoogleFonts.inter(
                           fontSize: 11,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white.withValues(alpha: 0.85),
                           letterSpacing: 1,
                         ),
@@ -121,7 +120,11 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                   const SizedBox(height: 4),
                   Text(
                     'Total Approved Internships',
-                    style: GoogleFonts.inter(fontSize: 13, color: Colors.white.withValues(alpha: 0.85)),
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      color: Colors.white.withValues(alpha: 0.85),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -146,14 +149,19 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                                 color: const Color(0xFF2563EB).withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.play_arrow_rounded, color: Color(0xFF2563EB), size: 18),
+                              child: const Icon(
+                                Icons.play_arrow_rounded,
+                                color: Color(0xFF2563EB),
+                                size: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Text(
                               d.currentlyActive.toString(),
                               style: GoogleFonts.inter(
                                 fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: Colors.black87,
                               ),
                             ),
@@ -163,7 +171,7 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                           'CURRENTLY ACTIVE',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                             color: Colors.grey[500],
                             letterSpacing: 0.4,
                           ),
@@ -190,14 +198,19 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                                 color: Colors.amber.withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(Icons.check_circle_outline, color: Colors.amber, size: 18),
+                              child: const Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.amber,
+                                size: 18,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Text(
                               d.completed.toString(),
                               style: GoogleFonts.inter(
                                 fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: Colors.black87,
                               ),
                             ),
@@ -207,7 +220,7 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                           'COMPLETED',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                             color: Colors.grey[500],
                             letterSpacing: 0.4,
                           ),
@@ -228,8 +241,8 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                     Text(
                       'YOUR NETWORK',
                       style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900,
                         color: const Color(0xFF2563EB),
                         letterSpacing: 0.8,
                       ),
@@ -237,7 +250,7 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                     const SizedBox(height: 4),
                     Text(
                       'Assigned Mentees',
-                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -245,10 +258,10 @@ class _GuideDashboardPageState extends State<GuideDashboardPage> {
                   children: [
                     Text(
                       'See All',
-                      style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
+                      style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF2563EB)),
                     ),
                     SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 14, color: Color(0xFF2563EB)),
+                    Icon(Icons.arrow_forward, size: 14, color: Color(0xFF0000FF), fontWeight: FontWeight.w800),
                   ],
                 ),
               ],
@@ -357,9 +370,12 @@ class _MenteeCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: Colors.black87),
                     ),
-                    Text(email, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      email,
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500], fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
               ),
@@ -367,12 +383,17 @@ class _MenteeCard extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(color: const Color(0xFFEFF6FF), shape: BoxShape.circle),
-                child: const Icon(Icons.visibility_outlined, color: Color(0xFF2563EB), size: 18),
+                child: const Icon(
+                  Icons.visibility_outlined,
+                  color: Color(0xFF0000FF),
+                  size: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 14),
-          Divider(height: 1, color: Colors.grey[100]),
+          Divider(height: 1, color: Colors.grey[400]),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -385,14 +406,14 @@ class _MenteeCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         color: Colors.grey[500],
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       internshipId,
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -406,14 +427,14 @@ class _MenteeCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         color: Colors.grey[500],
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         letterSpacing: 0.4,
                       ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       company,
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -431,13 +452,16 @@ class _MenteeCard extends StatelessWidget {
                   statusLabel,
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                     color: statusColor,
                     letterSpacing: 0.3,
                   ),
                 ),
               ),
-              Text(footerNote, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[400])),
+              Text(
+                footerNote,
+                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[400], fontWeight: FontWeight.w800),
+              ),
             ],
           ),
         ],
