@@ -1,14 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
 import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class GuideDashboardPage extends StatelessWidget {
+class GuideDashboardPage extends StatefulWidget {
   const GuideDashboardPage({super.key});
   @override
+  State<GuideDashboardPage> createState() => _GuideDashboardPageState();
+}
+
+class _GuideDashboardPageState extends State<GuideDashboardPage> {
+  GuideDashboardModel? dashboard;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadDashboard();
+  }
+
+  Future<void> loadDashboard() async {
+    final data = await GuideServices.fetchGuideDashboard();
+    setState(() {
+      dashboard = data;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (dashboard == null) {
+      return Scaffold(body: Center(child: Text("Failed to load")));
+    }
+    final d = dashboard!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonAppBar(
@@ -67,7 +98,7 @@ class GuideDashboardPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '42',
+                        d.totalApproved.toString(),
                         style: GoogleFonts.inter(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
@@ -119,7 +150,7 @@ class GuideDashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              '38',
+                              d.currentlyActive.toString(),
                               style: GoogleFonts.inter(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -163,7 +194,7 @@ class GuideDashboardPage extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              '04',
+                              d.completed.toString(),
                               style: GoogleFonts.inter(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -223,37 +254,46 @@ class GuideDashboardPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 14),
-            _MenteeCard(
-              name: 'Alex Rivera',
-              email: 'alex.rivera@university.edu',
-              internshipId: '#INT-9921',
-              company: 'TechNova Labs',
-              statusLabel: 'ONGOING',
-              statusColor: Colors.amber,
-              statusBg: const Color(0xFFFFF8E1),
-              footerNote: 'Updated 2h ago',
-            ),
-            const SizedBox(height: 12),
-            _MenteeCard(
-              name: 'Jordan Chen',
-              email: 'j.chen@institute.tech',
-              internshipId: '#INT-8430',
-              company: 'Aether Systems',
-              statusLabel: 'STALLED',
-              statusColor: Colors.red,
-              statusBg: const Color(0xFFFFF1F1),
-              footerNote: 'Requires Attention',
-            ),
-            const SizedBox(height: 12),
-            _MenteeCard(
-              name: 'Sarah Miller',
-              email: 's.miller@college.edu',
-              internshipId: '#INT-7704',
-              company: 'GreenLoo3 Inc',
-              statusLabel: 'COMPLETED',
-              statusColor: Colors.blueGrey,
-              statusBg: const Color(0xFFECEFF1),
-              footerNote: 'Graduated Dec 2023',
+            Column(
+              children: d.students.map((s) {
+                Color statusColor;
+                Color statusBg;
+                String label;
+                switch (s.status.toLowerCase()) {
+                  case 'approved':
+                    label = "ONGOING";
+                    statusColor = Colors.amber;
+                    statusBg = Color(0xFFFFF8E1);
+                    break;
+                  case 'completed':
+                    label = "COMPLETED";
+                    statusColor = Colors.blueGrey;
+                    statusBg = Color(0xFFECEFF1);
+                    break;
+                  case 'pending':
+                    label = "PENDING";
+                    statusColor = Colors.orange;
+                    statusBg = Color(0xFFFFF3E0);
+                    break;
+                  default:
+                    label = "UNKNOWN";
+                    statusColor = Colors.grey;
+                    statusBg = Colors.grey.shade200;
+                }
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _MenteeCard(
+                    name: s.name,
+                    email: s.email,
+                    internshipId: "#INT-${s.internshipId}",
+                    company: s.company,
+                    statusLabel: label,
+                    statusColor: statusColor,
+                    statusBg: statusBg,
+                    footerNote: "Internship Active",
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 20),
           ],

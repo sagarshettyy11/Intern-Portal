@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/screens/faculty/guide/guide_dashboard.dart';
+import 'package:intern_portal/screens/faculty/hod/hod_dashboard.dart';
 import 'package:intern_portal/screens/students/dashboard.dart';
 import 'package:intern_portal/screens/students/secure_account.dart';
 import 'package:intern_portal/services/authentication/auth_services.dart';
@@ -201,10 +203,17 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                         );
                                         setState(() => isLoading = false);
                                         if (result['success']) {
+                                          final role = result['data']['role'];
                                           CustomSnackbar.show(message: "Welcome back!", isSuccess: true);
-                                          NavigationService.pushReplacement(DashboardPage());
-                                        } else {
-                                          CustomSnackbar.show(message: result['message'], isSuccess: false);
+                                          if (role == "Guide") {
+                                            NavigationService.pushReplacement(GuideDashboardPage());
+                                          } else if (role == "HOD") {
+                                            NavigationService.pushReplacement(HodDashboardPage());
+                                          } else if (role == "Admin") {
+                                            NavigationService.pushReplacement(DashboardPage());
+                                          } else {
+                                            CustomSnackbar.show(message: "Invalid role", isSuccess: false);
+                                          }
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(

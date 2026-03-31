@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/pages/login.dart';
+import 'package:intern_portal/pages/unified_login.dart';
 import 'package:intern_portal/screens/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/faculty/hod/hod_dashboard.dart';
+import 'package:intern_portal/screens/students/dashboard.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 void main() {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const HodDashboardPage(),
+      home: const UnifiedLoginPage(),
     );
   }
 }
