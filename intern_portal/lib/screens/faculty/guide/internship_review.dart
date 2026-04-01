@@ -3,8 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
-class InternshipReviewPage extends StatelessWidget {
-  const InternshipReviewPage({super.key});
+class InternshipReviewPage extends StatefulWidget {
+  final int internshipId;
+
+  const InternshipReviewPage({super.key, required this.internshipId});
+
+  @override
+  State<InternshipReviewPage> createState() => _InternshipReviewPageState();
+}
+
+class _InternshipReviewPageState extends State<InternshipReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -50,7 +50,7 @@ class GuideBottomNavController {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipReviewPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
         break;
       case 4:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportDetailsPage()));

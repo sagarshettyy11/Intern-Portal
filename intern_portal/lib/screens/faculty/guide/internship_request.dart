@@ -2,11 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class InternshipRequestsPage extends StatelessWidget {
+class InternshipRequestsPage extends StatefulWidget {
   const InternshipRequestsPage({super.key});
+
+  @override
+  State<InternshipRequestsPage> createState() => _InternshipRequestsPageState();
+}
+
+class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
+  Map stats = {};
+  List requests = [];
+  bool isLoading = true;
+
+  void loadRequests() async {
+    final res = await GuideServices.fetchGuideRequests();
+    if (res != null) {
+      setState(() {
+        stats = res['stats'];
+        requests = res['requests']['data'];
+        isLoading = false;
+      });
+    } else {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadRequests();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,15 +64,27 @@ class InternshipRequestsPage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: _SummaryBox(label: 'TOTAL', value: '12', valueColor: Colors.black87),
+                  child: _SummaryBox(
+                    label: 'TOTAL',
+                    value: stats['total']?.toString() ?? '0',
+                    valueColor: Colors.black87,
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: _SummaryBox(label: 'PENDING', value: '4', valueColor: const Color(0xFF2563EB)),
+                  child: _SummaryBox(
+                    label: 'PENDING',
+                    value: stats['pending']?.toString() ?? '0',
+                    valueColor: Color(0xFF2563EB),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: _SummaryBox(label: 'APPROVED', value: '6', valueColor: Colors.green),
+                  child: _SummaryBox(
+                    label: 'APPROVED',
+                    value: stats['approved']?.toString() ?? '0',
+                    valueColor: Colors.green,
+                  ),
                 ),
               ],
             ),
@@ -123,57 +165,23 @@ class InternshipRequestsPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _RequestCard(
-              companyIconBg: const Color(0xFFEFF6FF),
-              companyIcon: Icons.business_outlined,
-              companyIconColor: const Color(0xFF2563EB),
-              companyName: 'Nova Dynamics',
-              studentName: 'Student: Sarah Jenkins',
-              status: 'APPROVED',
-              statusColor: const Color(0xFF2563EB),
-              statusBg: const Color(0xFFEFF6FF),
-              submittedDate: 'Oct 12, 2023',
-              mentor: 'Prof. Miller',
-            ),
-            const SizedBox(height: 12),
-            _RequestCard(
-              companyIconBg: const Color(0xFFFFF8E1),
-              companyIcon: Icons.rocket_launch_outlined,
-              companyIconColor: Colors.amber,
-              companyName: 'Stellar Labs',
-              studentName: 'Student: Marcus Thorne',
-              status: 'PENDING',
-              statusColor: Colors.white,
-              statusBg: const Color(0xFFB7950B),
-              submittedDate: 'Oct 14, 2023',
-              mentor: 'Dr. Aris',
-            ),
-            const SizedBox(height: 12),
-            _RequestCard(
-              companyIconBg: const Color(0xFFF4F4F4),
-              companyIcon: Icons.architecture,
-              companyIconColor: Colors.grey,
-              companyName: 'Apex Design',
-              studentName: 'Student: Chloe Varga',
-              status: 'REJECTED',
-              statusColor: Colors.red,
-              statusBg: const Color(0xFFFFF1F1),
-              submittedDate: 'Oct 09, 2023',
-              mentor: 'Prof. Miller',
-            ),
-            const SizedBox(height: 12),
-            _RequestCard(
-              companyIconBg: const Color(0xFFEFF6FF),
-              companyIcon: Icons.biotech_outlined,
-              companyIconColor: const Color(0xFF2563EB),
-              companyName: 'BioGenics',
-              studentName: "Student: Liam O'Connor",
-              status: 'APPROVED',
-              statusColor: const Color(0xFF2563EB),
-              statusBg: const Color(0xFFEFF6FF),
-              submittedDate: 'Oct 16, 2023',
-              mentor: 'Dr. Aris',
-            ),
+            ...requests.map((r) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _RequestCard(
+                  companyIconBg: Color(0xFFEFF6FF),
+                  companyIcon: Icons.business_outlined,
+                  companyIconColor: Color(0xFF2563EB),
+                  companyName: r['company_name'] ?? '',
+                  studentName: "Student: ${r['student_name'] ?? ''}",
+                  status: (r['status_display'] ?? '').toUpperCase(),
+                  statusColor: getStatusColor(r['status_display']),
+                  statusBg: getStatusBg(r['status_display']),
+                  submittedDate: r['created_date'] ?? '',
+                  mentor: r['guide_name'] ?? '',
+                ),
+              );
+            }),
             const SizedBox(height: 20),
           ],
         ),
@@ -220,6 +228,32 @@ class _SummaryBox extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+Color getStatusColor(String? status) {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return Colors.green;
+    case 'pending':
+      return Colors.orange;
+    case 'rejected':
+      return Colors.red;
+    default:
+      return Colors.grey;
+  }
+}
+
+Color getStatusBg(String? status) {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return Color(0xFFE8F5E9);
+    case 'pending':
+      return Color(0xFFFFF3E0);
+    case 'rejected':
+      return Color(0xFFFFEBEE);
+    default:
+      return Colors.grey[200]!;
   }
 }
 

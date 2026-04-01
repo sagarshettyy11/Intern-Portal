@@ -44,3 +44,14 @@ class GuideStudent {
     );
   }
 }
+
+class GuideRequestModel {
+  final String companyName;
+  final String studentName;
+  final String status;
+
+  GuideRequestModel.fromJson(Map<String, dynamic> json)
+    : companyName = json['company_name'],
+      studentName = json['student_name'],
+      status = json['status_display'];
+}

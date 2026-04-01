@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const ReportDetailsScreen(),
+      home: const UnifiedLoginPage(),
     );
   }
 }
