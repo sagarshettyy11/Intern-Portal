@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
+import 'package:intern_portal/models/guide/guide_internship_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,22 +57,28 @@ class GuideServices {
     }
   }
 
-  static Future<Map<String, dynamic>?> fetchRequestDetails(int id) async {
+  static Future<InternshipReviewModel?> fetchRequestDetails(int id) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
-      final url = "${ApiEndpoints.requestDetails}?id=$id";
+
+      final url = "${ApiEndpoints.requestDetails}?action=detail&id=$id";
+
       final response = await http.get(
         Uri.parse(url),
         headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
       );
+
       debugPrint("DETAIL URL: $url");
       debugPrint("STATUS: ${response.statusCode}");
       debugPrint("BODY: ${response.body}");
+
       final json = jsonDecode(response.body);
+
       if (json['success'] == true) {
-        return json['data'];
+        return InternshipReviewModel.fromJson(json['data']);
       }
+
       return null;
     } catch (e) {
       debugPrint("ERROR (DETAILS): $e");
@@ -83,13 +90,15 @@ class GuideServices {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
+
+      final url = "${ApiEndpoints.requestDetails}?action=$action";
+
       final response = await http.post(
-        Uri.parse(ApiEndpoints.requestDetails),
+        Uri.parse(url),
         headers: {"Authorization": "Bearer $token"},
-        body: {"id": id.toString(), "action": action, "feedback": feedback},
+        body: {"internship_id": id.toString(), "feedback": feedback},
       );
-      debugPrint("ACTION STATUS: ${response.statusCode}");
-      debugPrint("ACTION BODY: ${response.body}");
+
       final json = jsonDecode(response.body);
       return json['success'] == true;
     } catch (e) {

@@ -11,6 +11,7 @@ class InternshipReviewModel {
   final String companyIndustry;
   final String supervisorName;
   final String supervisorEmail;
+  final String supervisorPhone;
 
   final String jobTitle;
   final String workMode;
@@ -36,6 +37,7 @@ class InternshipReviewModel {
     required this.companyIndustry,
     required this.supervisorName,
     required this.supervisorEmail,
+    required this.supervisorPhone,
     required this.jobTitle,
     required this.workMode,
     required this.domain,
@@ -62,6 +64,7 @@ class InternshipReviewModel {
       companyIndustry: json['company_industry'] ?? '',
       supervisorName: json['industry_guide_name'] ?? '',
       supervisorEmail: json['industry_guide_email'] ?? '',
+      supervisorPhone: json['industry_guide_phone'] ?? '',
 
       jobTitle: json['job_title'] ?? '',
       workMode: json['work_mode'] ?? '',

@@ -17,6 +17,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final jobTitleController = TextEditingController();
+  final jobDescriptionController = TextEditingController();
   final companyController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
@@ -167,6 +168,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(height: 14),
+            FormTextArea(
+              label: "JOB DESCRIPTION",
+              icon: Icons.warning_amber_outlined,
+              controller: jobDescriptionController,
+              hint: "Challenges faced...",
             ),
             SizedBox(height: 14),
             FieldLabel(label: "INTERNSHIP DOMAIN"),
