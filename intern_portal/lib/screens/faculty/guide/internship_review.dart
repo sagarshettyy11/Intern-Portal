@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
@@ -13,8 +14,31 @@ class InternshipReviewPage extends StatefulWidget {
 }
 
 class _InternshipReviewPageState extends State<InternshipReviewPage> {
+  Map<String, dynamic>? data;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadDetails();
+  }
+
+  Future<void> loadDetails() async {
+    final res = await GuideServices.fetchRequestDetails(widget.internshipId);
+    setState(() {
+      data = res;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (data == null) {
+      return const Scaffold(body: Center(child: Text("Failed to load data")));
+    }
+    final d = data!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonAppBar(title: "Student Internship Review", showBack: true),
@@ -50,7 +74,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Johnnathan Doe',
+                            d['student_name'] ?? '',
                             style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
                           ),
                           Text('ID: STU-2024-0891', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
@@ -146,7 +170,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'TechVision Systems Inc.',
+                            d['company_name'] ?? '',
                             style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
                           ),
                           Text(
@@ -243,7 +267,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Backend Intern',
+                              d['job_title'] ?? '',
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
@@ -378,7 +402,17 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final success = await GuideServices.updateRequestStatus(
+                    id: widget.internshipId,
+                    action: "reject",
+                    feedback: "Reason here",
+                  );
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Rejected successfully")));
+                    Navigator.pop(context);
+                  }
+                },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   side: BorderSide(color: Colors.grey[300]!),
@@ -393,7 +427,13 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final success = await GuideServices.updateRequestStatus(id: widget.internshipId, action: "approve");
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Approved successfully")));
+                    Navigator.pop(context);
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(vertical: 14),

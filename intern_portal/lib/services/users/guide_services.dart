@@ -55,4 +55,46 @@ class GuideServices {
       return null;
     }
   }
+
+  static Future<Map<String, dynamic>?> fetchRequestDetails(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final url = "${ApiEndpoints.requestDetails}?id=$id";
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
+      );
+      debugPrint("DETAIL URL: $url");
+      debugPrint("STATUS: ${response.statusCode}");
+      debugPrint("BODY: ${response.body}");
+      final json = jsonDecode(response.body);
+      if (json['success'] == true) {
+        return json['data'];
+      }
+      return null;
+    } catch (e) {
+      debugPrint("ERROR (DETAILS): $e");
+      return null;
+    }
+  }
+
+  static Future<bool> updateRequestStatus({required int id, required String action, String feedback = ""}) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.requestDetails),
+        headers: {"Authorization": "Bearer $token"},
+        body: {"id": id.toString(), "action": action, "feedback": feedback},
+      );
+      debugPrint("ACTION STATUS: ${response.statusCode}");
+      debugPrint("ACTION BODY: ${response.body}");
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("ERROR (ACTION): $e");
+      return false;
+    }
+  }
 }
