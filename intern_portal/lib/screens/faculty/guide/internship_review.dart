@@ -7,9 +7,7 @@ import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
 class InternshipReviewPage extends StatefulWidget {
   final int internshipId;
-
   const InternshipReviewPage({super.key, required this.internshipId});
-
   @override
   State<InternshipReviewPage> createState() => _InternshipReviewPageState();
 }
@@ -67,7 +65,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         backgroundColor: const Color(0xFFEFF6FF),
                         child: Text(
                           (d.studentName).split(' ').map((e) => e.isNotEmpty ? e[0] : '').take(2).join(),
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2563EB)),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF2563EB)),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -76,15 +74,23 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         children: [
                           Text(
                             d.studentName,
-                            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                            style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Colors.black87),
                           ),
-                          Text("ID: ${d.regNo}", style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                          Text(
+                            "ID: ${d.regNo}",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(8)),
                     child: Column(
@@ -93,39 +99,54 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         Text(
                           'PROGRAM & YEAR',
                           style: GoogleFonts.inter(
-                            fontSize: 10,
-                            color: Colors.grey[500],
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.4,
+                            fontSize: 12,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           d.department,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.grey[800]),
                         ),
+                        const SizedBox(height: 2),
                         Text(
                           "Academic Year: ${d.year}",
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(Icons.mail_outline, size: 14, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                            const SizedBox(width: 6),
+                            Text(
+                              d.email,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(Icons.phone_outlined, size: 14, color: Colors.grey[800]),
+                            const SizedBox(width: 6),
+                            Text(
+                              d.phone,
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.mail_outline, size: 14, color: Colors.grey[500]),
-                      const SizedBox(width: 6),
-                      Text(d.email, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      Icon(Icons.phone_outlined, size: 14, color: Colors.grey[500]),
-                      const SizedBox(width: 6),
-                      Text(d.phone, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
-                    ],
                   ),
                 ],
               ),
@@ -156,7 +177,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                           child: Text(
                             (d.companyName).substring(0, 1).toUpperCase(),
                             style: GoogleFonts.inter(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w800,
                               fontSize: 18,
                               color: Color(0xFF2563EB),
                             ),
@@ -169,9 +190,16 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         children: [
                           Text(
                             d.companyName,
-                            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                            style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                           ),
-                          Text(d.companyIndustry, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
+                          Text(
+                            d.companyIndustry,
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.grey[800],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -179,7 +207,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(Icons.location_on_outlined, size: 14, color: Colors.grey[500]),
+                      Icon(Icons.location_on_outlined, size: 14, color: Colors.grey[800], fontWeight: FontWeight.w800),
                       const SizedBox(width: 6),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,18 +216,22 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                             'LOCATION',
                             style: GoogleFonts.inter(
                               fontSize: 10,
-                              color: Colors.grey[500],
-                              fontWeight: FontWeight.w600,
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w800,
                               letterSpacing: 0.3,
                             ),
                           ),
-                          Text(d.companyAddress, style: GoogleFonts.inter(fontSize: 13, color: Colors.black87)),
+                          Text(
+                            d.companyAddress,
+                            style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w700),
+                          ),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
                   Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(8)),
                     child: Column(
@@ -208,19 +240,33 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                         Text(
                           'SUPERVISOR CONTACT',
                           style: GoogleFonts.inter(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: const Color(0xFF2563EB),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           d.supervisorName,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 13, color: Colors.black87),
                         ),
-                        Text(d.supervisorEmail, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
-                        Text(d.supervisorPhone, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(Icons.mail_outline, size: 14, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                            const SizedBox(width: 6),
+                            Text(d.supervisorEmail, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800],fontWeight: FontWeight.w700)),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(Icons.phone_outlined, size: 14, color: Colors.grey[800]),
+                            const SizedBox(width: 6),
+                            Text(d.supervisorPhone, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800],fontWeight: FontWeight.w700)),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -250,16 +296,16 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                               'JOB TITLE',
                               style: GoogleFonts.inter(
                                 fontSize: 10,
-                                color: Colors.grey[500],
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.3,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.4,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               d.jobTitle,
                               style: GoogleFonts.inter(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 fontSize: 14,
                                 color: Colors.black87,
                               ),
@@ -274,9 +320,9 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                             'WORK MODE',
                             style: GoogleFonts.inter(
                               fontSize: 10,
-                              color: Colors.grey[500],
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.3,
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.4,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -290,7 +336,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                               d.workMode,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w800,
                                 color: Color(0xFFB7950B),
                               ),
                             ),
@@ -299,17 +345,17 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 6),
                   Row(
                     children: [
-                      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[500]),
+                      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[800]),
                       const SizedBox(width: 6),
                       Text(
                         'DURATION',
                         style: GoogleFonts.inter(
                           fontSize: 10,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[800],
+                          fontWeight: FontWeight.w800,
                           letterSpacing: 0.3,
                         ),
                       ),
@@ -318,24 +364,24 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                   const SizedBox(height: 4),
                   Text(
                     "${d.startDate} — ${d.endDate} d.duration",
-                    style: GoogleFonts.inter(fontSize: 13, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
             SectionHeader(icon: Icons.format_list_bulleted, title: 'Job Description'),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey[200]!),
               ),
-              child: Text(d.description, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6)),
+              child: Text(d.description, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w700)),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
             const SizedBox(height: 12),
             _AttachmentRow(
@@ -375,7 +421,6 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
               sub: '',
               isLast: true,
             ),
-            const SizedBox(height: 100),
           ],
         ),
       ),
@@ -407,7 +452,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                 ),
                 child: Text(
                   'Reject Registration',
-                  style: GoogleFonts.inter(color: Colors.red, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: GoogleFonts.inter(color: Colors.red, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
             ),
@@ -429,7 +474,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                 ),
                 child: Text(
                   'Approve Internship',
-                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
             ),

@@ -9,7 +9,6 @@ import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class InternshipRequestsPage extends StatefulWidget {
   const InternshipRequestsPage({super.key});
-
   @override
   State<InternshipRequestsPage> createState() => _InternshipRequestsPageState();
 }
@@ -102,11 +101,11 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.search, color: Colors.grey[400], size: 18),
+                        Icon(Icons.search, color: Colors.grey[800], size: 18),
                         const SizedBox(width: 8),
                         Text(
                           'Search students or companies...',
-                          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[400]),
+                          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700]),
                         ),
                       ],
                     ),
@@ -121,7 +120,7 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey[200]!),
                   ),
-                  child: Icon(Icons.tune, color: Colors.grey[600], size: 20),
+                  child: Icon(Icons.tune, color: Colors.grey[800], size: 20),
                 ),
               ],
             ),
@@ -135,8 +134,8 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                     Text(
                       'MANAGEMENT PORTAL',
                       style: GoogleFonts.inter(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
                         color: const Color(0xFF2563EB),
                         letterSpacing: 0.8,
                       ),
@@ -144,7 +143,7 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                     const SizedBox(height: 4),
                     Text(
                       'Internship Requests',
-                      style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -157,9 +156,9 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[600]),
+                      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[800]),
                       const SizedBox(width: 5),
-                      Text('Oct 2023', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700])),
+                      Text('Oct 2023', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800)),
                     ],
                   ),
                 ),
@@ -217,15 +216,15 @@ class _SummaryBox extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: Colors.grey[500],
+              fontWeight: FontWeight.w900,
+              color: Colors.grey[800],
               letterSpacing: 0.4,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: valueColor),
+            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: valueColor),
           ),
         ],
       ),
@@ -311,7 +310,7 @@ class _RequestCard extends StatelessWidget {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(color: companyIconBg, borderRadius: BorderRadius.circular(10)),
-                    child: Icon(companyIcon, color: companyIconColor, size: 22),
+                    child: Icon(companyIcon, color: companyIconColor, size: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -320,9 +319,9 @@ class _RequestCard extends StatelessWidget {
                       children: [
                         Text(
                           companyName,
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: Colors.black87),
                         ),
-                        Text(studentName, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                        Text(studentName, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -331,7 +330,7 @@ class _RequestCard extends StatelessWidget {
                     decoration: BoxDecoration(color: statusBg, borderRadius: BorderRadius.circular(20)),
                     child: Text(
                       status,
-                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: statusColor),
+                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: statusColor),
                     ),
                   ),
                 ],
@@ -349,15 +348,15 @@ class _RequestCard extends StatelessWidget {
                           'SUBMITTED DATE',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            color: Colors.grey[500],
-                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w700,
                             letterSpacing: 0.3,
                           ),
                         ),
                         const SizedBox(height: 3),
                         Text(
                           submittedDate,
-                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black87),
                         ),
                       ],
                     ),
@@ -370,15 +369,15 @@ class _RequestCard extends StatelessWidget {
                           'ASSIGNED MENTOR',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            color: Colors.grey[500],
-                            fontWeight: FontWeight.w600,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w700,
                             letterSpacing: 0.3,
                           ),
                         ),
                         const SizedBox(height: 3),
                         Text(
                           mentor,
-                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.black87),
                         ),
                       ],
                     ),
