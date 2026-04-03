@@ -1,12 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/guide/guide_report_model.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 
-class ReportDetailsPage extends StatelessWidget {
-  const ReportDetailsPage({super.key});
+class ReportDetailsPage extends StatefulWidget {
+  final int reportId;
+  const ReportDetailsPage({super.key, required this.reportId});
+  @override
+  State<ReportDetailsPage> createState() => _ReportDetailsPageState();
+}
+
+class _ReportDetailsPageState extends State<ReportDetailsPage> {
+  final TextEditingController feedbackController = TextEditingController();
+  final TextEditingController scoreController = TextEditingController();
+  bool isLoading = true;
+  ReportDetailsModel? report;
+  bool get isEditable => report!.canEvaluate || report!.canEdit;
+  @override
+  void initState() {
+    super.initState();
+    loadDetails();
+  }
+
+  Future<void> loadDetails() async {
+    final res = await GuideServices.fetchReportDetails(widget.reportId);
+    setState(() {
+      report = res;
+      isLoading = false;
+      feedbackController.text = report?.feedback ?? '';
+      scoreController.text = report?.score?.toString() ?? '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (report == null) {
+      return const Scaffold(body: Center(child: Text("Failed to load report")));
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonAppBar(title: "Student Report Details", showBack: true),
@@ -33,11 +68,14 @@ class ReportDetailsPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Week 12: System\nIntegration',
+                        report!.reportLabel,
                         style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
-                      Text('Oct 24 - Oct 30, 2023', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                      Text(
+                        report!.submittedDate ?? '',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                      ),
                     ],
                   ),
                 ),
@@ -45,7 +83,7 @@ class ReportDetailsPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(color: const Color(0xFFB7950B), borderRadius: BorderRadius.circular(20)),
                   child: Text(
-                    'PENDING\nREVIEW',
+                    report!.statusLabel.toUpperCase(),
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
                   ),
@@ -72,13 +110,10 @@ class ReportDetailsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Alex Johnston',
+                        report!.studentName,
                         style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                       ),
-                      Text(
-                        'Junior Software Engineer Intern',
-                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
-                      ),
+                      Text(report!.companyName ?? '', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                     ],
                   ),
                 ],
@@ -95,7 +130,7 @@ class ReportDetailsPage extends StatelessWidget {
                 border: Border.all(color: Colors.grey[200]!),
               ),
               child: Text(
-                'This week focused primarily on the final integration of the payment gateway microservice. I spent Monday and Tuesday debugging the webhook listener that handles asynchronous transaction updates. On Wednesday, I collaborated with the QA team to draft a regression testing suite for the checkout flow. Thursday and Friday were dedicated to documentation and peer-reviewing code for the upcoming sprint.',
+                report!.activityDescription ?? "No description",
                 style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
               ),
             ),
@@ -103,44 +138,39 @@ class ReportDetailsPage extends StatelessWidget {
             SectionHeader(icon: Icons.lightbulb_outline, title: 'Learning Outcomes'),
             const SizedBox(height: 12),
             Container(
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey[200]!),
               ),
-              child: Column(
-                children: [
-                  _OutcomeRow(text: 'Mastered asynchronous webhook handling using Node.js.', isLast: false),
-                  _OutcomeRow(
-                    text: 'Gained proficiency in writing Unit Tests with Jest for critical flows.',
-                    isLast: false,
-                  ),
-                  _OutcomeRow(text: 'Improved technical writing skills through system documentation.', isLast: true),
-                ],
+              child: Text(
+                report!.learningOutcomes ?? "No learning outcomes",
+                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
               ),
+            ),
+            const SizedBox(height: 20),
+            SectionHeader(icon: Icons.warning_amber_outlined, title: 'Challenges'),
+            const SizedBox(height: 12),
+
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[200]!),
+              ),
+              child: Text(report!.challenges ?? "No challenges", style: GoogleFonts.inter(fontSize: 13, height: 1.6)),
             ),
             const SizedBox(height: 20),
             SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
             const SizedBox(height: 12),
             Row(
               children: [
-                Expanded(
-                  child: _FileChip(
-                    icon: Icons.code,
-                    iconColor: Colors.grey[600]!,
-                    fileName: 'PR-442.log',
-                    fileSize: '12 KB',
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _FileChip(
-                    icon: Icons.image_outlined,
-                    iconColor: Colors.grey[600]!,
-                    fileName: 'Flow_Diagram.png',
-                    fileSize: '1.4 MB',
-                  ),
-                ),
+                if (report!.attachmentPath != null)
+                  _FileChip(icon: Icons.attach_file, iconColor: Colors.grey, fileName: "Attachment", fileSize: "")
+                else
+                  Text("No attachments", style: TextStyle(color: Colors.grey)),
               ],
             ),
             const SizedBox(height: 20),
@@ -163,24 +193,37 @@ class ReportDetailsPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '85',
-                              style: GoogleFonts.inter(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2563EB),
+                      isEditable
+                          ? SizedBox(
+                              width: 80,
+                              child: TextField(
+                                controller: scoreController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: "Score",
+                                  border: OutlineInputBorder(),
+                                  isDense: true,
+                                ),
+                              ),
+                            )
+                          : RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${report!.score ?? 0}",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF2563EB),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' /100',
+                                    style: GoogleFonts.inter(fontSize: 14, color: Colors.grey),
+                                  ),
+                                ],
                               ),
                             ),
-                            TextSpan(
-                              text: ' /100',
-                              style: GoogleFonts.inter(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -194,20 +237,30 @@ class ReportDetailsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Container(
-                    width: double.infinity,
-                    height: 90,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey[200]!),
-                    ),
-                    child: Text(
-                      'Provide constructive feedback for Alex...',
-                      style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[400]),
-                    ),
-                  ),
+                  isEditable
+                      ? TextField(
+                          controller: feedbackController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            hintText: "Enter feedback...",
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          height: 90,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey[200]!),
+                          ),
+                          child: Text(
+                            // ✅ FIXED
+                            report!.feedback ?? "No feedback provided",
+                            style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700]),
+                          ),
+                        ),
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -274,33 +327,6 @@ class ReportDetailsPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _OutcomeRow extends StatelessWidget {
-  final String text;
-  final bool isLast;
-  const _OutcomeRow({required this.text, required this.isLast});
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.check_circle_outline, color: Color(0xFF2563EB), size: 18),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(text, style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, height: 1.4)),
-              ),
-            ],
-          ),
-        ),
-        if (!isLast) Divider(height: 1, color: Colors.grey[100], indent: 14),
-      ],
     );
   }
 }

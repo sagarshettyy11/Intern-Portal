@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/guide/guide_report_model.dart';
 import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/screens/faculty/guide/report_review.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -13,6 +16,51 @@ class StudentReportsPage extends StatefulWidget {
 
 class _StudentReportsPageState extends State<StudentReportsPage> {
   int _selectedTab = 0;
+
+  bool isLoading = true;
+  ReportListResponse? response;
+
+  final tabs = ["Daily", "Weekly", "Monthly"];
+
+  @override
+  void initState() {
+    super.initState();
+    loadReports();
+  }
+
+  Future<void> loadReports() async {
+    setState(() => isLoading = true);
+
+    final res = await GuideServices.fetchReports(tab: tabs[_selectedTab], page: 1);
+
+    setState(() {
+      response = res;
+      isLoading = false;
+    });
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return const Color(0xFF2563EB);
+      case 'rejected':
+        return Colors.red;
+      default:
+        return Colors.orange;
+    }
+  }
+
+  Color getStatusBg(String status) {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return const Color(0xFFEFF6FF);
+      case 'rejected':
+        return const Color(0xFFFFF1F1);
+      default:
+        return const Color(0xFFFFF8E1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +119,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                           icon: Icons.pending_actions_outlined,
                           iconColor: Colors.orange,
                           label: 'PENDING',
-                          value: '12',
+                          value: "${response?.stats.pending ?? 0}",
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -80,7 +128,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                           icon: Icons.verified_outlined,
                           iconColor: const Color(0xFF2563EB),
                           label: 'APPROVED',
-                          value: '08',
+                          value: "${response?.stats.approved ?? 0}",
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -89,7 +137,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                           icon: Icons.cancel_outlined,
                           iconColor: Colors.red,
                           label: 'REJECTED',
-                          value: '03',
+                          value: "${response?.stats.rejected ?? 0}",
                         ),
                       ),
                     ],
@@ -116,7 +164,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '88.4',
+                              "${response?.stats.avgScore ?? 0}",
                               style: GoogleFonts.inter(
                                 fontSize: 38,
                                 fontWeight: FontWeight.bold,
@@ -139,58 +187,63 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                       _TabItem(
                         label: 'Daily Reports',
                         isSelected: _selectedTab == 0,
-                        onTap: () => setState(() => _selectedTab = 0),
+                        onTap: () {
+                          setState(() => _selectedTab = 0);
+                          loadReports();
+                        },
                       ),
                       const SizedBox(width: 20),
                       _TabItem(
                         label: 'Weekly Summaries',
                         isSelected: _selectedTab == 1,
-                        onTap: () => setState(() => _selectedTab = 1),
+                        onTap: () {
+                          setState(() => _selectedTab = 1);
+                          loadReports();
+                        },
                       ),
                       const SizedBox(width: 20),
                       _TabItem(
                         label: 'Monthly Reviews',
                         isSelected: _selectedTab == 2,
-                        onTap: () => setState(() => _selectedTab = 2),
+                        onTap: () {
+                          setState(() => _selectedTab = 2);
+                          loadReports();
+                        },
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  _ReportRow(
-                    name: 'James Wilson',
-                    role: 'Architecture Intern',
-                    time: 'Today, 09:45',
-                    status: 'UNDER REVIEW',
-                    statusColor: Colors.white,
-                    statusBg: const Color(0xFFB7950B),
-                  ),
-                  const SizedBox(height: 10),
-                  _ReportRow(
-                    name: 'Elena Rodriguez',
-                    role: 'UI Design Intern',
-                    time: 'Today, 08:20',
-                    status: 'APPROVED',
-                    statusColor: const Color(0xFF2563EB),
-                    statusBg: const Color(0xFFEFF6FF),
-                  ),
-                  const SizedBox(height: 10),
-                  _ReportRow(
-                    name: 'Marcus Chen',
-                    role: 'Data Analyst Intern',
-                    time: 'Yesterday',
-                    status: 'FLAGGED',
-                    statusColor: Colors.red,
-                    statusBg: const Color(0xFFFFF1F1),
-                  ),
-                  const SizedBox(height: 10),
-                  _ReportRow(
-                    name: 'Sophie Laurent',
-                    role: 'Marketing Intern',
-                    time: 'Yesterday',
-                    status: 'APPROVED',
-                    statusColor: const Color(0xFF2563EB),
-                    statusBg: const Color(0xFFEFF6FF),
-                  ),
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : response == null || response!.reports.isEmpty
+                      ? const Center(child: Text("No reports found"))
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: response!.reports.length,
+                          itemBuilder: (context, index) {
+                            final r = response!.reports[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => ReportDetailsPage(reportId: r.reportId)),
+                                  );
+                                },
+                                child: _ReportRow(
+                                  name: r.studentName,
+                                  role: r.jobTitle ?? r.reportType,
+                                  time: r.submittedOn ?? '',
+                                  status: r.statusLabel,
+                                  statusColor: getStatusColor(r.status),
+                                  statusBg: getStatusBg(r.status),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                   const SizedBox(height: 20),
                 ],
               ),
