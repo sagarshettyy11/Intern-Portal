@@ -4,6 +4,7 @@ import 'package:intern_portal/models/guide/guide_internship_model.dart';
 import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
+import 'package:intl/intl.dart';
 
 class InternshipReviewPage extends StatefulWidget {
   final int internshipId;
@@ -363,7 +364,7 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${d.startDate} — ${d.endDate} d.duration",
+                    "${formatDate(d.startDate)} — ${formatDate(d.endDate)} (${d.duration} days)",
                     style: GoogleFonts.inter(fontSize: 13, color: Colors.black87, fontWeight: FontWeight.w800),
                   ),
                 ],
@@ -485,6 +486,10 @@ class _InternshipReviewPageState extends State<InternshipReviewPage> {
   }
 }
 
+String formatDate(String date) {
+  final parsed = DateTime.parse(date);
+  return DateFormat('dd MMM yyyy').format(parsed);
+}
 class _AttachmentRow extends StatelessWidget {
   final IconData icon;
   final Color iconColor;

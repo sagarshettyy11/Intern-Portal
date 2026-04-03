@@ -23,7 +23,9 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
     if (res != null) {
       setState(() {
         stats = res['stats'];
-        requests = res['requests']['data'];
+        final allRequests = res['requests']['data'];
+        requests = allRequests.where((r) => (r['status_display'] ?? '').toLowerCase() == 'pending').toList();
+
         isLoading = false;
       });
     } else {
@@ -158,7 +160,10 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
                     children: [
                       Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey[800]),
                       const SizedBox(width: 5),
-                      Text('Oct 2023', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+                      Text(
+                        'Oct 2023',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                      ),
                     ],
                   ),
                 ),
@@ -321,7 +326,10 @@ class _RequestCard extends StatelessWidget {
                           companyName,
                           style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: Colors.black87),
                         ),
-                        Text(studentName, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.bold)),
+                        Text(
+                          studentName,
+                          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),

@@ -15,6 +15,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   shared_preferences: ^2.5.4
   file_picker: ^10.3.10
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
