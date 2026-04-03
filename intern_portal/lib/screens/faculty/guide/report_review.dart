@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/models/guide/guide_report_model.dart';
+import 'package:intern_portal/screens/faculty/guide/student_report.dart';
 import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
@@ -44,7 +45,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     }
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar(title: "Student Report Details", showBack: true),
+      appBar: CommonAppBar(title: "Student Report Review", showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -60,21 +61,21 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       Text(
                         'REPORTING PERIOD',
                         style: GoogleFonts.inter(
-                          fontSize: 10,
-                          color: Colors.grey[500],
-                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.grey[900],
+                          fontWeight: FontWeight.w900,
                           letterSpacing: 0.4,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         report!.reportLabel,
-                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                        style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         report!.submittedDate ?? '',
-                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
@@ -111,9 +112,12 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                     children: [
                       Text(
                         report!.studentName,
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                       ),
-                      Text(report!.companyName ?? '', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                      Text(
+                        report!.companyName ?? '',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+                      ),
                     ],
                   ),
                 ],
@@ -131,7 +135,12 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
               child: Text(
                 report!.activityDescription ?? "No description",
-                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: Colors.grey[900],
+                  height: 1.6,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -146,13 +155,17 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               ),
               child: Text(
                 report!.learningOutcomes ?? "No learning outcomes",
-                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.6),
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: Colors.grey[900],
+                  height: 1.6,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             const SizedBox(height: 20),
             SectionHeader(icon: Icons.warning_amber_outlined, title: 'Challenges'),
             const SizedBox(height: 12),
-
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
@@ -160,17 +173,29 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey[200]!),
               ),
-              child: Text(report!.challenges ?? "No challenges", style: GoogleFonts.inter(fontSize: 13, height: 1.6)),
+              child: Text(
+                report!.challenges ?? "No challenges",
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: Colors.grey[900],
+                  height: 1.6,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             SectionHeader(icon: Icons.attach_file, title: 'Attachments'),
             const SizedBox(height: 12),
             Row(
               children: [
-                if (report!.attachmentPath != null)
-                  _FileChip(icon: Icons.attach_file, iconColor: Colors.grey, fileName: "Attachment", fileSize: "")
-                else
-                  Text("No attachments", style: TextStyle(color: Colors.grey)),
+                Row(
+                  children: [
+                    if (report!.attachmentPath != null)
+                      _FileChip(icon: Icons.attach_file, iconColor: Colors.grey, fileName: "Attachment", fileSize: "")
+                    else
+                      Text("No attachments", style: GoogleFonts.inter(color: Colors.grey)),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -193,37 +218,24 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                           ),
                         ],
                       ),
-                      isEditable
-                          ? SizedBox(
-                              width: 80,
-                              child: TextField(
-                                controller: scoreController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  hintText: "Score",
-                                  border: OutlineInputBorder(),
-                                  isDense: true,
-                                ),
-                              ),
-                            )
-                          : RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "${report!.score ?? 0}",
-                                    style: GoogleFonts.inter(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF2563EB),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' /100',
-                                    style: GoogleFonts.inter(fontSize: 14, color: Colors.grey),
-                                  ),
-                                ],
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${report!.score ?? 0}",
+                              style: GoogleFonts.inter(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2563EB),
                               ),
                             ),
+                            TextSpan(
+                              text: ' /100',
+                              style: GoogleFonts.inter(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -231,36 +243,32 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                     'GUIDE FEEDBACK',
                     style: GoogleFonts.inter(
                       fontSize: 10,
-                      color: Colors.grey[500],
+                      color: Colors.grey[700],
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  isEditable
-                      ? TextField(
-                          controller: feedbackController,
-                          maxLines: 4,
-                          decoration: InputDecoration(
-                            hintText: "Enter feedback...",
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                        )
-                      : Container(
-                          width: double.infinity,
-                          height: 90,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey[200]!),
-                          ),
-                          child: Text(
-                            // ✅ FIXED
-                            report!.feedback ?? "No feedback provided",
-                            style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700]),
-                          ),
-                        ),
+                  Container(
+                    width: double.infinity,
+                    height: 250,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey[200]!),
+                    ),
+                    child: Text(
+                      report!.feedback ?? "No feedback provided",
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: Colors.grey[800],
+                        height: 1.6,
+                        fontWeight: FontWeight.w700,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.all(12),
@@ -282,7 +290,6 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 100),
           ],
         ),
       ),
@@ -296,15 +303,17 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentReportsPage()));
+                },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   side: BorderSide(color: Colors.grey[300]!),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                child: const Text(
-                  'Return for Revision',
-                  style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14),
+                child: Text(
+                  'Back to Dashboard',
+                  style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
             ),
@@ -318,9 +327,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'Save Evaluation',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                child: Text(
+                  'Edit Evaluation',
+                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
             ),
@@ -359,7 +368,7 @@ class _FileChip extends StatelessWidget {
                   style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(fileSize, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[500])),
+                Text(fileSize, style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[700])),
               ],
             ),
           ),

@@ -16,12 +16,9 @@ class StudentReportsPage extends StatefulWidget {
 
 class _StudentReportsPageState extends State<StudentReportsPage> {
   int _selectedTab = 0;
-
   bool isLoading = true;
   ReportListResponse? response;
-
   final tabs = ["Daily", "Weekly", "Monthly"];
-
   @override
   void initState() {
     super.initState();
@@ -30,9 +27,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
 
   Future<void> loadReports() async {
     setState(() => isLoading = true);
-
     final res = await GuideServices.fetchReports(tab: tabs[_selectedTab], page: 1);
-
     setState(() {
       response = res;
       isLoading = false;
@@ -84,9 +79,8 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -94,21 +88,20 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                     'ACADEMIC INSIGHTS',
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF2563EB),
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF0000EF),
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     'Student Reports',
-                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black87),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -154,7 +147,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                           'AVERAGE SCORE',
                           style: GoogleFonts.inter(
                             fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w800,
                             color: Colors.white.withValues(alpha: 0.8),
                             letterSpacing: 0.8,
                           ),
@@ -167,14 +160,14 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                               "${response?.stats.avgScore ?? 0}",
                               style: GoogleFonts.inter(
                                 fontSize: 38,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 height: 1,
                               ),
                             ),
                             Text(
                               '%',
-                              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.white),
                             ),
                           ],
                         ),
@@ -283,15 +276,15 @@ class _ReportStatCard extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
+              color: Colors.grey[700],
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.3,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black87),
           ),
         ],
       ),
@@ -313,10 +306,10 @@ class _TabItem extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 13,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? const Color(0xFF2563EB) : Colors.grey[500],
+              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
+              color: isSelected ? const Color(0xFF0000FF) : Colors.grey[700],
             ),
           ),
           const SizedBox(height: 4),
@@ -369,9 +362,12 @@ class _ReportRow extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                 ),
-                Text('$role • $time', style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                Text(
+                  '$role • $time',
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+                ),
               ],
             ),
           ),
@@ -379,8 +375,8 @@ class _ReportRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(color: statusBg, borderRadius: BorderRadius.circular(20)),
             child: Text(
-              status,
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: statusColor),
+              status.toUpperCase(),
+              style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w800, color: statusColor),
             ),
           ),
         ],
