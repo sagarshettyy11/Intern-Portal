@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
 import 'package:intern_portal/screens/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/faculty/guide/internship_review.dart';
 import 'package:intern_portal/screens/faculty/guide/report_review.dart';
@@ -53,7 +54,7 @@ class GuideBottomNavController {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
         break;
       case 4:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportDetailsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyProfilePage()));
         break;
     }
   }
