@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/models/guide/guide_report_model.dart';
-import 'package:intern_portal/screens/faculty/guide/student_report.dart';
+import 'package:intern_portal/screens/college/faculty/guide/student_report.dart';
 import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';

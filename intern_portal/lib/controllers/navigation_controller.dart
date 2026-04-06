@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:intern_portal/screens/faculty/guide/faculty_profile.dart';
-import 'package:intern_portal/screens/faculty/guide/guide_dashboard.dart';
-import 'package:intern_portal/screens/faculty/guide/internship_review.dart';
-import 'package:intern_portal/screens/faculty/guide/report_review.dart';
-import 'package:intern_portal/screens/faculty/guide/internship_request.dart';
-import 'package:intern_portal/screens/faculty/guide/student_report.dart';
-import 'package:intern_portal/screens/faculty/hod/faculty_performance.dart';
-import 'package:intern_portal/screens/faculty/hod/hod_dashboard.dart';
-import 'package:intern_portal/screens/faculty/hod/hod_profile.dart';
-import 'package:intern_portal/screens/faculty/hod/overall_analytics.dart';
-import 'package:intern_portal/screens/faculty/hod/student_performance.dart';
-import 'package:intern_portal/screens/students/certificate.dart';
-import 'package:intern_portal/screens/students/dashboard.dart';
-import 'package:intern_portal/screens/students/internship.dart';
-import 'package:intern_portal/screens/students/profile.dart';
-import 'package:intern_portal/screens/students/report_overview.dart';
+import 'package:intern_portal/screens/college/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
+import 'package:intern_portal/screens/college/faculty/guide/internship_review.dart';
+import 'package:intern_portal/screens/college/faculty/guide/report_review.dart';
+import 'package:intern_portal/screens/college/faculty/guide/internship_request.dart';
+import 'package:intern_portal/screens/college/faculty/guide/student_report.dart';
+import 'package:intern_portal/screens/college/faculty/hod/faculty_performance.dart';
+import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
+import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/screens/college/faculty/hod/overall_analytics.dart';
+import 'package:intern_portal/screens/college/faculty/hod/student_performance.dart';
+import 'package:intern_portal/screens/college/students/certificate.dart';
+import 'package:intern_portal/screens/college/students/dashboard.dart';
+import 'package:intern_portal/screens/college/students/internship.dart';
+import 'package:intern_portal/screens/college/students/profile.dart';
+import 'package:intern_portal/screens/college/students/report_overview.dart';
 
 class StudentBottomNavController {
   static void onItemTapped(BuildContext context, int index) {
