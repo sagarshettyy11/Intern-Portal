@@ -1,25 +1,5 @@
 import 'package:flutter/material.dart';
 
-class DepartmentMasterApp extends StatelessWidget {
-  const DepartmentMasterApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ScholarFlow',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color(0xFFF2F4F7),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A56DB)),
-      ),
-      home: const DepartmentMasterPage(),
-    );
-  }
-}
-
-// ─── Data Model ───────────────────────────────────────────────────────────────
-
 class Department {
   final String name;
   final String code;

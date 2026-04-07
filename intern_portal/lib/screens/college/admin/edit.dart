@@ -1,23 +1,5 @@
 import 'package:flutter/material.dart';
 
-class EditFacultyApp extends StatelessWidget {
-  const EditFacultyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Edit Faculty',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A56DB)),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
-      home: const EditFacultyPage(),
-    );
-  }
-}
-
 class EditFacultyPage extends StatelessWidget {
   const EditFacultyPage({super.key});
 

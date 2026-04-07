@@ -39,9 +39,6 @@ class Faculty {
   });
 }
 
-// ─────────────────────────────────────────────
-// Main page
-// ─────────────────────────────────────────────
 class FacultyMasterPage extends StatefulWidget {
   const FacultyMasterPage({super.key});
 
@@ -50,7 +47,7 @@ class FacultyMasterPage extends StatefulWidget {
 }
 
 class _FacultyMasterPageState extends State<FacultyMasterPage> {
-  int _selectedIndex = 1; // Faculty tab selected by default
+  int _selectedIndex = 1; 
 
   final List<Faculty> _facultyList = const [
     Faculty(
