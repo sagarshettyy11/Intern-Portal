@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intern_portal/screens/college/admin/department_master.dart';
 import 'package:intern_portal/screens/college/admin/faculty_master.dart';
 import 'package:intern_portal/screens/college/admin/internship_master.dart';
+import 'package:intern_portal/screens/college/admin/student_master.dart';
 import 'package:intern_portal/screens/college/faculty/guide/faculty_profile.dart';
 import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/guide/internship_review.dart';
@@ -95,7 +96,7 @@ class AdminBottomNavController {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyMasterPage()));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentsListScreen()));
         break;
       case 3:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const DepartmentMasterPage()));

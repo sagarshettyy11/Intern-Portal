@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/pages/login.dart';
 import 'package:intern_portal/pages/unified_login.dart';
 import 'package:intern_portal/screens/college/admin/faculty_master.dart';
+import 'package:intern_portal/screens/college/admin/student_master.dart';
 import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/guide/report_review.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const FacultyMasterPage(),
+      home: const StudentsListScreen(),
     );
   }
 }

@@ -6,23 +6,6 @@ import 'package:intern_portal/screens/college/admin/edit_faculty.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class ScholarFlowApp extends StatelessWidget {
-  const ScholarFlowApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ScholarFlow',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1A56DB)),
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-      ),
-      home: const FacultyMasterPage(),
-    );
-  }
-}
-
 class Faculty {
   final String name;
   final String initials;
