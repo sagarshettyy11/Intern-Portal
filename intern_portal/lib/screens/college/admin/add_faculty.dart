@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class AddFacultyPage extends StatelessWidget {
   const AddFacultyPage({super.key});
@@ -7,42 +9,10 @@ class AddFacultyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: CommonAppBar(title: "Add New Faculty", showBack: true),
       body: SafeArea(
         child: Column(
           children: [
-            // Top Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.maybePop(context),
-                    child: const Icon(Icons.close, color: Color(0xFF374151), size: 24),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    'Add Faculty',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF111827),
-                    ),
-                  ),
-                  const Spacer(),
-                  const Text(
-                    'STEP 1 OF 1',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF9CA3AF),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Scrollable body
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -50,63 +20,39 @@ class AddFacultyPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'New Faculty Member',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF111827),
-                      ),
+                      style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       'Provide administrative details to register the member and generate secure login credentials.',
-                      style: TextStyle(
-                          fontSize: 13, color: Color(0xFF6B7280), height: 1.5),
+                      style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF6B7280), height: 1.5),
                     ),
                     const SizedBox(height: 24),
-
-                    // Assign Role
-                    const Text(
+                    Text(
                       'Assign Role',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF111827),
-                      ),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
                     ),
                     const SizedBox(height: 10),
                     const _AddFacultyRoleToggle(),
                     const SizedBox(height: 24),
-
-                    // Full Name
                     const _AddFacultyFieldLabel('Full Name'),
                     const SizedBox(height: 8),
                     const _AddFacultyTextField(hint: 'e.g. Dr. Robert Wilson'),
                     const SizedBox(height: 16),
-
-                    // Academic Email
                     const _AddFacultyFieldLabel('Academic Email'),
                     const SizedBox(height: 8),
                     const _AddFacultyTextField(hint: 'robert.w@university.edu'),
                     const SizedBox(height: 16),
-
-                    // Contact Number
                     const _AddFacultyFieldLabel('Contact Number'),
                     const SizedBox(height: 8),
-                    const _AddFacultyTextField(
-                      hint: '+1 (555) 000-0000',
-                      keyboardType: TextInputType.phone,
-                    ),
+                    const _AddFacultyTextField(hint: '+1 (555) 000-0000', keyboardType: TextInputType.phone),
                     const SizedBox(height: 16),
-
-                    // Current Designation
                     const _AddFacultyFieldLabel('Current Designation'),
                     const SizedBox(height: 8),
                     const _AddFacultyTextField(hint: 'e.g. Associate Professor'),
                     const SizedBox(height: 16),
-
-                    // Department
                     const _AddFacultyFieldLabel('Department'),
                     const SizedBox(height: 8),
                     const _AddFacultyDropdown(
@@ -118,8 +64,6 @@ class AddFacultyPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-
-                    // Info Box
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -128,17 +72,13 @@ class AddFacultyPage extends StatelessWidget {
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Icon(Icons.info_outline, size: 18, color: Color(0xFF1A56DB)),
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
                               'Once added, a welcome email with secure login credentials will be sent to the academic email address provided above.',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Color(0xFF1E40AF),
-                                height: 1.5,
-                              ),
+                              style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF1E40AF), height: 1.5),
                             ),
                           ),
                         ],
@@ -149,8 +89,6 @@ class AddFacultyPage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Bottom Buttons
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
               child: Column(
@@ -162,23 +100,17 @@ class AddFacultyPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1A56DB),
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         elevation: 0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.person_add_outlined,
-                              color: Colors.white, size: 20),
+                        children: [
+                          Icon(Icons.person_add_outlined, color: Colors.white, size: 20),
                           SizedBox(width: 8),
                           Text(
                             'Add Faculty & Generate Login',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
+                            style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
                           ),
                         ],
                       ),
@@ -189,13 +121,9 @@ class AddFacultyPage extends StatelessWidget {
                     width: double.infinity,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text(
+                      child: Text(
                         'Cancel',
-                        style: TextStyle(
-                          color: Color(0xFF374151),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: GoogleFonts.inter(color: Color(0xFF374151), fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -209,50 +137,36 @@ class AddFacultyPage extends StatelessWidget {
   }
 }
 
-// ─── Widgets ─────────────────────────────────────────────────────────────────
-
 class _AddFacultyFieldLabel extends StatelessWidget {
   final String text;
   const _AddFacultyFieldLabel(this.text);
-
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Color(0xFF111827),
-      ),
+      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
     );
   }
 }
 
 class _AddFacultyTextField extends StatelessWidget {
   final String hint;
-  // FIX: kept only params that are actually used at call sites
   final TextInputType? keyboardType;
-
-  const _AddFacultyTextField({
-    required this.hint,
-    this.keyboardType,
-  });
+  const _AddFacultyTextField({required this.hint, this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       keyboardType: keyboardType,
-      style: const TextStyle(fontSize: 14, color: Color(0xFF111827)),
+      style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827)),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: Color(0xFFB0B8C9), fontSize: 14),
+        hintStyle: GoogleFonts.inter(color: Color(0xFFB0B8C9), fontSize: 14),
         filled: true,
         fillColor: const Color(0xFFF3F5F9),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Color(0xFF1A56DB), width: 1.5),
@@ -264,7 +178,6 @@ class _AddFacultyTextField extends StatelessWidget {
 
 class _AddFacultyRoleToggle extends StatefulWidget {
   const _AddFacultyRoleToggle();
-
   @override
   State<_AddFacultyRoleToggle> createState() => _AddFacultyRoleToggleState();
 }
@@ -272,14 +185,10 @@ class _AddFacultyRoleToggle extends StatefulWidget {
 class _AddFacultyRoleToggleState extends State<_AddFacultyRoleToggle> {
   int _selected = 0;
   final List<String> _labels = const ['GUIDE', 'HOD'];
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F5F9),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: List.generate(2, (i) {
           final isSelected = _selected == i;
@@ -300,19 +209,17 @@ class _AddFacultyRoleToggleState extends State<_AddFacultyRoleToggle> {
                             color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
-                          )
+                          ),
                         ]
                       : [],
                 ),
                 child: Text(
                   _labels[i],
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: isSelected
-                        ? const Color(0xFF1A56DB)
-                        : const Color(0xFF9CA3AF),
+                    color: isSelected ? const Color(0xFF1A56DB) : const Color(0xFF9CA3AF),
                   ),
                 ),
               ),
@@ -327,42 +234,31 @@ class _AddFacultyRoleToggleState extends State<_AddFacultyRoleToggle> {
 class _AddFacultyDropdown extends StatefulWidget {
   final String hint;
   final List<String> items;
-
-  // FIX: removed unused 'value' parameter
-  const _AddFacultyDropdown({
-    required this.hint,
-    required this.items,
-  });
-
+  const _AddFacultyDropdown({required this.hint, required this.items});
   @override
   State<_AddFacultyDropdown> createState() => _AddFacultyDropdownState();
 }
 
 class _AddFacultyDropdownState extends State<_AddFacultyDropdown> {
   String? _selected;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F5F9),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: _selected,
-          hint: Text(widget.hint,
-              style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 14)),
+          hint: Text(widget.hint, style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14)),
           isExpanded: true,
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF6B7280)),
           items: widget.items
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e,
-                        style: const TextStyle(
-                            fontSize: 14, color: Color(0xFF111827))),
-                  ))
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e, style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827))),
+                ),
+              )
               .toList(),
           onChanged: (v) => setState(() => _selected = v),
         ),

@@ -4,7 +4,6 @@ import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class AddDepartmentPage extends StatelessWidget {
   const AddDepartmentPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -21,11 +21,26 @@ class AppBottomNav extends StatelessWidget {
         unselectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
         elevation: 0,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'INTERNSHIPS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'CERTIFICATES'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold),
+            label: 'DASHBOARD',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold),
+            label: 'INTERNSHIPS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart, fontWeight: FontWeight.bold),
+            label: 'REPORTS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold),
+            label: 'CERTIFICATES',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            label: 'PROFILE',
+          ),
         ],
       ),
     );
@@ -52,17 +67,31 @@ class GuideAppBottomNav extends StatelessWidget {
         unselectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
         elevation: 0,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.group, fontWeight: FontWeight.bold), label: 'MENTEES'),
-          BottomNavigationBarItem(icon: Icon(Icons.fact_check, fontWeight: FontWeight.bold), label: 'REPORTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.checklist, fontWeight: FontWeight.bold), label: 'REVIEW'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified, fontWeight: FontWeight.bold), label: 'CERTS'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold),
+            label: 'DASHBOARD',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group, fontWeight: FontWeight.bold),
+            label: 'MENTEES',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fact_check, fontWeight: FontWeight.bold),
+            label: 'REPORTS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.checklist, fontWeight: FontWeight.bold),
+            label: 'REVIEW',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.verified, fontWeight: FontWeight.bold),
+            label: 'CERTS',
+          ),
         ],
       ),
     );
   }
 }
-
 
 class HodAppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -84,11 +113,26 @@ class HodAppBottomNav extends StatelessWidget {
         unselectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
         elevation: 0,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'STUDENTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'FACULTY'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'ANALYTICS'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold),
+            label: 'DASHBOARD',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold),
+            label: 'STUDENTS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart, fontWeight: FontWeight.bold),
+            label: 'FACULTY',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold),
+            label: 'ANALYTICS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            label: 'PROFILE',
+          ),
         ],
       ),
     );
@@ -115,14 +159,28 @@ class AdminAppBottomNav extends StatelessWidget {
         unselectedLabelStyle: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.w800),
         elevation: 0,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold), label: 'DASHBOARD'),
-          BottomNavigationBarItem(icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold), label: 'STUDENTS'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart , fontWeight: FontWeight.bold), label: 'FACULTY'),
-          BottomNavigationBarItem(icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold), label: 'ANALYTICS'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold), label: 'PROFILE'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.grid_view_rounded, fontWeight: FontWeight.bold),
+            label: 'DASHBOARD',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold),
+            label: 'FACULTY',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart, fontWeight: FontWeight.bold),
+            label: 'STUDENTS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold),
+            label: 'DEPARTMENT',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            label: 'INTERNSHIPS',
+          ),
         ],
       ),
     );
   }
 }
-

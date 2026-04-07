@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/college/admin/add_department.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class Department {
   final String name;
@@ -7,7 +12,6 @@ class Department {
   final int facultyCount;
   final bool isActive;
   final IconData icon;
-
   const Department({
     required this.name,
     required this.code,
@@ -53,29 +57,34 @@ final List<Department> departments = [
   ),
 ];
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
-
 class DepartmentMasterPage extends StatefulWidget {
   const DepartmentMasterPage({super.key});
-
   @override
   State<DepartmentMasterPage> createState() => _DepartmentMasterPageState();
 }
 
 class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
-  int _currentIndex = 0;
-
+  int currentIndex = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F4F7),
+      appBar: CommonAppBar(
+        showLogo: true,
+        actions: [
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {},
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top App Bar ──
-            _buildTopBar(),
-
-            // ── Scrollable Content ──
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -83,11 +92,9 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-
-                    // Section label
                     Text(
                       'ACADEMIC MANAGEMENT',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.grey[500],
@@ -95,11 +102,9 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                       ),
                     ),
                     const SizedBox(height: 4),
-
-                    // Page title
-                    const Text(
+                    Text(
                       'Department Master',
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF0F172A),
@@ -107,12 +112,8 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                       ),
                     ),
                     const SizedBox(height: 18),
-
-                    // ── Action Row ──
                     _buildActionRow(),
                     const SizedBox(height: 20),
-
-                    // ── Department Cards ──
                     ...departments.map(
                       (dept) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -127,100 +128,35 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
           ],
         ),
       ),
-
-      // ── Bottom Navigation Bar ──
-      bottomNavigationBar: _buildBottomNavBar(),
-    );
-  }
-
-  // ── Top Bar ─────────────────────────────────────────────────────────────────
-
-  Widget _buildTopBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Hamburger + Logo
-          Row(
-            children: [
-              Icon(Icons.menu, color: Colors.grey[700], size: 24),
-              const SizedBox(width: 10),
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Scholar',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF1A56DB),
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Flow',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF0F172A),
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          // Avatar
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: const Color(0xFF2C3A6B),
-            child: ClipOval(
-              child: Container(
-                width: 40,
-                height: 40,
-                color: const Color(0xFF2C3A6B),
-                child: const Icon(Icons.person, color: Colors.white, size: 22),
-              ),
-            ),
-          ),
-        ],
+      bottomNavigationBar: AdminAppBottomNav(
+        currentIndex: 3,
+        onTap: (index) => AdminBottomNavController.onItemTapped(context, index),
       ),
     );
   }
-
-  // ── Action Row (Add Button + Filter) ────────────────────────────────────────
 
   Widget _buildActionRow() {
     return Row(
       children: [
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddDepartmentPage()));
+            },
             icon: const Icon(Icons.add_circle, size: 20, color: Colors.white),
-            label: const Text(
+            label: Text(
               'Add Department',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+              style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1A56DB),
               padding: const EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               elevation: 0,
             ),
           ),
         ),
         const SizedBox(width: 10),
-
-        // Filter button
         Container(
           width: 48,
           height: 50,
@@ -229,166 +165,76 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
-          child: const Icon(
-            Icons.tune_rounded,
-            color: Color(0xFF475569),
-            size: 22,
-          ),
+          child: const Icon(Icons.tune_rounded, color: Color(0xFF475569), size: 22),
         ),
       ],
     );
   }
-
-  // ── Bottom Navigation Bar ────────────────────────────────────────────────────
-
-  Widget _buildBottomNavBar() {
-    final items = [
-      DepartmentMasterNavItem(icon: Icons.grid_view_rounded, label: 'DASHBOARD'),
-      DepartmentMasterNavItem(icon: Icons.school_outlined, label: 'FACULTY'),
-      DepartmentMasterNavItem(icon: Icons.people_outline_rounded, label: 'STUDENTS'),
-      DepartmentMasterNavItem(icon: Icons.work_outline_rounded, label: 'INTERNSHIPS'),
-      DepartmentMasterNavItem(icon: Icons.person_outline_rounded, label: 'PROFILE'),
-    ];
-
-    return Container(
-      height: 72,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFE2E8F0))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(items.length, (i) {
-          final selected = i == _currentIndex;
-          return GestureDetector(
-            onTap: () => setState(() => _currentIndex = i),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  items[i].icon,
-                  size: 24,
-                  color: selected
-                      ? const Color(0xFF1A56DB)
-                      : const Color(0xFF94A3B8),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  items[i].label,
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight:
-                        selected ? FontWeight.w700 : FontWeight.w500,
-                    color: selected
-                        ? const Color(0xFF1A56DB)
-                        : const Color(0xFF94A3B8),
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
-    );
-  }
 }
-
-class DepartmentMasterNavItem {
-  final IconData icon;
-  final String label;
-  const DepartmentMasterNavItem({required this.icon, required this.label});
-}
-
-// ─── Department Card ───────────────────────────────────────────────────────────
 
 class DepartmentMasterCard extends StatelessWidget {
   final Department department;
   const DepartmentMasterCard({super.key, required this.department});
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Header Row ──
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon box
                 Container(
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: department.isActive
-                        ? const Color(0xFFEFF6FF)
-                        : const Color(0xFFF1F5F9),
+                    color: department.isActive ? const Color(0xFFEFF6FF) : const Color(0xFFF1F5F9),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(
                     department.icon,
-                    color: department.isActive
-                        ? const Color(0xFF1A56DB)
-                        : const Color(0xFF94A3B8),
+                    color: department.isActive ? const Color(0xFF1A56DB) : const Color(0xFF94A3B8),
                     size: 22,
                   ),
                 ),
                 const SizedBox(width: 12),
-
-                // Name & code
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         department.name,
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: department.isActive
-                              ? const Color(0xFF0F172A)
-                              : const Color(0xFF94A3B8),
+                          color: department.isActive ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
                           height: 1.3,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         'CODE: ${department.code}',
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: department.isActive
-                              ? const Color(0xFF64748B)
-                              : const Color(0xFFB0BFCC),
+                          color: department.isActive ? const Color(0xFF64748B) : const Color(0xFFB0BFCC),
                           letterSpacing: 0.3,
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                // Status badge
                 DepartmentMasterStatusBadge(isActive: department.isActive),
               ],
             ),
-
             const SizedBox(height: 14),
-
-            // ── Info Row ──
             Row(
               children: [
                 Expanded(
@@ -415,12 +261,9 @@ class DepartmentMasterCard extends StatelessWidget {
   }
 }
 
-// ─── Status Badge ─────────────────────────────────────────────────────────────
-
 class DepartmentMasterStatusBadge extends StatelessWidget {
   final bool isActive;
   const DepartmentMasterStatusBadge({super.key, required this.isActive});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -428,16 +271,11 @@ class DepartmentMasterStatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isActive
-              ? const Color(0xFFD4A017)
-              : const Color(0xFFEF4444),
-          width: 1.2,
-        ),
+        border: Border.all(color: isActive ? const Color(0xFFD4A017) : const Color(0xFFEF4444), width: 1.2),
       ),
       child: Text(
         isActive ? 'ACTIVE' : 'INACTIVE',
-        style: TextStyle(
+        style: GoogleFonts.inter(
           fontSize: 10,
           fontWeight: FontWeight.w700,
           color: isActive ? const Color(0xFFD4A017) : const Color(0xFFEF4444),
@@ -448,20 +286,11 @@ class DepartmentMasterStatusBadge extends StatelessWidget {
   }
 }
 
-// ─── Info Cell ────────────────────────────────────────────────────────────────
-
 class DepartmentMasterInfoCell extends StatelessWidget {
   final String label;
   final String value;
   final bool isActive;
-
-  const DepartmentMasterInfoCell({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.isActive,
-  });
-
+  const DepartmentMasterInfoCell({super.key, required this.label, required this.value, required this.isActive});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -476,7 +305,7 @@ class DepartmentMasterInfoCell extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 10,
               fontWeight: FontWeight.w600,
               color: Color(0xFF94A3B8),
@@ -486,7 +315,7 @@ class DepartmentMasterInfoCell extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
+            style: GoogleFonts.inter(
               fontSize: 13,
               fontWeight: FontWeight.w700,
               color: isActive ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
