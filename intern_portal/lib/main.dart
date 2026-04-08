@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/pages/login.dart';
 import 'package:intern_portal/pages/unified_login.dart';
+import 'package:intern_portal/screens/college/admin/admin_dashboard.dart';
 import 'package:intern_portal/screens/college/admin/faculty_master.dart';
 import 'package:intern_portal/screens/college/admin/student_master.dart';
 import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const StudentsListScreen(),
+      home: const CollegeAdminDashboardScreen(),
     );
   }
 }

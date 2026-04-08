@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intern_portal/screens/college/admin/admin_dashboard.dart';
 import 'package:intern_portal/screens/college/admin/department_master.dart';
 import 'package:intern_portal/screens/college/admin/faculty_master.dart';
 import 'package:intern_portal/screens/college/admin/internship_master.dart';
@@ -90,7 +91,7 @@ class AdminBottomNavController {
   static void onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const GuideDashboardPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const CollegeAdminDashboardScreen()));
         break;
       case 1:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyMasterPage()));
