@@ -1,61 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/internship_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-enum InternshipStatus { active, inactive }
-
-enum InternshipMode { online, onsite, hybrid }
-
-class InternshipBatch {
-  final String id;
-  final String name;
-  final String academicYear;
-  final String duration;
-  final InternshipMode mode;
-  final String createdDate;
-  final InternshipStatus status;
-  const InternshipBatch({
-    required this.id,
-    required this.name,
-    required this.academicYear,
-    required this.duration,
-    required this.mode,
-    required this.createdDate,
-    required this.status,
-  });
-}
-
-final List<InternshipBatch> sampleBatches = [
-  const InternshipBatch(
-    id: 'SF-2026-001',
-    name: 'Summer Internship 2026',
-    academicYear: '2026-2027',
-    duration: '3 months',
-    mode: InternshipMode.online,
-    createdDate: '12 May',
-    status: InternshipStatus.active,
-  ),
-  const InternshipBatch(
-    id: 'SF-2025-084',
-    name: 'Data Science Winter',
-    academicYear: '2025-2026',
-    duration: '6 months',
-    mode: InternshipMode.onsite,
-    createdDate: '04 Jan',
-    status: InternshipStatus.inactive,
-  ),
-  const InternshipBatch(
-    id: 'SF-2026-002',
-    name: 'Marketing Cohort A',
-    academicYear: '2026-2027',
-    duration: '2 months',
-    mode: InternshipMode.hybrid,
-    createdDate: '15 May',
-    status: InternshipStatus.active,
-  ),
-];
 
 class InternshipMasterScreen extends StatefulWidget {
   const InternshipMasterScreen({super.key});
@@ -66,16 +15,34 @@ class InternshipMasterScreen extends StatefulWidget {
 class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
   int selectedNavIndex = 4;
   final TextEditingController _searchController = TextEditingController();
-  List<InternshipBatch> _filteredBatches = sampleBatches;
+  List<Internship> _batches = [];
+  List<Internship> _filteredBatches = [];
+  bool isLoading = true;
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    loadInternships();
+  }
+
+  Future<void> loadInternships() async {
+    setState(() => isLoading = true);
+    final data = await AdminServices.fetchInternships();
+    setState(() {
+      _batches = data;
+      _filteredBatches = data;
+      isLoading = false;
+    });
+  }
+
   void _onSearch(String query) {
     setState(() {
-      _filteredBatches = sampleBatches
+      _filteredBatches = _batches
           .where(
             (b) =>
                 b.name.toLowerCase().contains(query.toLowerCase()) ||
@@ -85,9 +52,9 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
     });
   }
 
-  int get _totalCount => sampleBatches.length;
-  int get _activeCount => sampleBatches.where((b) => b.status == InternshipStatus.active).length;
-  int get _inactiveCount => sampleBatches.where((b) => b.status == InternshipStatus.inactive).length;
+  int get _totalCount => _batches.length;
+  int get _activeCount => _batches.where((b) => b.status == InternshipStatus.active).length;
+  int get _inactiveCount => _batches.where((b) => b.status == InternshipStatus.inactive).length;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +88,12 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                     const SizedBox(height: 24),
                     _buildSearchRow(),
                     const SizedBox(height: 20),
-                    ..._filteredBatches.map((batch) => _buildBatchCard(batch)),
+                    if (isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (_filteredBatches.isEmpty)
+                      const Center(child: Text("No internships found"))
+                    else
+                      ..._filteredBatches.map((batch) => _buildBatchCard(batch)),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -223,7 +195,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
     );
   }
 
-  Widget _buildBatchCard(InternshipBatch batch) {
+  Widget _buildBatchCard(Internship batch) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -262,7 +234,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                   child: _InfoTile(
                     icon: Icons.calendar_today_outlined,
                     iconColor: const Color(0xFF2563EB),
-                    label: batch.academicYear,
+                    label: batch.year,
                   ),
                 ),
                 Expanded(
@@ -343,7 +315,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
     switch (mode) {
       case InternshipMode.online:
         return Icons.laptop_outlined;
-      case InternshipMode.onsite:
+      case InternshipMode.offline:
         return Icons.location_on; // ← filled icon to match design
       case InternshipMode.hybrid:
         return Icons.people_outline;
@@ -354,7 +326,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
     switch (mode) {
       case InternshipMode.online:
         return 'Online';
-      case InternshipMode.onsite:
+      case InternshipMode.offline:
         return 'On-site';
       case InternshipMode.hybrid:
         return 'Hybrid';

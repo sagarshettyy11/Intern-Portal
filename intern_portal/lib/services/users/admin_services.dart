@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/admin/internship_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -130,5 +131,90 @@ class AdminServices {
       return true;
     }
     return false;
+  }
+
+  static Future<List<Internship>> fetchInternships({
+    String search = '',
+    String status = 'all',
+    String year = '',
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final uri = Uri.parse(
+      "${ApiEndpoints.adminInternship}?action=list"
+      "&search=$search"
+      "&status=$status"
+      "&year=$year",
+    );
+    final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
+    final json = jsonDecode(response.body);
+    if (json['success'] == true) {
+      return (json['data']['internships'] as List).map((e) => Internship.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  static Future<bool> addInternship({
+    required String name,
+    required String year,
+    required String duration,
+    required String mode,
+    required List<int> departments,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.adminInternship}?action=add"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {
+        "internship_name": name,
+        "year": year,
+        "duration": duration,
+        "mode": mode,
+        "departments": departments.join(','),
+      },
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<bool> editInternship({
+    required int id,
+    required String name,
+    required String year,
+    required String duration,
+    required String mode,
+    required String status,
+    required List<int> departments,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.adminInternship}?action=edit"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {
+        "internship_master_id": id.toString(),
+        "internship_name": name,
+        "year": year,
+        "duration": duration,
+        "mode": mode,
+        "status": status,
+        "departments": departments.join(','),
+      },
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<bool> deleteInternship(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.adminInternship}?action=delete"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {"internship_master_id": id.toString()},
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
   }
 }

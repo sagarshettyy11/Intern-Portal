@@ -1,27 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/screens/college/admin/add_department.dart';
 import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-class Department {
-  final String name;
-  final String code;
-  final String hodName;
-  final int facultyCount;
-  final bool isActive;
-  final IconData icon;
-  const Department({
-    required this.name,
-    required this.code,
-    required this.hodName,
-    required this.facultyCount,
-    required this.isActive,
-    required this.icon,
-  });
-}
 
 class DepartmentMasterPage extends StatefulWidget {
   const DepartmentMasterPage({super.key});
