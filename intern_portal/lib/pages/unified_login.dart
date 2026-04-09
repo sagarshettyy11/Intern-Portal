@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/screens/college/admin/admin_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
 import 'package:intern_portal/screens/college/students/dashboard.dart';
@@ -209,8 +210,8 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                             NavigationService.pushReplacement(GuideDashboardPage());
                                           } else if (role == "HOD") {
                                             NavigationService.pushReplacement(HodDashboardPage());
-                                          } else if (role == "Admin") {
-                                            NavigationService.pushReplacement(DashboardPage());
+                                          } else if (role == "CollegeAdmin") {
+                                            NavigationService.pushReplacement(CollegeAdminDashboardScreen());
                                           } else {
                                             CustomSnackbar.show(message: "Invalid role", isSuccess: false);
                                           }

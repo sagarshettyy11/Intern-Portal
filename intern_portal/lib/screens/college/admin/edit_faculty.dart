@@ -1,9 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/faculty_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
-class EditFacultyPage extends StatelessWidget {
-  const EditFacultyPage({super.key});
+class EditFacultyPage extends StatefulWidget {
+  final Faculty faculty;
+  const EditFacultyPage({super.key, required this.faculty});
+  @override
+  State<EditFacultyPage> createState() => _EditFacultyPageState();
+}
+
+class _EditFacultyPageState extends State<EditFacultyPage> {
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController phoneController;
+  late TextEditingController designationController;
+
+  List departments = [];
+  String role = "Guide";
+  String status = "Active";
+  int? departmentId;
+  bool isLoading = false;
+
+  Future<void> loadDepartments() async {
+    final data = await AdminServices.fetchDepartments();
+    setState(() {
+      departments = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final f = widget.faculty;
+    departmentId = widget.faculty.departmentId;
+    nameController = TextEditingController(text: f.name);
+    emailController = TextEditingController(text: f.email);
+    phoneController = TextEditingController(text: f.phone);
+    designationController = TextEditingController(text: f.designation);
+    role = f.role;
+    status = f.isActive ? "Active" : "Inactive";
+    loadDepartments();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +86,7 @@ class EditFacultyPage extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Dr. Sarah Jenkins',
+              widget.faculty.name,
               style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
             ),
             const SizedBox(height: 24),
@@ -78,10 +118,7 @@ class EditFacultyPage extends StatelessWidget {
                     leading: const Icon(Icons.person_outline, size: 16, color: Color(0xFF6B7280)),
                   ),
                   const SizedBox(height: 8),
-                  _EditFacultyTextField(
-                    hint: 'Full Name',
-                    controller: TextEditingController(text: 'Dr. Sarah Jenkins'),
-                  ),
+                  _EditFacultyTextField(hint: 'Full Name', controller: nameController),
                   const SizedBox(height: 16),
                   _EditFacultyFieldLabel(
                     'Email Address',
@@ -90,7 +127,7 @@ class EditFacultyPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   _EditFacultyTextField(
                     hint: 'Email',
-                    controller: TextEditingController(text: 's.jenkins@scholarflow.edu'),
+                    controller: emailController,
                     readOnly: true,
                     suffix: const Padding(
                       padding: EdgeInsets.all(12),
@@ -110,7 +147,7 @@ class EditFacultyPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   _EditFacultyTextField(
                     hint: 'Contact Number',
-                    controller: TextEditingController(text: '+1 (555) 012-3456'),
+                    controller: phoneController,
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 16),
@@ -119,24 +156,20 @@ class EditFacultyPage extends StatelessWidget {
                     leading: const Icon(Icons.badge_outlined, size: 16, color: Color(0xFF6B7280)),
                   ),
                   const SizedBox(height: 8),
-                  _EditFacultyTextField(
-                    hint: 'Designation',
-                    controller: TextEditingController(text: 'Senior Professor'),
-                  ),
+                  _EditFacultyTextField(hint: 'Designation', controller: designationController),
                   const SizedBox(height: 16),
                   _EditFacultyFieldLabel(
                     'Department',
                     leading: const Icon(Icons.grid_view_rounded, size: 16, color: Color(0xFF6B7280)),
                   ),
                   const SizedBox(height: 8),
-                  const _EditFacultyDropdown(
-                    hint: 'Select Department',
-                    value: 'Computer Science & Engineering',
-                    items: [
-                      'Computer Science & Engineering',
-                      'Information Science Engineering',
-                      'Mechanical Engineering',
-                    ],
+                  _EditFacultyDropdown<int>(
+                    hint: "Select Department",
+                    value: departmentId,
+                    items: departments.map<DropdownMenuItem<int>>((d) {
+                      return DropdownMenuItem<int>(value: d['department_id'], child: Text(d['department_name']));
+                    }).toList(),
+                    onChanged: (v) => setState(() => departmentId = v),
                   ),
                   const SizedBox(height: 16),
                   _EditFacultyFieldLabel(
@@ -144,7 +177,15 @@ class EditFacultyPage extends StatelessWidget {
                     leading: const Icon(Icons.circle_outlined, size: 16, color: Color(0xFF6B7280)),
                   ),
                   const SizedBox(height: 8),
-                  const _EditFacultyDropdown(hint: 'Select Status', value: 'Active', items: ['Active', 'Inactive']),
+                  _EditFacultyDropdown<String>(
+                    hint: "Select Status",
+                    value: status,
+                    items: [
+                      'Active',
+                      'Inactive',
+                    ].map((e) => DropdownMenuItem<String>(value: e, child: Text(e))).toList(),
+                    onChanged: (v) => setState(() => status = v!),
+                  ),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -177,7 +218,23 @@ class EditFacultyPage extends StatelessWidget {
             Expanded(
               flex: 3,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  setState(() => isLoading = true);
+                  final success = await AdminServices.editFaculty(
+                    facultyId: widget.faculty.id,
+                    name: nameController.text,
+                    email: widget.faculty.email!,
+                    phone: phoneController.text,
+                    designation: designationController.text,
+                    departmentId: departmentId!,
+                    role: role,
+                    status: status,
+                  );
+                  setState(() => isLoading = false);
+                  if (success) {
+                    Navigator.pop(context, true);
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1A56DB),
                   padding: const EdgeInsets.symmetric(vertical: 15),
@@ -307,17 +364,21 @@ class _EditFacultyRoleToggleState extends State<_EditFacultyRoleToggle> {
   }
 }
 
-class _EditFacultyDropdown extends StatefulWidget {
+class _EditFacultyDropdown<T> extends StatefulWidget {
   final String hint;
-  final String? value;
-  final List<String> items;
-  const _EditFacultyDropdown({required this.hint, this.value, required this.items});
+  final T? value;
+  final List<DropdownMenuItem<T>> items;
+  final Function(T?) onChanged;
+
+  const _EditFacultyDropdown({required this.hint, required this.items, required this.onChanged, this.value});
+
   @override
-  State<_EditFacultyDropdown> createState() => _EditFacultyDropdownState();
+  State<_EditFacultyDropdown<T>> createState() => _EditFacultyDropdownState<T>();
 }
 
-class _EditFacultyDropdownState extends State<_EditFacultyDropdown> {
-  String? _selected;
+class _EditFacultyDropdownState<T> extends State<_EditFacultyDropdown<T>> {
+  T? _selected;
+
   @override
   void initState() {
     super.initState();
@@ -330,20 +391,16 @@ class _EditFacultyDropdownState extends State<_EditFacultyDropdown> {
       decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
+        child: DropdownButton<T>(
           value: _selected,
           hint: Text(widget.hint, style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14)),
           isExpanded: true,
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF6B7280)),
-          items: widget.items
-              .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e, style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827))),
-                ),
-              )
-              .toList(),
-          onChanged: (v) => setState(() => _selected = v),
+          items: widget.items,
+          onChanged: (v) {
+            setState(() => _selected = v);
+            widget.onChanged(v); // 🔥 important
+          },
         ),
       ),
     );

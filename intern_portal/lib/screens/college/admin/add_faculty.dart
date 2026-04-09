@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
-class AddFacultyPage extends StatelessWidget {
+class AddFacultyPage extends StatefulWidget {
   const AddFacultyPage({super.key});
+
+  @override
+  State<AddFacultyPage> createState() => _AddFacultyPageState();
+}
+
+class _AddFacultyPageState extends State<AddFacultyPage> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final designationController = TextEditingController();
+  String role = "Guide";
+  int? departmentId;
+  bool isLoading = false;
+
+  List departments = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadDepartments();
+  }
+
+  Future<void> loadDepartments() async {
+    final data = await AdminServices.fetchDepartments();
+    setState(() {
+      departments = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +68,33 @@ class AddFacultyPage extends StatelessWidget {
                     const SizedBox(height: 24),
                     const _AddFacultyFieldLabel('Full Name'),
                     const SizedBox(height: 8),
-                    const _AddFacultyTextField(hint: 'e.g. Dr. Robert Wilson'),
+                    _AddFacultyTextField(hint: 'e.g. Dr. Robert Wilson', controller: nameController),
                     const SizedBox(height: 16),
                     const _AddFacultyFieldLabel('Academic Email'),
                     const SizedBox(height: 8),
-                    const _AddFacultyTextField(hint: 'robert.w@university.edu'),
+                    _AddFacultyTextField(hint: 'robert.w@university.edu', controller: emailController),
                     const SizedBox(height: 16),
                     const _AddFacultyFieldLabel('Contact Number'),
                     const SizedBox(height: 8),
-                    const _AddFacultyTextField(hint: '+1 (555) 000-0000', keyboardType: TextInputType.phone),
+                    _AddFacultyTextField(
+                      hint: '+1 (555) 000-0000',
+                      keyboardType: TextInputType.phone,
+                      controller: phoneController,
+                    ),
                     const SizedBox(height: 16),
                     const _AddFacultyFieldLabel('Current Designation'),
                     const SizedBox(height: 8),
-                    const _AddFacultyTextField(hint: 'e.g. Associate Professor'),
+                    _AddFacultyTextField(hint: 'e.g. Associate Professor', controller: designationController),
                     const SizedBox(height: 16),
                     const _AddFacultyFieldLabel('Department'),
                     const SizedBox(height: 8),
-                    const _AddFacultyDropdown(
-                      hint: 'Select Department',
-                      items: [
-                        'Computer Science Engineering',
-                        'Information Science Engineering',
-                        'Mechanical Engineering',
-                      ],
+                    _AddFacultyDropdown<int>(
+                      hint: "Select Department",
+                      value: departmentId,
+                      items: departments.map<DropdownMenuItem<int>>((d) {
+                        return DropdownMenuItem<int>(value: d['department_id'], child: Text(d['department_name']));
+                      }).toList(),
+                      onChanged: (v) => setState(() => departmentId = v),
                     ),
                     const SizedBox(height: 20),
                     Container(
@@ -96,7 +129,21 @@ class AddFacultyPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        setState(() => isLoading = true);
+                        final success = await AdminServices.addFaculty(
+                          name: nameController.text,
+                          email: emailController.text,
+                          phone: phoneController.text,
+                          designation: designationController.text,
+                          departmentId: departmentId!,
+                          role: role,
+                        );
+                        setState(() => isLoading = false);
+                        if (success) {
+                          Navigator.pop(context, true); // return success
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1A56DB),
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -152,7 +199,7 @@ class _AddFacultyFieldLabel extends StatelessWidget {
 class _AddFacultyTextField extends StatelessWidget {
   final String hint;
   final TextInputType? keyboardType;
-  const _AddFacultyTextField({required this.hint, this.keyboardType});
+  const _AddFacultyTextField({required this.hint, this.keyboardType, required TextEditingController controller});
 
   @override
   Widget build(BuildContext context) {
@@ -231,36 +278,43 @@ class _AddFacultyRoleToggleState extends State<_AddFacultyRoleToggle> {
   }
 }
 
-class _AddFacultyDropdown extends StatefulWidget {
+class _AddFacultyDropdown<T> extends StatefulWidget {
   final String hint;
-  final List<String> items;
-  const _AddFacultyDropdown({required this.hint, required this.items});
+  final T? value;
+  final List<DropdownMenuItem<T>> items;
+  final Function(T?) onChanged;
+
+  const _AddFacultyDropdown({required this.hint, required this.items, required this.onChanged, this.value});
+
   @override
-  State<_AddFacultyDropdown> createState() => _AddFacultyDropdownState();
+  State<_AddFacultyDropdown<T>> createState() => _AddFacultyDropdownState<T>();
 }
 
-class _AddFacultyDropdownState extends State<_AddFacultyDropdown> {
-  String? _selected;
+class _AddFacultyDropdownState<T> extends State<_AddFacultyDropdown<T>> {
+  T? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
+        child: DropdownButton<T>(
           value: _selected,
-          hint: Text(widget.hint, style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14)),
+          hint: Text(widget.hint, style: GoogleFonts.inter(color: const Color(0xFF9CA3AF), fontSize: 14)),
           isExpanded: true,
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF6B7280)),
-          items: widget.items
-              .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e, style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827))),
-                ),
-              )
-              .toList(),
-          onChanged: (v) => setState(() => _selected = v),
+          items: widget.items,
+          onChanged: (v) {
+            setState(() => _selected = v);
+            widget.onChanged(v); // 🔥 important
+          },
         ),
       ),
     );

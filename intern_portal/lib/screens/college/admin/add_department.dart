@@ -1,9 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/screens/college/admin/department_master.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
+import 'package:intern_portal/widgets/custom_snackbar.dart';
 
-class AddDepartmentPage extends StatelessWidget {
+class AddDepartmentPage extends StatefulWidget {
   const AddDepartmentPage({super.key});
+  @override
+  State<AddDepartmentPage> createState() => _AddDepartmentPageState();
+}
+
+class _AddDepartmentPageState extends State<AddDepartmentPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+  List<dynamic> hodList = [];
+  int? selectedHodId;
+  bool isLoading = false;
+
+  @override
+void initState() {
+  super.initState();
+  loadHods(); 
+}
+
+void loadHods() async {
+  final data = await AdminServices.fetchHodList();
+  setState(() {
+    hodList = data;
+  });
+  debugPrint("HOD LIST: $hodList");
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,31 +81,35 @@ class AddDepartmentPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Department Name
-                  const _DeptFieldLabel('Department Name'),
-                  const SizedBox(height: 8),
-                  const _DeptTextField(hint: 'e.g., Computer Science & Engineering'),
-                  const SizedBox(height: 20),
-                  const _DeptFieldLabel('Department Code'),
-                  const SizedBox(height: 8),
-                  _DeptTextField(
-                    hint: 'E.G., CSE-2024',
-                    suffix: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(6)),
-                      child: Text(
-                        'UNIQUE',
-                        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF374151)),
-                      ),
-                    ),
+                  Text(
+                    "Department Name",
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
+                  const SizedBox(height: 6),
+                  CustomTextField(controller: nameController, hint: "e.g Computer Science"),
                   const SizedBox(height: 20),
-                  const _DeptFieldLabel('Head of Department (HOD)'),
-                  const SizedBox(height: 8),
-                  const _DeptDropdown(
-                    hint: 'Select an academic head',
-                    items: ['Dr. Shri Laxmi', 'Dr. Rajesh Kumar', 'Dr. Ananya Murthy'],
+                  Text(
+                    "Department Code",
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 6),
+                  CustomTextField(controller: codeController, hint: "e.g DEPT001"),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Head of Department",
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 6),
+                  CustomDropdown(
+                    value: selectedHodId,
+                    hint: "Select HOD",
+                    items: hodList,
+                    isMap: true, // 🔥 IMPORTANT
+                    onChanged: (value) {
+                      setState(() {
+                        selectedHodId = value;
+                      });
+                    },
                   ),
                   const SizedBox(height: 20),
                   Container(
@@ -103,7 +136,25 @@ class AddDepartmentPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final name = nameController.text.trim();
+                  final code = codeController.text.trim();
+                  if (name.isEmpty || code.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all fields")));
+                    return;
+                  }
+                  setState(() => isLoading = true);
+                  final success = await AdminServices.addDepartment(name: name, code: code);
+                  setState(() => isLoading = false);
+                  if (success) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Department added successfully")));
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to add department")));
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1A56DB),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -120,7 +171,9 @@ class AddDepartmentPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DepartmentMasterPage()));
+                },
                 child: Text(
                   'Cancel',
                   style: GoogleFonts.inter(color: Color(0xFF374151), fontSize: 15, fontWeight: FontWeight.w500),
@@ -128,82 +181,6 @@ class AddDepartmentPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// Reuseable Widgets
-class _DeptFieldLabel extends StatelessWidget {
-  final String text;
-  const _DeptFieldLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
-    );
-  }
-}
-
-class _DeptTextField extends StatelessWidget {
-  final String hint;
-  final Widget? suffix;
-  const _DeptTextField({required this.hint, this.suffix});
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827)),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: GoogleFonts.inter(color: Color(0xFFB0B8C9), fontSize: 14),
-        suffixIcon: suffix,
-        filled: true,
-        fillColor: const Color(0xFFF3F5F9),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF1A56DB), width: 1.5),
-        ),
-      ),
-    );
-  }
-}
-
-class _DeptDropdown extends StatefulWidget {
-  final String hint;
-  final List<String> items;
-  const _DeptDropdown({required this.hint, required this.items});
-  @override
-  State<_DeptDropdown> createState() => _DeptDropdownState();
-}
-
-class _DeptDropdownState extends State<_DeptDropdown> {
-  String? _selected;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: _selected,
-          hint: Text(widget.hint, style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14)),
-          isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF6B7280)),
-          items: widget.items
-              .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e, style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827))),
-                ),
-              )
-              .toList(),
-          onChanged: (v) => setState(() => _selected = v),
         ),
       ),
     );

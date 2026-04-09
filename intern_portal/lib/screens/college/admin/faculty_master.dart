@@ -1,31 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/faculty_model.dart';
 import 'package:intern_portal/screens/college/admin/add_faculty.dart';
 import 'package:intern_portal/screens/college/admin/edit_faculty.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-class Faculty {
-  final String name;
-  final String initials;
-  final String role; // 'HOD' | 'GUIDE'
-  final bool isActive;
-  final String department;
-  final String designation;
-  final String? email;
-  final String? phone;
-  const Faculty({
-    required this.name,
-    required this.initials,
-    required this.role,
-    required this.isActive,
-    required this.department,
-    required this.designation,
-    this.email,
-    this.phone,
-  });
-}
 
 class FacultyMasterPage extends StatefulWidget {
   const FacultyMasterPage({super.key});
@@ -35,36 +16,44 @@ class FacultyMasterPage extends StatefulWidget {
 
 class _FacultyMasterPageState extends State<FacultyMasterPage> {
   int selectedIndex = 1;
-  final List<Faculty> _facultyList = const [
-    Faculty(
-      name: 'Shri Laxmi',
-      initials: 'SL',
-      role: 'HOD',
-      isActive: true,
-      department: 'Information Science Engineering',
-      designation: 'Assistant Professor',
-      email: 'shri.laxmi@university.edu',
-      phone: '+91 98765 43210',
-    ),
-    Faculty(
-      name: 'Rajesh Kumar',
-      initials: 'RK',
-      role: 'GUIDE',
-      isActive: true,
-      department: 'Computer Science Engineering',
-      designation: 'Professor',
-      email: 'rajesh.k@university.edu',
-      phone: '+91 91234 56789',
-    ),
-    Faculty(
-      name: 'Ananya Murthy',
-      initials: 'AM',
-      role: 'GUIDE',
-      isActive: false,
-      department: 'Mechanical Engineering',
-      designation: 'Associate Professor',
-    ),
-  ];
+  List<Faculty> facultyList = [];
+  bool isLoading = true;
+  int page = 1;
+  int totalPages = 1;
+  String search = '';
+  String filter = 'all';
+
+  @override
+  void initState() {
+    super.initState();
+    loadFaculty();
+  }
+
+  Future<void> loadFaculty() async {
+    setState(() => isLoading = true);
+    final data = await AdminServices.fetchFaculty(page: page, search: search, status: filter);
+    final List list = data['faculty'];
+    setState(() {
+      facultyList = list
+          .map(
+            (e) => Faculty(
+              id: e['faculty_id'],
+              name: e['faculty_name'],
+              initials: e['initials'],
+              role: e['is_hod'] ? 'HOD' : 'GUIDE',
+              isActive: e['status'] == 'Active',
+              department: e['department_name'] ?? '',
+              designation: e['designation'] ?? '',
+              departmentId: e['department_id'],
+              email: e['faculty_email'],
+              phone: e['faculty_contact'],
+            ),
+          )
+          .toList();
+      totalPages = data['pagination']['total_pages'];
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,13 +155,7 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
             ),
           ),
           const SizedBox(height: 20),
-          ..._facultyList.map(
-            (f) => _FacultyCard(
-              faculty: f,
-              onResetPassword: () => _showResetPasswordDialog(f),
-              onDeactivate: () => _showDeactivateDialog(f),
-            ),
-          ),
+          ...facultyList.map((f) => _FacultyCard(faculty: f, onDeactivate: () => _showDeactivateDialog(f))),
         ],
       ),
     );
@@ -189,15 +172,6 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
     );
   }
 
-  void _showResetPasswordDialog(Faculty faculty) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (_) => _ResetPasswordSheet(faculty: faculty),
-    );
-  }
-
   void _showDeactivateDialog(Faculty faculty) {
     showModalBottomSheet(
       context: context,
@@ -210,9 +184,8 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
 
 class _FacultyCard extends StatelessWidget {
   final Faculty faculty;
-  final VoidCallback onResetPassword;
   final VoidCallback onDeactivate;
-  const _FacultyCard({required this.faculty, required this.onResetPassword, required this.onDeactivate});
+  const _FacultyCard({required this.faculty, required this.onDeactivate});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -274,11 +247,9 @@ class _FacultyCard extends StatelessWidget {
                       icon: Icons.edit_outlined,
                       color: const Color(0xFF6B7280),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditFacultyPage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => EditFacultyPage(faculty: faculty)));
                       },
                     ),
-                    const SizedBox(width: 4),
-                    _ActionIcon(icon: Icons.lock_outline, color: const Color(0xFF6B7280), onTap: onResetPassword),
                     const SizedBox(width: 4),
                     _ActionIcon(
                       icon: Icons.person_off_outlined,
@@ -383,103 +354,6 @@ class _InfoRow extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _ResetPasswordSheet extends StatelessWidget {
-  final Faculty faculty;
-  const _ResetPasswordSheet({required this.faculty});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(color: const Color(0xFFD1D5DB), borderRadius: BorderRadius.circular(2)),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(color: const Color(0xFFEFF6FF), borderRadius: BorderRadius.circular(12)),
-                child: const Icon(Icons.lock_reset, color: Color(0xFF1A56DB), size: 26),
-              ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Reset Password',
-                    style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
-                  ),
-                  Text(
-                    'Reset login password for ${faculty.name}?',
-                    style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF6B7280)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFFBEB),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFFDE68A)),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.info_outline, size: 18, color: Color(0xFFD97706)),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'A new password will be auto-generated: first name + last 4 digits of contact number',
-                    style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF92400E)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1A56DB),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 0,
-              ),
-              child: Text(
-                'Reset Password',
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.inter(color: Color(0xFF374151), fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

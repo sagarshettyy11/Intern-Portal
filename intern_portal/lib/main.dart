@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const CollegeAdminDashboardScreen(),
+      home: const UnifiedLoginPage(),
     );
   }
 }

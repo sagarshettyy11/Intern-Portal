@@ -105,20 +105,23 @@ class CustomTextField extends StatelessWidget {
 }
 
 class CustomDropdown extends StatelessWidget {
-  final String? value;
+  final dynamic value;
   final String hint;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
+  final List<dynamic> items;
+  final ValueChanged<dynamic> onChanged;
+  final bool isMap;
   const CustomDropdown({
     super.key,
     required this.value,
     required this.hint,
     required this.items,
     required this.onChanged,
+    this.isMap = false,
   });
+
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
+    return DropdownButtonFormField<dynamic>(
       isExpanded: true,
       initialValue: value,
       hint: Text(
@@ -126,13 +129,39 @@ class CustomDropdown extends StatelessWidget {
         style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[500], fontWeight: FontWeight.bold),
       ),
       items: items.map((item) {
-        return DropdownMenuItem(
-          value: item,
-          child: Text(
-            item,
-            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-        );
+        if (isMap) {
+          final isAvailable = item['is_available'];
+          return DropdownMenuItem(
+            value: isAvailable ? item['faculty_id'] : null,
+            enabled: isAvailable,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  item['faculty_name'],
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: isAvailable ? Colors.black : Colors.grey,
+                  ),
+                ),
+                if (!isAvailable)
+                  Text(
+                    "Assigned",
+                    style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+          );
+        } else {
+          return DropdownMenuItem(
+            value: item,
+            child: Text(
+              item,
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+          );
+        }
       }).toList(),
       onChanged: onChanged,
       decoration: InputDecoration(

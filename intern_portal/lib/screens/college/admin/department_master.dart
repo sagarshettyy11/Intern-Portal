@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/college/admin/add_department.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -22,41 +23,6 @@ class Department {
   });
 }
 
-final List<Department> departments = [
-  Department(
-    name: 'Computer Science Engineering',
-    code: 'CSE-01',
-    hodName: 'Dr. Alan Turing',
-    facultyCount: 42,
-    isActive: true,
-    icon: Icons.laptop_mac,
-  ),
-  Department(
-    name: 'Information Science Engineering',
-    code: 'ISE-04',
-    hodName: 'Dr. Grace Hopper',
-    facultyCount: 35,
-    isActive: true,
-    icon: Icons.grid_view_rounded,
-  ),
-  Department(
-    name: 'Electronics & Comm. Eng.',
-    code: 'ECE-02',
-    hodName: 'Dr. Nikola Tesla',
-    facultyCount: 28,
-    isActive: false,
-    icon: Icons.memory_rounded,
-  ),
-  Department(
-    name: 'Mechanical Engineering',
-    code: 'ME-07',
-    hodName: 'Dr. James Watt',
-    facultyCount: 50,
-    isActive: true,
-    icon: Icons.settings_rounded,
-  ),
-];
-
 class DepartmentMasterPage extends StatefulWidget {
   const DepartmentMasterPage({super.key});
   @override
@@ -64,9 +30,42 @@ class DepartmentMasterPage extends StatefulWidget {
 }
 
 class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
+  List<Department> departments = [];
+  bool isLoading = true;
   int currentIndex = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    loadDepartments();
+  }
+
+  void loadDepartments() async {
+    final data = await AdminServices.fetchDepartments();
+    setState(() {
+      departments = data.map<Department>((d) {
+        return Department(
+          name: d['department_name'],
+          code: d['dept_code'],
+          hodName: d['hod_name'] ?? "Not Assigned",
+          facultyCount: d['faculty_count'],
+          isActive: d['status'] == "Active",
+          icon: Icons.apartment,
+        );
+      }).toList();
+
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    if (departments.isEmpty) {
+      return Scaffold(body: Center(child: Text("No departments found")));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF2F4F7),
       appBar: CommonAppBar(
@@ -140,8 +139,9 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
       children: [
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddDepartmentPage()));
+            onPressed: () async {
+              await Navigator.push(context, MaterialPageRoute(builder: (context) => AddDepartmentPage()));
+              loadDepartments();
             },
             icon: const Icon(Icons.add_circle, size: 20, color: Colors.white),
             label: Text(
