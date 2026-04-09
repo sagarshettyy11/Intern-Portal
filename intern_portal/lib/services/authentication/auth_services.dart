@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,9 +10,6 @@ class AuthService {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email, "password": password}),
     );
-    debugPrint("STATUS: ${response.statusCode}");
-    debugPrint("BODY:");
-    debugPrint(response.body);
     final data = jsonDecode(response.body);
     if (response.statusCode == 200 && data['success'] == true) {
       final token = data['data']['token'];
