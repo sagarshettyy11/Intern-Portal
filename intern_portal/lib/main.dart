@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const UnifiedLoginPage(),
+      routes: {'/login': (context) => const LoginPage(), '/UnifiedLogin': (context) => const UnifiedLoginPage()},
     );
   }
 }

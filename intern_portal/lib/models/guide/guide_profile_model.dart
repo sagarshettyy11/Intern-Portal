@@ -1,4 +1,4 @@
-class FacultyProfileModel {
+class GuideProfileModel {
   final int id;
   final String name;
   final String email;
@@ -7,7 +7,7 @@ class FacultyProfileModel {
   final String department;
   final String college;
 
-  FacultyProfileModel({
+  GuideProfileModel({
     required this.id,
     required this.name,
     required this.email,
@@ -17,11 +17,11 @@ class FacultyProfileModel {
     required this.college,
   });
 
-  factory FacultyProfileModel.fromJson(Map<String, dynamic> json) {
+  factory GuideProfileModel.fromJson(Map<String, dynamic> json) {
     final profile = json['profile'];
 
-    return FacultyProfileModel(
-      id: profile['id'] ?? 0,
+    return GuideProfileModel(
+      id: int.parse(profile['id'].toString()),
       name: profile['name'] ?? '',
       email: profile['email'] ?? '',
       phone: profile['phone'] ?? '',
