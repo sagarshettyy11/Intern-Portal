@@ -72,12 +72,11 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                       'ACADEMIC MANAGEMENT',
                       style: GoogleFonts.inter(
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[500],
+                        fontWeight: FontWeight.w800,
+                        color: Colors.grey[900],
                         letterSpacing: 0.8,
                       ),
                     ),
-                    const SizedBox(height: 4),
                     Text(
                       'Department Master',
                       style: GoogleFonts.inter(
@@ -87,9 +86,9 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                         letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 10),
                     _buildActionRow(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     ...departments.map(
                       (dept) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -143,11 +142,11 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
           width: 48,
           height: 50,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
-          child: const Icon(Icons.tune_rounded, color: Color(0xFF475569), size: 22),
+          child: const Icon(Icons.tune_rounded, color: Color(0xFF1A56DB), fontWeight: FontWeight.w500, size: 22),
         ),
       ],
     );
@@ -184,6 +183,7 @@ class DepartmentMasterCard extends StatelessWidget {
                     department.icon,
                     color: department.isActive ? const Color(0xFF1A56DB) : const Color(0xFF94A3B8),
                     size: 22,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -195,7 +195,7 @@ class DepartmentMasterCard extends StatelessWidget {
                         department.name,
                         style: GoogleFonts.inter(
                           fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                           color: department.isActive ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
                           height: 1.3,
                         ),
@@ -205,8 +205,8 @@ class DepartmentMasterCard extends StatelessWidget {
                         'CODE: ${department.code}',
                         style: GoogleFonts.inter(
                           fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: department.isActive ? const Color(0xFF64748B) : const Color(0xFFB0BFCC),
+                          fontWeight: FontWeight.w800,
+                          color: department.isActive ? Colors.grey[800] : const Color(0xFFB0BFCC),
                           letterSpacing: 0.3,
                         ),
                       ),
@@ -231,7 +231,7 @@ class DepartmentMasterCard extends StatelessWidget {
                               (context.findAncestorStateOfType<_DepartmentMasterPageState>())?.loadDepartments();
                             }
                           },
-                          child: const Icon(Icons.edit_outlined, color: Color(0xFF94A3B8), size: 18),
+                          child: const Icon(Icons.edit_outlined, color: Color(0xFF1F2937), size: 18),
                         ),
                         const SizedBox(width: 8),
                         GestureDetector(
@@ -260,7 +260,7 @@ class DepartmentMasterCard extends StatelessWidget {
                           },
                           child: Icon(
                             Icons.power_settings_new,
-                            color: department.isActive ? const Color(0xFFEF4444) : const Color(0xFF94A3B8),
+                            color: department.isActive ? const Color(0xFF1F2937) : const Color(0xFFEF4444),
                             size: 18,
                           ),
                         ),
@@ -313,7 +313,7 @@ class DepartmentMasterStatusBadge extends StatelessWidget {
         isActive ? 'ACTIVE' : 'INACTIVE',
         style: GoogleFonts.inter(
           fontSize: 10,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w800,
           color: isActive ? const Color(0xFFD4A017) : const Color(0xFFEF4444),
           letterSpacing: 0.5,
         ),
@@ -343,8 +343,8 @@ class DepartmentMasterInfoCell extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF94A3B8),
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF374151),
               letterSpacing: 0.4,
             ),
           ),

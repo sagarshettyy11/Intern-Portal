@@ -174,7 +174,7 @@ class _EditFacultyPageState extends State<EditFacultyPage> {
                     hint: "Select Department",
                     value: departmentId,
                     items: departments.map<DropdownMenuItem<int>>((d) {
-                      return DropdownMenuItem<int>(value: d['department_id'], child: Text(d['department_name']));
+                      return DropdownMenuItem<int>(value: d.id, child: Text(d.name));
                     }).toList(),
                     onChanged: (v) => setState(() => departmentId = v),
                   ),

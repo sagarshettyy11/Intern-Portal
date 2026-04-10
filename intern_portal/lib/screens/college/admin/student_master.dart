@@ -123,14 +123,14 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(Icons.upload_file, color: Colors.white70, size: 14),
+                                      Icon(Icons.upload_file, color: Colors.white, size: 14),
                                       SizedBox(width: 6),
                                       Text(
                                         'FAST ONBOARDING',
                                         style: GoogleFonts.inter(
-                                          color: Colors.white70,
+                                          color: Colors.white,
                                           fontSize: 11,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w900,
                                           letterSpacing: 1.0,
                                         ),
                                       ),
@@ -145,10 +145,15 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 2),
                                   Text(
                                     'Quickly add multiple student profiles using our standard spreadsheet template.',
-                                    style: GoogleFonts.inter(color: Colors.white70, fontSize: 13, height: 1.4),
+                                    style: GoogleFonts.inter(
+                                      color: Colors.white70,
+                                      fontSize: 13,
+                                      height: 1.4,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -161,7 +166,12 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                 color: Colors.white.withValues(alpha: 0.25),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(Icons.arrow_forward, color: Colors.white, size: 22),
+                              child: Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -197,10 +207,10 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                             child: TextField(
                               decoration: InputDecoration(
                                 hintText: 'Search students...',
-                                hintStyle: GoogleFonts.inter(color: Color(0xFFADB5BD), fontSize: 14),
-                                prefixIcon: Icon(Icons.search, color: Color(0xFFADB5BD), size: 20),
+                                hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+                                prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(vertical: 13),
+                                contentPadding: EdgeInsets.symmetric(vertical: 10),
                               ),
                               onChanged: (value) {
                                 fetchStudents(search: value);
@@ -213,21 +223,19 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                           height: 46,
                           width: 46,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.06),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
                           ),
-                          child: const Icon(Icons.tune, color: Color(0xFF64748B), size: 20),
+                          child: const Icon(
+                            Icons.tune,
+                            color: Color(0xFF1A56DB),
+                            fontWeight: FontWeight.w500,
+                            size: 20,
+                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -239,7 +247,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                               'Students List',
                               style: GoogleFonts.inter(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w800,
                                 color: Color(0xFF0F172A),
                               ),
                             ),
@@ -256,12 +264,12 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                           icon: const Icon(Icons.add_circle_outline, size: 18, color: Color(0xFF1A56DB)),
                           label: Text(
                             'Add Student',
-                            style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w600),
+                            style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w800),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 6),
                     ...students.asMap().entries.map(
                       (entry) => Padding(
                         padding: const EdgeInsets.only(bottom: 14),
@@ -309,7 +317,7 @@ class _StudentCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     student.initials,
-                    style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w700, fontSize: 15),
+                    style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w900, fontSize: 15),
                   ),
                 ),
               ),
@@ -320,10 +328,13 @@ class _StudentCard extends StatelessWidget {
                   children: [
                     Text(
                       student.name,
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 15, color: Color(0xFF0F172A)),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: Color(0xFF0F172A)),
                     ),
                     const SizedBox(height: 2),
-                    Text(student.email, style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF64748B))),
+                    Text(
+                      student.email,
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w700),
+                    ),
                   ],
                 ),
               ),
@@ -337,15 +348,13 @@ class _StudentCard extends StatelessWidget {
                   student.isActive ? 'ACTIVE' : 'INACTIVE',
                   style: GoogleFonts.inter(
                     color: student.isActive ? const Color(0xFF16A34A) : const Color(0xFFDC2626),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 10,
-                    letterSpacing: 0.6,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 11,
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
               IconButton(
-                icon: Icon(Icons.edit_outlined, color: const Color(0xFF94A3B8), size: 20),
+                icon: Icon(Icons.edit_outlined, color: const Color(0xFF1F2937), size: 20),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -353,12 +362,11 @@ class _StudentCard extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(width: 6),
               GestureDetector(
                 onTap: onDeactivate,
                 child: Icon(
                   Icons.power_settings_new,
-                  color: student.isActive ? const Color(0xFFEF4444) : const Color(0xFF94A3B8),
+                  color: student.isActive ? const Color(0xFF1F2937) : const Color(0xFFEF4444),
                   size: 20,
                 ),
               ),
@@ -407,15 +415,15 @@ class _InfoCell extends StatelessWidget {
           label,
           style: GoogleFonts.inter(
             fontSize: 10,
-            color: Color(0xFF94A3B8),
-            fontWeight: FontWeight.w600,
+            color: Color(0xFF374151),
+            fontWeight: FontWeight.w800,
             letterSpacing: 0.5,
           ),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF0F172A), fontWeight: FontWeight.w600),
+          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
         ),
       ],
     );
@@ -446,8 +454,8 @@ class _StatCard extends StatelessWidget {
               label,
               style: GoogleFonts.inter(
                 fontSize: 10,
-                color: Color(0xFF94A3B8),
-                fontWeight: FontWeight.w600,
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w800,
                 letterSpacing: 0.6,
               ),
             ),

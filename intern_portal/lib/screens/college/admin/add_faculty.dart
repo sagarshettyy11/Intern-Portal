@@ -18,7 +18,6 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
   String role = "Guide";
   int? departmentId;
   bool isLoading = false;
-
   List departments = [];
 
   @override
@@ -99,7 +98,7 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
                       hint: "Select Department",
                       value: departmentId,
                       items: departments.map<DropdownMenuItem<int>>((d) {
-                        return DropdownMenuItem<int>(value: d['department_id'], child: Text(d['department_name']));
+                        return DropdownMenuItem<int>(value: d.id, child: Text(d.name));
                       }).toList(),
                       onChanged: (v) => setState(() => departmentId = v),
                     ),

@@ -85,20 +85,18 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
                     _buildHeader(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _buildStatsRow(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
                     _buildSearchRow(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     if (isLoading)
                       const Center(child: CircularProgressIndicator())
                     else if (_filteredBatches.isEmpty)
                       const Center(child: Text("No internships found"))
                     else
                       ..._filteredBatches.map((batch) => _buildBatchCard(batch)),
-                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -119,12 +117,11 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
       children: [
         Text(
           'Internship Master',
-          style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+          style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
         ),
-        SizedBox(height: 4),
         Text(
           'Create and manage internship batches for your college.',
-          style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF64748B)),
+          style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[800], fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -177,8 +174,8 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
               onChanged: _onSearch,
               decoration: InputDecoration(
                 hintText: 'Search batches by name or mode...',
-                hintStyle: GoogleFonts.inter(color: Color(0xFFADB5BD), fontSize: 14),
-                prefixIcon: Icon(Icons.search, color: Color(0xFFADB5BD), size: 22),
+                hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 22),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
@@ -193,8 +190,8 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
             if (result == true) loadInternships();
           },
           child: Container(
-            width: 52,
-            height: 52,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(color: const Color(0xFF2563EB), borderRadius: BorderRadius.circular(14)),
             child: const Icon(Icons.add, color: Colors.white, size: 28),
           ),
@@ -225,10 +222,13 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                     children: [
                       Text(
                         batch.name,
-                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
                       ),
                       const SizedBox(height: 2),
-                      Text('ID: ${batch.id}', style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF94A3B8))),
+                      Text(
+                        'ID: ${batch.id}',
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w700),
+                      ),
                     ],
                   ),
                 ),
@@ -241,12 +241,12 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                 Expanded(
                   child: _InfoTile(
                     icon: Icons.calendar_today_outlined,
-                    iconColor: const Color(0xFF2563EB),
+                    iconColor: const Color(0xFF0000FF),
                     label: batch.year,
                   ),
                 ),
                 Expanded(
-                  child: _InfoTile(icon: Icons.access_time, iconColor: const Color(0xFF2563EB), label: batch.duration),
+                  child: _InfoTile(icon: Icons.access_time, iconColor: const Color(0xFF0000FF), label: batch.duration),
                 ),
               ],
             ),
@@ -256,20 +256,19 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                 Expanded(
                   child: _InfoTile(
                     icon: _modeIcon(batch.mode),
-                    iconColor: const Color(0xFF2563EB),
+                    iconColor: const Color(0xFF0000FF),
                     label: _modeLabel(batch.mode),
                   ),
                 ),
                 Expanded(
                   child: _InfoTile(
                     icon: Icons.calendar_month_outlined,
-                    iconColor: const Color(0xFF2563EB),
+                    iconColor: const Color(0xFF0000FF),
                     label: 'Created: ${batch.createdDate?.toLocal().toString().split(' ')[0] ?? ''}',
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 14),
             const Divider(height: 1, color: Color(0xFFF1F5F9)),
             const SizedBox(height: 12),
             Row(
@@ -293,14 +292,14 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.edit_outlined, size: 18, color: Color(0xFF475569)),
+                          Icon(Icons.edit_outlined, size: 18, color: Colors.grey[800]),
                           SizedBox(width: 6),
                           Text(
                             'Edit',
                             style: GoogleFonts.inter(
-                              color: Color(0xFF475569),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
                             ),
                           ),
                         ],
@@ -325,7 +324,12 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(color: const Color(0xFFFEE2E2), borderRadius: BorderRadius.circular(10)),
-                    child: const Icon(Icons.delete_outline, color: Color(0xFFDC2626), size: 20),
+                    child: const Icon(
+                      Icons.delete_outline,
+                      color: Color(0xFFDC2626),
+                      size: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -341,7 +345,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
       case InternshipMode.online:
         return Icons.laptop_outlined;
       case InternshipMode.offline:
-        return Icons.location_on; // ← filled icon to match design
+        return Icons.location_on;
       case InternshipMode.hybrid:
         return Icons.people_outline;
     }
@@ -380,15 +384,15 @@ class _StatCard extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF94A3B8),
+              fontWeight: FontWeight.w800,
+              color: Colors.grey[800],
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 2),
           Text(
             value,
-            style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.bold, color: valueColor),
+            style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: valueColor),
           ),
         ],
       ),
@@ -412,7 +416,7 @@ class _StatusBadge extends StatelessWidget {
         isActive ? 'ACTIVE' : 'INACTIVE',
         style: GoogleFonts.inter(
           fontSize: 11,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w800,
           color: isActive ? const Color(0xFFB45309) : const Color(0xFF64748B),
           letterSpacing: 0.5,
         ),
@@ -435,7 +439,7 @@ class _InfoTile extends StatelessWidget {
         Flexible(
           child: Text(
             label,
-            style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF475569)),
+            style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
             overflow: TextOverflow.ellipsis,
           ),
         ),

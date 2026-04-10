@@ -18,7 +18,7 @@ class FacultyMasterPage extends StatefulWidget {
 class _FacultyMasterPageState extends State<FacultyMasterPage> {
   int selectedIndex = 1;
   List<Faculty> facultyList = [];
-  bool isLoading = true;
+  bool isLoading = false;
   String search = '';
   String filter = 'all';
 
@@ -81,31 +81,25 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                   Text(
                     'ADMINISTRATION',
                     style: GoogleFonts.inter(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
                       color: Color(0xFF1A56DB),
                       letterSpacing: 1.2,
                     ),
                   ),
-                  SizedBox(height: 4),
                   Text(
                     'Faculty Master',
                     style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
                   ),
-                  SizedBox(height: 4),
                   Text(
                     'Manage institutional human resources and roles.',
-                    style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF6B7280)),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800]),
                   ),
                 ],
               ),
-              IconButton(
-                icon: const Icon(Icons.more_vert, color: Color(0xFF6B7280)),
-                onPressed: () {},
-              ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -120,10 +114,10 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                   child: TextField(
                     decoration: InputDecoration(
                       hintText: 'Search faculty...',
-                      hintStyle: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14),
-                      prefixIcon: Icon(Icons.search, color: Color(0xFF9CA3AF)),
+                      hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey[800]),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(vertical: 14),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
                     ),
                     onChanged: (value) {
                       search = value;
@@ -138,7 +132,7 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                     color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.filter_list, color: Color(0xFF1A56DB), size: 20),
+                  child: const Icon(Icons.tune, color: Color(0xFF1A56DB), fontWeight: FontWeight.w500, size: 20),
                 ),
               ],
             ),
@@ -157,7 +151,7 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
       },
       backgroundColor: const Color(0xFF1A56DB),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: const Icon(Icons.person_add, color: Colors.white),
+      child: Icon(Icons.person_add, color: Colors.white, fontWeight: FontWeight.bold),
     );
   }
 
@@ -167,12 +161,10 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
       builder: (_) => _DeactivateFacultySheet(
         faculty: faculty,
         onConfirm: () async {
-          Navigator.pop(context); // close sheet
-
+          Navigator.pop(context);
           final success = await AdminServices.deactivateFaculty(faculty.id);
-
           if (success) {
-            loadFaculty(); // 🔥 refresh list
+            loadFaculty();
           }
         },
       ),
@@ -216,7 +208,7 @@ class _FacultyCard extends StatelessWidget {
                     children: [
                       Text(
                         faculty.name,
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827)),
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -230,7 +222,7 @@ class _FacultyCard extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               color: faculty.isActive ? const Color(0xFF16A34A) : const Color(0xFF9CA3AF),
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ],
@@ -243,7 +235,7 @@ class _FacultyCard extends StatelessWidget {
                   children: [
                     _ActionIcon(
                       icon: Icons.edit_outlined,
-                      color: const Color(0xFF6B7280),
+                      color: const Color(0xFF1F2937),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => EditFacultyPage(faculty: faculty)));
                       },
@@ -251,7 +243,7 @@ class _FacultyCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     _ActionIcon(
                       icon: Icons.person_off_outlined,
-                      color: faculty.isActive ? const Color(0xFF6B7280) : const Color(0xFFEF4444),
+                      color: faculty.isActive ? const Color(0xFF1F2937) : const Color(0xFFEF4444),
                       onTap: onDeactivate,
                     ),
                   ],
@@ -290,9 +282,9 @@ class _RoleBadge extends StatelessWidget {
       child: Text(
         label,
         style: GoogleFonts.inter(
-          fontSize: 11,
+          fontSize: 12,
           color: Color(0xFF1A56DB),
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w800,
           letterSpacing: 0.5,
         ),
       ),
@@ -339,16 +331,20 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: const Color(0xFF9CA3AF)),
+        Icon(icon, size: 18, color: Colors.black54),
         const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               primary,
-              style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF374151), fontWeight: FontWeight.w500),
+              style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF374151), fontWeight: FontWeight.w800),
             ),
-            if (secondary != null) Text(secondary!, style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF))),
+            if (secondary != null)
+              Text(
+                secondary!,
+                style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[600], fontWeight: FontWeight.w800),
+              ),
           ],
         ),
       ],
