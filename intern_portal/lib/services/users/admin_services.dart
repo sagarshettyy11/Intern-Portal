@@ -368,10 +368,13 @@ class AdminServices {
   static Future<AdminProfile?> fetchAdminProfile() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final response = await http.get(Uri.parse(ApiEndpoints.adminProfile), headers: {"Authorization": "Bearer $token"});
+    final response = await http.get(
+      Uri.parse("${ApiEndpoints.adminProfile}?action=list"),
+      headers: {"Authorization": "Bearer $token"},
+    );
     final json = jsonDecode(response.body);
-    if (json['success'] == true) {
-      return AdminProfile.fromJson(json['data']['profile']);
+    if (json['success'] == true && json['data'] != null) {
+      return AdminProfile.fromApi(json['data']);
     }
     return null;
   }

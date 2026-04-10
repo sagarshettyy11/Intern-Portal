@@ -110,9 +110,9 @@ class _ProfileHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(profile.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(profile.name, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800)),
               const SizedBox(height: 4),
-              Text(profile.role),
+              Text(profile.designation, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700)),
             ],
           ),
         ),
@@ -131,7 +131,7 @@ class _PersonalInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Personal Information", style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("Personal Information", style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.black87)),
           const SizedBox(height: 16),
           _InfoRow(label: 'FULL NAME', value: profile.name),
           const SizedBox(height: 14),
@@ -144,6 +144,10 @@ class _PersonalInfoCard extends StatelessWidget {
           _InfoRow(label: 'DEPARTMENT', value: profile.department),
           const SizedBox(height: 14),
           _InfoRow(label: 'COLLEGE', value: profile.college),
+          const SizedBox(height: 14),
+          _InfoRow(label: 'ADDRESS', value: profile.address),
+          const SizedBox(height: 14),
+          _InfoRow(label: 'WEBSITE', value: profile.website),
         ],
       ),
     );
@@ -161,12 +165,12 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: kMuted, letterSpacing: 0.6),
+          style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.grey[800], letterSpacing: 0.6),
         ),
         const SizedBox(height: 3),
         Text(
           value,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: kText),
+          style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.black87),
         ),
       ],
     );
@@ -179,9 +183,9 @@ class _QuickLinksSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Quick Links',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kText),
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.black87),
         ),
         const SizedBox(height: 12),
         ..._quickLinks.map((link) => _QuickLinkRow(icon: link.icon, label: link.label)),
@@ -202,7 +206,7 @@ class _QuickLinkRow extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: kWhite,
+          color: kCardBg,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 2)),
@@ -220,7 +224,7 @@ class _QuickLinkRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: kText),
+                style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.black87),
               ),
             ),
             const Icon(Icons.chevron_right, color: kMuted, size: 22),

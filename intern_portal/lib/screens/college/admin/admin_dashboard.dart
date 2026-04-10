@@ -96,7 +96,7 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
 
   Widget _buildHeroCard() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -118,10 +118,13 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 6),
           Text(
             'Overview of all internship activity',
-            style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w400),
+            style: GoogleFonts.inter(
+              fontSize: 15,
+              color: Colors.white.withValues(alpha: 0.85),
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -250,7 +253,6 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
 
   Widget _buildDepartmentRegistrations() {
     final List deptList = dashboard?.deptStats ?? [];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -263,11 +265,10 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
               children: [
                 Icon(Icons.bar_chart_rounded, color: Color(0xFF1A56DB), size: 22),
                 SizedBox(width: 8),
-                Text('Department Registrations', style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700)),
+                Text('Department Registrations', style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800)),
               ],
             ),
             const SizedBox(height: 20),
-
             if (deptList.isEmpty)
               Center(
                 child: Text('No registrations found', style: GoogleFonts.inter(fontSize: 14, color: Colors.grey)),
@@ -288,10 +289,16 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                           getTitlesWidget: (value, meta) {
                             final index = value.toInt();
                             if (index >= deptList.length) return const SizedBox();
-
                             return Padding(
                               padding: const EdgeInsets.only(top: 6),
-                              child: Text(deptList[index]['dept_code'], style: TextStyle(fontSize: 10)),
+                              child: Text(
+                                deptList[index]['dept_code'],
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -330,7 +337,7 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                 SizedBox(width: 8),
                 Text(
                   'Status Breakdown',
-                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
+                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
                 ),
               ],
             ),
@@ -388,7 +395,7 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                 },
                 child: Text(
                   'View All',
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: const Color(0xFF1A56DB)),
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: const Color(0xFF1A56DB)),
                 ),
               ),
             ],
@@ -408,8 +415,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                           'STUDENT',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey[800],
                             letterSpacing: 0.6,
                           ),
                         ),
@@ -420,8 +427,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                           'DEPT',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey[800],
                             letterSpacing: 0.6,
                           ),
                         ),
@@ -432,8 +439,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                           'COMPANY',
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey[800],
                             letterSpacing: 0.6,
                           ),
                         ),
@@ -445,8 +452,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                           textAlign: TextAlign.right,
                           style: GoogleFonts.inter(
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey[800],
                             letterSpacing: 0.6,
                           ),
                         ),
@@ -514,9 +521,7 @@ class _RecentRegRow extends StatelessWidget {
   final String dept;
   final String company;
   final String status;
-
   const _RecentRegRow({required this.studentName, required this.dept, required this.company, required this.status});
-
   Color get _statusBg {
     switch (status.toLowerCase()) {
       case 'approved':
@@ -544,22 +549,19 @@ class _RecentRegRow extends StatelessWidget {
   }
 
   bool get _showDot => status.toLowerCase() == 'approved' || status.toLowerCase() == 'rejected';
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
-          // Student name
           Expanded(
             flex: 3,
             child: Text(
               studentName,
-              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF0F172A)),
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: const Color(0xFF0F172A)),
             ),
           ),
-          // Dept badge
           Expanded(
             flex: 2,
             child: Container(
@@ -577,7 +579,7 @@ class _RecentRegRow extends StatelessWidget {
             flex: 3,
             child: Text(
               company,
-              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: const Color(0xFF475569)),
+              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: const Color(0xFF475569)),
             ),
           ),
           // Status badge
@@ -659,17 +661,16 @@ class _StatCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: const Color(0xFF1A56DB), size: 28),
-          const SizedBox(height: 14),
+          const SizedBox(height: 4),
           Text(
             label,
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF64748B),
+              fontWeight: FontWeight.w800,
+              color: Colors.grey[800],
               letterSpacing: 0.6,
             ),
           ),
-          const SizedBox(height: 4),
           Text(
             value,
             style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
@@ -701,9 +702,9 @@ class _RegCountTile extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF94A3B8),
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: Colors.grey[800],
                 letterSpacing: 0.5,
               ),
             ),
@@ -787,7 +788,7 @@ class _LegendItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           label,
-          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF475569)),
+          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF475569)),
         ),
       ],
     );

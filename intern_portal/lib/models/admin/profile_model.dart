@@ -6,9 +6,12 @@ class AdminProfile {
   final String designation;
   final String department;
   final String college;
-  final String role;
-  final String status;
-
+  final String address;
+  final String website;
+  // stats
+  final int totalStudents;
+  final int totalFaculty;
+  final int totalDepts;
   AdminProfile({
     required this.id,
     required this.name,
@@ -17,21 +20,29 @@ class AdminProfile {
     required this.designation,
     required this.department,
     required this.college,
-    required this.role,
-    required this.status,
+    required this.address,
+    required this.website,
+    required this.totalStudents,
+    required this.totalFaculty,
+    required this.totalDepts,
   });
 
-  factory AdminProfile.fromJson(Map<String, dynamic> json) {
+  factory AdminProfile.fromApi(Map<String, dynamic> json) {
+    final college = json['college'] ?? {};
+    final stats = json['stats'] ?? {};
     return AdminProfile(
-      id: json['id'],
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      designation: json['designation'] ?? '',
-      department: json['department'] ?? '',
-      college: json['college'] ?? '',
-      role: json['role'] ?? '',
-      status: json['status'] ?? '',
+      id: college['college_id'] ?? 0,
+      name: college['college_name'] ?? 'Admin',
+      email: college['email'] ?? '',
+      phone: college['phone'] ?? '',
+      designation: 'College Admin',
+      department: 'Administration',
+      college: college['college_name'] ?? '',
+      address: college['address'] ?? '',
+      website: college['website'] ?? '',
+      totalStudents: stats['total_students'] ?? 0,
+      totalFaculty: stats['total_faculty'] ?? 0,
+      totalDepts: stats['total_depts'] ?? 0,
     );
   }
 }
