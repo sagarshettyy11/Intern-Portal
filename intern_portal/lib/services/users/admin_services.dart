@@ -220,7 +220,7 @@ class AdminServices {
         "year": year,
         "duration": duration,
         "mode": mode,
-        "departments": departments.join(','),
+        "departments[]": departments.map((e) => e.toString()).toList(),
       },
     );
     final json = jsonDecode(response.body);
@@ -248,7 +248,7 @@ class AdminServices {
         "duration": duration,
         "mode": mode,
         "status": status,
-        "departments": departments.join(','),
+        "departments[]": departments.map((e) => e.toString()).toList(),
       },
     );
     final json = jsonDecode(response.body);
@@ -259,7 +259,7 @@ class AdminServices {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.post(
-      Uri.parse("${ApiEndpoints.adminInternship}?action=delete"),
+      Uri.parse("${ApiEndpoints.adminInternship}?action=deactivate"),
       headers: {"Authorization": "Bearer $token"},
       body: {"internship_master_id": id.toString()},
     );

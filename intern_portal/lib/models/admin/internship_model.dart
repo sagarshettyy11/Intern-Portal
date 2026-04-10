@@ -30,11 +30,8 @@ class Internship {
       mode: _parseMode(json['mode']),
       status: _parseStatus(json['status']),
       createdDate: json['created_date'] != null ? DateTime.tryParse(json['created_date']) : null,
-      departments: (json['departments'] ?? '')
-          .toString()
-          .split(',')
-          .where((e) => e.isNotEmpty)
-          .map((e) => int.tryParse(e))
+      departments: (json['department_ids'] as List? ?? [])
+          .map((e) => int.tryParse(e.toString()))
           .where((e) => e != null)
           .cast<int>()
           .toList(),

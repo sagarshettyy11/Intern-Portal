@@ -6,7 +6,7 @@ import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class NewBatchDetailsScreen extends StatefulWidget {
-  final Internship? internship; // 👈 ADD THIS
+  final Internship? internship;
 
   const NewBatchDetailsScreen({super.key, this.internship});
   @override
@@ -202,12 +202,26 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                   height: 52,
                   child: ElevatedButton.icon(
                     onPressed: () async {
+                      if (_internshipNameController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Internship name required")));
+                        return;
+                      }
+                      if (_durationController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Duration required")));
+                        return;
+                      }
+                      if (selectedDepartmentIds.isEmpty) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text("Select at least one department")));
+                        return;
+                      }
                       final departments = selectedDepartmentIds;
                       bool success;
                       if (widget.internship == null) {
                         success = await AdminServices.addInternship(
                           name: _internshipNameController.text,
-                          year: _selectedAcademicYear,
+                          year: _selectedAcademicYear.split(' - ')[0],
                           duration: _durationController.text,
                           mode: _internshipMode,
                           departments: departments,
@@ -216,7 +230,7 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                         success = await AdminServices.editInternship(
                           id: widget.internship!.id,
                           name: _internshipNameController.text,
-                          year: _selectedAcademicYear,
+                          year: _selectedAcademicYear.split(' - ')[0],
                           duration: _durationController.text,
                           mode: _internshipMode,
                           status: status,

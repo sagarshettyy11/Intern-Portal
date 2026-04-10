@@ -261,7 +261,7 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                   child: _InfoTile(
                     icon: Icons.calendar_month_outlined,
                     iconColor: const Color(0xFF2563EB),
-                    label: 'Created: ${batch.createdDate}',
+                    label: 'Created: ${batch.createdDate?.toLocal().toString().split(' ')[0] ?? ''}',
                   ),
                 ),
               ],
@@ -312,6 +312,10 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                     if (success) {
                       loadInternships();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Batch deactivated")));
+                    } else {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text("Cannot deactivate (students linked)")));
                     }
                   },
                   child: Container(

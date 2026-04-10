@@ -125,6 +125,10 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(vertical: 14),
                     ),
+                    onChanged: (value) {
+                      search = value;
+                      loadFaculty();
+                    },
                   ),
                 ),
                 Container(
