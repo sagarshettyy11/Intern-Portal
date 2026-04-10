@@ -64,7 +64,14 @@ class _AddFacultyPageState extends State<AddFacultyPage> {
                       style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
                     ),
                     const SizedBox(height: 10),
-                    const _AddFacultyRoleToggle(),
+                    _AddFacultyRoleToggle(
+                      selected: role,
+                      onChanged: (value) {
+                        setState(() {
+                          role = value;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 24),
                     const _AddFacultyFieldLabel('Full Name'),
                     const SizedBox(height: 8),
@@ -223,56 +230,44 @@ class _AddFacultyTextField extends StatelessWidget {
   }
 }
 
-class _AddFacultyRoleToggle extends StatefulWidget {
-  const _AddFacultyRoleToggle();
-  @override
-  State<_AddFacultyRoleToggle> createState() => _AddFacultyRoleToggleState();
-}
+class _AddFacultyRoleToggle extends StatelessWidget {
+  final String selected;
+  final Function(String) onChanged;
 
-class _AddFacultyRoleToggleState extends State<_AddFacultyRoleToggle> {
-  int _selected = 0;
-  final List<String> _labels = const ['GUIDE', 'HOD'];
+  const _AddFacultyRoleToggle({required this.selected, required this.onChanged});
+
   @override
   Widget build(BuildContext context) {
+    final roles = ['Guide', 'HOD'];
+
     return Container(
       decoration: BoxDecoration(color: const Color(0xFFF3F5F9), borderRadius: BorderRadius.circular(10)),
       child: Row(
-        children: List.generate(2, (i) {
-          final isSelected = _selected == i;
+        children: roles.map((role) {
+          final isSelected = selected == role;
+
           return Expanded(
             child: GestureDetector(
-              onTap: () => setState(() => _selected = i),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
+              onTap: () => onChanged(role),
+              child: Container(
                 margin: const EdgeInsets.all(4),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   color: isSelected ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                            // FIX: replaced deprecated withOpacity with withValues
-                            color: Colors.black.withValues(alpha: 0.08),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]
-                      : [],
                 ),
+                alignment: Alignment.center,
                 child: Text(
-                  _labels[i],
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                  role.toUpperCase(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: isSelected ? const Color(0xFF1A56DB) : const Color(0xFF9CA3AF),
                   ),
                 ),
               ),
             ),
           );
-        }),
+        }).toList(),
       ),
     );
   }

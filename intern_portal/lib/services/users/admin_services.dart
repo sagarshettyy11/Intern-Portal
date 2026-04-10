@@ -54,7 +54,7 @@ class AdminServices {
     return json['success'] == true;
   }
 
-  static Future<bool> deleteDepartment(int id) async {
+  static Future<bool> deactivateDepartment(int id) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.post(
@@ -163,6 +163,18 @@ class AdminServices {
       return true;
     }
     return false;
+  }
+
+  static Future<bool> deactivateFaculty(int facultyId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.faculty}?action=deactivate"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {"faculty_id": facultyId.toString()},
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
   }
 
   static Future<List<Internship>> fetchInternships({

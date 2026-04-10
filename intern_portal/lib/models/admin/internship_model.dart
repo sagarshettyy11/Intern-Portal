@@ -34,7 +34,9 @@ class Internship {
           .toString()
           .split(',')
           .where((e) => e.isNotEmpty)
-          .map((e) => int.parse(e))
+          .map((e) => int.tryParse(e))
+          .where((e) => e != null)
+          .cast<int>()
           .toList(),
     );
   }

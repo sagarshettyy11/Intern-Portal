@@ -307,7 +307,13 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
                 ),
                 const SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () async {
+                    final success = await AdminServices.deleteInternship(batch.id);
+                    if (success) {
+                      loadInternships();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Batch deactivated")));
+                    }
+                  },
                   child: Container(
                     width: 44,
                     height: 44,

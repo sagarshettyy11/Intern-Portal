@@ -34,22 +34,7 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
     final data = await AdminServices.fetchFaculty(page: page, search: search, status: filter);
     final List list = data['faculty'];
     setState(() {
-      facultyList = list
-          .map(
-            (e) => Faculty(
-              id: e['faculty_id'],
-              name: e['faculty_name'],
-              initials: e['initials'],
-              role: e['is_hod'] ? 'HOD' : 'GUIDE',
-              isActive: e['status'] == 'Active',
-              department: e['department_name'] ?? '',
-              designation: e['designation'] ?? '',
-              departmentId: e['department_id'],
-              email: e['faculty_email'],
-              phone: e['faculty_contact'],
-            ),
-          )
-          .toList();
+      facultyList = list.map((e) => Faculty.fromJson(e)).toList();
       totalPages = data['pagination']['total_pages'];
       isLoading = false;
     });
@@ -175,9 +160,18 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
   void _showDeactivateDialog(Faculty faculty) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (_) => _DeactivateFacultySheet(faculty: faculty),
+      builder: (_) => _DeactivateFacultySheet(
+        faculty: faculty,
+        onConfirm: () async {
+          Navigator.pop(context); // close sheet
+
+          final success = await AdminServices.deactivateFaculty(faculty.id);
+
+          if (success) {
+            loadFaculty(); // 🔥 refresh list
+          }
+        },
+      ),
     );
   }
 }
@@ -360,7 +354,8 @@ class _InfoRow extends StatelessWidget {
 
 class _DeactivateFacultySheet extends StatelessWidget {
   final Faculty faculty;
-  const _DeactivateFacultySheet({required this.faculty});
+  final Future<void> Function() onConfirm;
+  const _DeactivateFacultySheet({required this.faculty, required this.onConfirm});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -405,7 +400,9 @@ class _DeactivateFacultySheet extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () async {
+                await onConfirm();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFDC2626),
                 padding: const EdgeInsets.symmetric(vertical: 16),

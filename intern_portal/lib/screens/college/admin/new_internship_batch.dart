@@ -219,7 +219,7 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                           year: _selectedAcademicYear,
                           duration: _durationController.text,
                           mode: _internshipMode,
-                          status: "Active",
+                          status: status,
                           departments: departments,
                         );
                       }

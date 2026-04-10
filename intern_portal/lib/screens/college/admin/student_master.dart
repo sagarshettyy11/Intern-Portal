@@ -199,6 +199,9 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.symmetric(vertical: 13),
                               ),
+                              onChanged: (value) {
+                                fetchStudents(search: value);
+                              },
                             ),
                           ),
                         ),
@@ -241,8 +244,11 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                         ),
                         TextButton.icon(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => const AddStudentScreen()));
-                            fetchStudents(); // refresh after coming back
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => const AddStudentScreen())).then((
+                              _,
+                            ) {
+                              fetchStudents();
+                            });
                           },
                           icon: const Icon(Icons.add_circle_outline, size: 18, color: Color(0xFF1A56DB)),
                           label: Text(

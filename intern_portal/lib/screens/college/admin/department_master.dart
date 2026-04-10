@@ -234,7 +234,7 @@ class DepartmentMasterCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () async {
                             if (department.isActive) {
-                              final success = await AdminServices.deleteDepartment(department.id);
+                              final success = await AdminServices.deactivateDepartment(department.id);
                               if (success) {
                                 ScaffoldMessenger.of(
                                   context,
