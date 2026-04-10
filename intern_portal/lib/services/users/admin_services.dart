@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/models/admin/internship_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminServices {
-  static Future<List<dynamic>> fetchDepartments() async {
+  static Future<List<Department>> fetchDepartments() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.get(
@@ -14,7 +15,8 @@ class AdminServices {
     );
     final json = jsonDecode(response.body);
     if (json['success'] == true) {
-      return json['data']['departments'];
+      final list = json['data']?['departments'] as List? ?? [];
+      return list.map((e) => Department.fromJson(e)).toList();
     }
     return [];
   }
@@ -32,6 +34,35 @@ class AdminServices {
       return true;
     }
     return false;
+  }
+
+  static Future<bool> editDepartment({required int id, required String name, required String code, int? hodId}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.adminDepartment}?action=edit"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {
+        "dept_id": id.toString(),
+        "dept_name": name,
+        "dept_code": code,
+        if (hodId != null) "hod_faculty_id": hodId.toString(),
+      },
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<bool> deleteDepartment(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.adminDepartment}?action=delete"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {"dept_id": id.toString()},
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
   }
 
   static Future<List<dynamic>> fetchHodList() async {
@@ -149,8 +180,13 @@ class AdminServices {
     final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
     final json = jsonDecode(response.body);
     if (json['success'] == true) {
-      return (json['data']['internships'] as List).map((e) => Internship.fromJson(e)).toList();
+      final internships = json['data']?['batches'];
+      if (internships == null || internships is! List) {
+        return [];
+      }
+      return internships.map<Internship>((e) => Internship.fromJson(e)).toList();
     }
+
     return [];
   }
 

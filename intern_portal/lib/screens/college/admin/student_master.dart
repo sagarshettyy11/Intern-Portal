@@ -286,12 +286,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
         currentIndex: 2,
         onTap: (index) => AdminBottomNavController.onItemTapped(context, index),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color(0xFF1A56DB),
-        elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
-      ),
     );
   }
 }

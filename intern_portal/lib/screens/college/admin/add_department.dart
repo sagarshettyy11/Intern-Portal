@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/screens/college/admin/department_master.dart';
 import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -7,7 +8,8 @@ import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 class AddDepartmentPage extends StatefulWidget {
-  const AddDepartmentPage({super.key});
+  final Department? department;
+  const AddDepartmentPage({super.key, this.department});
   @override
   State<AddDepartmentPage> createState() => _AddDepartmentPageState();
 }
@@ -20,24 +22,30 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
   bool isLoading = false;
 
   @override
-void initState() {
-  super.initState();
-  loadHods(); 
-}
+  void initState() {
+    super.initState();
+    loadHods();
+    if (widget.department != null) {
+      final d = widget.department!;
+      nameController.text = d.name;
+      codeController.text = d.code;
+      selectedHodId = d.hodId;
+    }
+  }
 
-void loadHods() async {
-  final data = await AdminServices.fetchHodList();
-  setState(() {
-    hodList = data;
-  });
-  debugPrint("HOD LIST: $hodList");
-}
+  void loadHods() async {
+    final data = await AdminServices.fetchHodList();
+    setState(() {
+      hodList = data;
+    });
+    debugPrint("HOD LIST: $hodList");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FA),
-      appBar: CommonAppBar(title: "Add New Department", showBack: true),
+      appBar: CommonAppBar(title: "Add Department", showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
@@ -60,7 +68,7 @@ void loadHods() async {
             ),
             const SizedBox(height: 8),
             Text(
-              'Add Department',
+              widget.department == null ? 'Add Department' : 'Edit Department',
               style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
             ),
             const SizedBox(height: 6),
@@ -139,20 +147,48 @@ void loadHods() async {
                 onPressed: () async {
                   final name = nameController.text.trim();
                   final code = codeController.text.trim();
+
                   if (name.isEmpty || code.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all fields")));
                     return;
                   }
+
                   setState(() => isLoading = true);
-                  final success = await AdminServices.addDepartment(name: name, code: code);
+
+                  final success = widget.department == null
+                      ? await AdminServices.addDepartment(
+                          name: name,
+                          code: code,
+                          hodId: selectedHodId, // ✅ IMPORTANT
+                        )
+                      : await AdminServices.editDepartment(
+                          id: widget.department!.id,
+                          name: name,
+                          code: code,
+                          hodId: selectedHodId, // ✅ IMPORTANT
+                        );
+
                   setState(() => isLoading = false);
+
                   if (success) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text("Department added successfully")));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          widget.department == null
+                              ? "Department added successfully"
+                              : "Department updated successfully",
+                        ),
+                      ),
+                    );
                     Navigator.pop(context);
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to add department")));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          widget.department == null ? "Failed to add department" : "Failed to update department",
+                        ),
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -162,7 +198,7 @@ void loadHods() async {
                   elevation: 0,
                 ),
                 child: Text(
-                  'Add Department',
+                  widget.department == null ? 'Add Department' : 'Update Department',
                   style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
                 ),
               ),

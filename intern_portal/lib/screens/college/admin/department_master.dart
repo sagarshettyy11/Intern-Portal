@@ -27,17 +27,7 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
   void loadDepartments() async {
     final data = await AdminServices.fetchDepartments();
     setState(() {
-      departments = data.map<Department>((d) {
-        return Department(
-          name: d['department_name'],
-          code: d['dept_code'],
-          hodName: d['hod_name'] ?? "Not Assigned",
-          facultyCount: d['faculty_count'],
-          isActive: d['status'] == "Active",
-          icon: Icons.apartment,
-        );
-      }).toList();
-
+      departments = data;
       isLoading = false;
     });
   }
@@ -124,8 +114,13 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
         Expanded(
           child: ElevatedButton.icon(
             onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (context) => AddDepartmentPage()));
-              loadDepartments();
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddDepartmentPage()),
+              );
+              if (result == true) {
+                loadDepartments();
+              }
             },
             icon: const Icon(Icons.add_circle, size: 20, color: Colors.white),
             label: Text(
@@ -215,7 +210,61 @@ class DepartmentMasterCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                DepartmentMasterStatusBadge(isActive: department.isActive),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    DepartmentMasterStatusBadge(isActive: department.isActive),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => AddDepartmentPage(department: department)),
+                            );
+                            if (result == true) {
+                              (context.findAncestorStateOfType<_DepartmentMasterPageState>())?.loadDepartments();
+                            }
+                          },
+                          child: const Icon(Icons.edit_outlined, color: Color(0xFF94A3B8), size: 18),
+                        ),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () async {
+                            if (department.isActive) {
+                              final success = await AdminServices.deleteDepartment(department.id);
+                              if (success) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text("Department deactivated")));
+                              }
+                            } else {
+                              final success = await AdminServices.editDepartment(
+                                id: department.id,
+                                name: department.name,
+                                code: department.code,
+                                hodId: department.hodId,
+                              );
+                              if (success) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text("Department activated")));
+                              }
+                            }
+                            (context.findAncestorStateOfType<_DepartmentMasterPageState>())?.loadDepartments();
+                          },
+                          child: Icon(
+                            Icons.power_settings_new,
+                            color: department.isActive ? const Color(0xFFEF4444) : const Color(0xFF94A3B8),
+                            size: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
             const SizedBox(height: 14),

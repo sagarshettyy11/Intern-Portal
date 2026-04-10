@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
+import 'package:intern_portal/models/admin/internship_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class NewBatchDetailsScreen extends StatefulWidget {
-  const NewBatchDetailsScreen({super.key});
+  final Internship? internship; // 👈 ADD THIS
+
+  const NewBatchDetailsScreen({super.key, this.internship});
   @override
   State<NewBatchDetailsScreen> createState() => _NewBatchDetailsScreenState();
 }
@@ -11,11 +16,52 @@ class NewBatchDetailsScreen extends StatefulWidget {
 class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
   final TextEditingController _internshipNameController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
+  List<Department> departments = [];
+  List<int> selectedDepartmentIds = [];
   String _selectedAcademicYear = '2024 - 2025';
-  bool _cseSelected = true;
-  bool _iseSelected = false;
   String _internshipMode = 'Online';
+  String status = "Active";
   final List<String> _academicYears = ['2023 - 2024', '2024 - 2025', '2025 - 2026'];
+
+  String _mapMode(InternshipMode mode) {
+    switch (mode) {
+      case InternshipMode.online:
+        return "Online";
+      case InternshipMode.offline:
+        return "Offline";
+      case InternshipMode.hybrid:
+        return "Hybrid";
+    }
+  }
+
+  String _mapYear(String year) {
+    for (var y in _academicYears) {
+      if (y.contains(year)) return y;
+    }
+    return _academicYears.last;
+  }
+
+  Future<void> loadDepartments() async {
+    final data = await AdminServices.fetchDepartments();
+    setState(() {
+      departments = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadDepartments();
+    if (widget.internship != null) {
+      final i = widget.internship!;
+      _internshipNameController.text = i.name;
+      _durationController.text = i.duration;
+      _internshipMode = _mapMode(i.mode);
+      _selectedAcademicYear = _mapYear(i.year);
+      selectedDepartmentIds = List.from(widget.internship!.departments);
+      status = widget.internship!.status == InternshipStatus.active ? "Active" : "Inactive";
+    }
+  }
 
   @override
   void dispose() {
@@ -28,7 +74,7 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F2F5),
-      appBar: CommonAppBar(title: "Add New Internship Batch", showBack: true),
+      appBar: CommonAppBar(title: "Internship Batch", showBack: true),
       body: Column(
         children: [
           Expanded(
@@ -51,7 +97,7 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'New Batch Details',
+                          widget.internship == null ? 'New Batch Details' : 'Edit Batch Details',
                           style: GoogleFonts.inter(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
@@ -94,25 +140,40 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                         const SizedBox(height: 20),
                         _FieldLabel(label: 'Eligible Departments'),
                         const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
+                        Column(
+                          children: departments.map((dept) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
                               child: _DepartmentCheckbox(
-                                label: 'CSE',
-                                value: _cseSelected,
-                                onChanged: (v) => setState(() => _cseSelected = v ?? false),
+                                label: dept.name,
+                                value: selectedDepartmentIds.contains(dept.id),
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      selectedDepartmentIds.add(dept.id);
+                                    } else {
+                                      selectedDepartmentIds.remove(dept.id);
+                                    }
+                                  });
+                                },
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _DepartmentCheckbox(
-                                label: 'ISE',
-                                value: _iseSelected,
-                                onChanged: (v) => setState(() => _iseSelected = v ?? false),
-                              ),
-                            ),
-                          ],
+                            );
+                          }).toList(),
                         ),
+                        if (widget.internship != null) ...[
+                          const SizedBox(height: 20),
+                          _FieldLabel(label: 'Status'),
+                          const SizedBox(height: 8),
+                          _DropdownField(
+                            value: status,
+                            items: ['Active', 'Inactive'],
+                            onChanged: (v) {
+                              if (v != null) {
+                                setState(() => status = v);
+                              }
+                            },
+                          ),
+                        ],
                         const SizedBox(height: 20),
                         _FieldLabel(label: 'Internship Mode'),
                         const SizedBox(height: 10),
@@ -140,14 +201,41 @@ class _NewBatchDetailsScreenState extends State<NewBatchDetailsScreen> {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final departments = selectedDepartmentIds;
+                      bool success;
+                      if (widget.internship == null) {
+                        success = await AdminServices.addInternship(
+                          name: _internshipNameController.text,
+                          year: _selectedAcademicYear,
+                          duration: _durationController.text,
+                          mode: _internshipMode,
+                          departments: departments,
+                        );
+                      } else {
+                        success = await AdminServices.editInternship(
+                          id: widget.internship!.id,
+                          name: _internshipNameController.text,
+                          year: _selectedAcademicYear,
+                          duration: _durationController.text,
+                          mode: _internshipMode,
+                          status: "Active",
+                          departments: departments,
+                        );
+                      }
+                      if (success) {
+                        Navigator.pop(context, true);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong")));
+                      }
+                    },
                     icon: const SizedBox.shrink(),
                     label: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Create Batch',
-                          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                          widget.internship == null ? 'Create Batch' : 'Update Batch',
+                          style: GoogleFonts.inter(color: Colors.white),
                         ),
                         SizedBox(width: 8),
                         Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 20),
@@ -239,7 +327,7 @@ class _DropdownField extends StatelessWidget {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: value,
+          value: items.contains(value) ? value : null,
           isExpanded: true,
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF64748B)),
           style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1E293B)),
