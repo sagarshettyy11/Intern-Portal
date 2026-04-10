@@ -1,27 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
+import 'package:intern_portal/models/admin/student_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class EditStudentDetailsScreen extends StatefulWidget {
-  const EditStudentDetailsScreen({super.key});
+  final StudentModel student;
+  const EditStudentDetailsScreen({super.key, required this.student});
   @override
   State<EditStudentDetailsScreen> createState() => _EditStudentDetailsScreenState();
 }
 
 class _EditStudentDetailsScreenState extends State<EditStudentDetailsScreen> {
-  final TextEditingController _fullNameController = TextEditingController(text: 'Rakesh');
-  final TextEditingController _studentIdController = TextEditingController(text: 'SF-2024-0892');
-  final TextEditingController _emailController = TextEditingController(text: 'rakesh.v@scholarflow.edu');
-  final TextEditingController _phoneController = TextEditingController(text: '+91 98765 43210');
-  String _selectedMajor = 'Information Technology';
-  final List<String> _majors = [
-    'Information Technology',
-    'Computer Science',
-    'Bio-Engineering',
-    'Economics',
-    'Business Administration',
-    'Electrical Engineering',
-  ];
+  late TextEditingController _fullNameController;
+  late TextEditingController _studentIdController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  List<Department> departments = [];
+  Department? selectedDepartment;
+  bool isLoading = false;
+  String selectedStatus = 'Active';
+  final List<String> statusOptions = ['Active', 'Inactive'];
+
+  Future<void> fetchDepartments() async {
+    final data = await AdminServices.fetchDepartments();
+    setState(() {
+      departments = data;
+      selectedDepartment = departments.firstWhere(
+        (d) => d.name == widget.student.departmentName,
+        orElse: () => departments.first,
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final s = widget.student;
+    _fullNameController = TextEditingController(text: s.name);
+    _studentIdController = TextEditingController(text: s.regNo);
+    _emailController = TextEditingController(text: s.email);
+    _phoneController = TextEditingController(text: s.phone);
+    fetchDepartments();
+  }
 
   @override
   void dispose() {
@@ -98,12 +120,12 @@ class _EditStudentDetailsScreenState extends State<EditStudentDetailsScreen> {
                         _EditFieldLabel(label: 'Primary Major'),
                         const SizedBox(height: 8),
                         _MajorDropdown(
-                          value: _selectedMajor,
-                          items: _majors,
-                          onChanged: (v) {
-                            if (v != null) {
-                              setState(() => _selectedMajor = v);
-                            }
+                          value: selectedDepartment?.name ?? '',
+                          items: departments.map((d) => d.name).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedDepartment = departments.firstWhere((d) => d.name == value);
+                            });
                           },
                         ),
                         const SizedBox(height: 18),
@@ -115,6 +137,19 @@ class _EditStudentDetailsScreenState extends State<EditStudentDetailsScreen> {
                           readOnly: false,
                           keyboardType: TextInputType.phone,
                         ),
+                        const SizedBox(height: 18),
+                        _EditFieldLabel(label: 'STATUS'),
+                        const SizedBox(height: 8),
+                        _StatusDropdown(
+                          value: selectedStatus,
+                          items: statusOptions,
+                          onChanged: (v) {
+                            if (v != null) {
+                              setState(() => selectedStatus = v);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 18),
                         const SizedBox(height: 24),
                         _InternshipStatusCard(),
                         const SizedBox(height: 16),
@@ -135,7 +170,29 @@ class _EditStudentDetailsScreenState extends State<EditStudentDetailsScreen> {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            setState(() => isLoading = true);
+
+                            final success = await AdminServices.editStudent(
+                              studentId: widget.student.studentId,
+                              name: _fullNameController.text.trim(),
+                              email: _emailController.text.trim(),
+                              phone: _phoneController.text.trim(),
+                              regNo: _studentIdController.text.trim(),
+                              departmentId: selectedDepartment!.id,
+                              batch: widget.student.batch,
+                              status: selectedStatus,
+                            );
+                            setState(() => isLoading = false);
+                            if (success) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student updated")));
+                              Navigator.pop(context, true);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Update failed")));
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1A56DB),
                       elevation: 0,
@@ -341,6 +398,34 @@ class _InternshipStatusCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _StatusDropdown extends StatelessWidget {
+  final String value;
+  final List<String> items;
+  final ValueChanged<String?> onChanged;
+  const _StatusDropdown({required this.value, required this.items, required this.onChanged});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          icon: const Icon(Icons.keyboard_arrow_down_rounded),
+          items: items.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+          onChanged: onChanged,
+        ),
       ),
     );
   }

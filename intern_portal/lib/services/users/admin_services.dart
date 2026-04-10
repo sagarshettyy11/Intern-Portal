@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/models/admin/internship_model.dart';
+import 'package:intern_portal/models/admin/student_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -249,6 +250,101 @@ class AdminServices {
       Uri.parse("${ApiEndpoints.adminInternship}?action=delete"),
       headers: {"Authorization": "Bearer $token"},
       body: {"internship_master_id": id.toString()},
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<StudentListResponse?> fetchStudents({
+    String search = '',
+    String status = 'all',
+    int? deptId,
+    String batch = '',
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final uri = Uri.parse(
+      "${ApiEndpoints.student}?action=list"
+      "&search=$search"
+      "&status=$status"
+      "${deptId != null ? "&dept=$deptId" : ""}"
+      "&batch=$batch",
+    );
+    final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
+    final json = jsonDecode(response.body);
+    if (json['success'] == true) {
+      return StudentListResponse.fromJson(json);
+    }
+    return null;
+  }
+
+  static Future<bool> addStudent({
+    required String name,
+    required String email,
+    required String phone,
+    required String regNo,
+    required String dob,
+    required int departmentId,
+    required String batch,
+    required String gender,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.student}?action=add"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "registration_no": regNo,
+        "dob": dob,
+        "department_id": departmentId.toString(),
+        "batch": batch,
+        "gender": gender,
+      },
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<bool> editStudent({
+    required int studentId,
+    required String name,
+    required String email,
+    required String phone,
+    required String regNo,
+    required int departmentId,
+    required String batch,
+    required String status,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.student}?action=edit"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {
+        "student_id": studentId.toString(),
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "registration_no": regNo,
+        "department_id": departmentId.toString(),
+        "batch": batch,
+        "status": status,
+      },
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<bool> deactivateStudent(int studentId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.student}?action=deactivate"),
+      headers: {"Authorization": "Bearer $token"},
+      body: {"student_id": studentId.toString()},
     );
     final json = jsonDecode(response.body);
     return json['success'] == true;

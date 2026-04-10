@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class AddStudentScreen extends StatefulWidget {
@@ -9,23 +11,33 @@ class AddStudentScreen extends StatefulWidget {
 }
 
 class _AddStudentScreenState extends State<AddStudentScreen> {
+  bool isLoading = false;
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _regNoController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _batchController = TextEditingController(text: 'Fall 2024');
-  String? _selectedDepartment;
+  List<Department> departments = [];
+  Department? selectedDepartment;
   String _selectedGender = 'Male';
   DateTime? _dob;
 
-  final List<String> _departments = [
-    'Computer Science',
-    'Information Technology',
-    'Bio-Engineering',
-    'Economics',
-    'Business Administration',
-    'Electrical Engineering',
-  ];
+  Future<void> fetchDepartments() async {
+    try {
+      final data = await AdminServices.fetchDepartments();
+      setState(() {
+        departments = data;
+      });
+    } catch (e) {
+      debugPrint("Dept error: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDepartments();
+  }
 
   final List<String> _genders = ['Male', 'Female', 'Other'];
   Future<void> _pickDate() async {
@@ -47,6 +59,43 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     final m = _dob!.month.toString().padLeft(2, '0');
     final d = _dob!.day.toString().padLeft(2, '0');
     return '$m/$d/${_dob!.year}';
+  }
+
+  Future<void> _submit() async {
+    if (_fullNameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _regNoController.text.isEmpty ||
+        _dob == null ||
+        selectedDepartment == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all required fields")));
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final success = await AdminServices.addStudent(
+        name: _fullNameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        regNo: _regNoController.text.trim(),
+        dob: "${_dob!.year}-${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}",
+        departmentId: selectedDepartment!.id,
+        batch: _batchController.text.trim(),
+        gender: _selectedGender,
+      );
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Student added successfully")));
+        Navigator.pop(context, true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to add student")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+
+    setState(() => isLoading = false);
   }
 
   @override
@@ -183,9 +232,13 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                         _AddFieldLabel(label: 'DEPARTMENT'),
                         const SizedBox(height: 8),
                         _DepartmentDropdown(
-                          value: _selectedDepartment,
-                          items: _departments,
-                          onChanged: (v) => setState(() => _selectedDepartment = v),
+                          value: selectedDepartment?.name,
+                          items: departments.map((d) => d.name).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedDepartment = departments.firstWhere((d) => d.name == value);
+                            });
+                          },
                         ),
                         const SizedBox(height: 18),
                         Row(
@@ -243,7 +296,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1A56DB),
                       elevation: 0,

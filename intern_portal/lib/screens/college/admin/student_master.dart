@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/student_model.dart';
+import 'package:intern_portal/screens/college/admin/add_student.dart';
+import 'package:intern_portal/screens/college/admin/edit_student.dart';
 import 'package:intern_portal/screens/college/admin/import_students.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-class StudentModel {
-  final String initials;
-  final String name;
-  final String email;
-  final String regId;
-  final String department;
-  final String batch;
-  final String yearOfStudy;
-  bool isActive;
-  StudentModel({
-    required this.initials,
-    required this.name,
-    required this.email,
-    required this.regId,
-    required this.department,
-    required this.batch,
-    required this.yearOfStudy,
-    required this.isActive,
-  });
-}
 
 class StudentsListScreen extends StatefulWidget {
   const StudentsListScreen({super.key});
@@ -34,48 +17,47 @@ class StudentsListScreen extends StatefulWidget {
 
 class _StudentsListScreenState extends State<StudentsListScreen> {
   int selectedTab = 2;
-  final List<StudentModel> _students = [
-    StudentModel(
-      initials: 'AS',
-      name: 'Aley Thompson',
-      email: 'alex.t@scholarflow.edu',
-      regId: 'SF-2024-0892',
-      department: 'Computer Science',
-      batch: 'Class of 2025',
-      yearOfStudy: '3rd Year',
-      isActive: true,
-    ),
-    StudentModel(
-      initials: 'MJ',
-      name: 'Maria Jimenez',
-      email: 'm.jimenez@scholarflow.edu',
-      regId: 'SF-2024-0741',
-      department: 'Bio-Engineering',
-      batch: 'Class of 2026',
-      yearOfStudy: '2nd Year',
-      isActive: false,
-    ),
-    StudentModel(
-      initials: 'RK',
-      name: 'Rakesh Kumar',
-      email: 'r.kumar@scholarflow.edu',
-      regId: 'SF-2024-1102',
-      department: 'Economics',
-      batch: 'Class of 2024',
-      yearOfStudy: '4th Year',
-      isActive: true,
-    ),
-  ];
+  List<StudentModel> students = [];
+  bool isLoading = true;
+  int total = 0;
+  int active = 0;
+  int inactive = 0;
+
+  Future<void> fetchStudents({String search = ''}) async {
+    try {
+      final response = await AdminServices.fetchStudents(search: search);
+      if (response != null) {
+        setState(() {
+          students = response.students;
+          total = response.stats.total;
+          active = response.stats.active;
+          inactive = response.stats.inactive;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error: $e");
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStudents();
+  }
 
   void _onDeactivateStudent(int index) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (_) => DeactivateStudentSheet(
-        studentName: _students[index].name.split(' ').first,
-        onConfirm: () {
-          setState(() => _students[index].isActive = false);
+        studentName: students[index].name.split(' ').first,
+        onConfirm: () async {
+          final studentId = students[index].studentId;
+          final success = await AdminServices.deactivateStudent(studentId);
+          if (success) {
+            fetchStudents();
+          }
           Navigator.pop(context);
         },
         onCancel: () => Navigator.pop(context),
@@ -185,11 +167,11 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                     const SizedBox(height: 20),
                     Row(
                       children: [
-                        _StatCard(label: 'TOTAL', value: '1,284', valueColor: const Color(0xFF0F172A)),
+                        _StatCard(label: 'TOTAL', value: "$total", valueColor: const Color(0xFF0F172A)),
                         const SizedBox(width: 10),
-                        _StatCard(label: 'ACTIVE', value: '1,120', valueColor: const Color(0xFF1A56DB)),
+                        _StatCard(label: 'ACTIVE', value: "$active", valueColor: const Color(0xFF1A56DB)),
                         const SizedBox(width: 10),
-                        _StatCard(label: 'PENDING', value: '164', valueColor: const Color(0xFFEF4444)),
+                        _StatCard(label: 'INACTIVE', value: "$inactive", valueColor: const Color(0xFFEF4444)),
                       ],
                     ),
                     const SizedBox(height: 18),
@@ -258,7 +240,10 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                           ],
                         ),
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => const AddStudentScreen()));
+                            fetchStudents(); // refresh after coming back
+                          },
                           icon: const Icon(Icons.add_circle_outline, size: 18, color: Color(0xFF1A56DB)),
                           label: Text(
                             'Add Student',
@@ -268,7 +253,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    ..._students.asMap().entries.map(
+                    ...students.asMap().entries.map(
                       (entry) => Padding(
                         padding: const EdgeInsets.only(bottom: 14),
                         child: _StudentCard(student: entry.value, onDeactivate: () => _onDeactivateStudent(entry.key)),
@@ -350,7 +335,15 @@ class _StudentCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(Icons.edit_outlined, color: const Color(0xFF94A3B8), size: 20),
+              IconButton(
+                icon: Icon(Icons.edit_outlined, color: const Color(0xFF94A3B8), size: 20),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => EditStudentDetailsScreen(student: student)),
+                  );
+                },
+              ),
               const SizedBox(width: 6),
               GestureDetector(
                 onTap: onDeactivate,
@@ -368,10 +361,10 @@ class _StudentCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _InfoCell(label: 'REG ID', value: student.regId),
+                child: _InfoCell(label: 'REG ID', value: student.regNo),
               ),
               Expanded(
-                child: _InfoCell(label: 'DEPARTMENT', value: student.department),
+                child: _InfoCell(label: 'DEPARTMENT', value: student.departmentName ?? ''),
               ),
             ],
           ),

@@ -11,7 +11,6 @@ class Internship {
   final InternshipStatus status;
   final DateTime? createdDate;
   final List<int> departments;
-
   Internship({
     required this.id,
     required this.name,
@@ -22,7 +21,6 @@ class Internship {
     required this.createdDate,
     required this.departments,
   });
-
   factory Internship.fromJson(Map<String, dynamic> json) {
     return Internship(
       id: int.parse(json['internship_master_id'].toString()),
