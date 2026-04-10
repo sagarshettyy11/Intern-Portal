@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/admin/internship_model.dart';
+import 'package:intern_portal/screens/college/admin/admin_profile.dart';
 import 'package:intern_portal/screens/college/admin/new_internship_batch.dart';
 import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -65,7 +66,9 @@ class _InternshipMasterScreenState extends State<InternshipMasterScreen> {
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminProfileScreen()));
+            },
             child: const Padding(
               padding: EdgeInsets.only(right: 12),
               child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),

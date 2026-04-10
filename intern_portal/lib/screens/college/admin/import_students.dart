@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ImportStudentsScreen extends StatefulWidget {
   const ImportStudentsScreen({super.key});
@@ -29,6 +33,18 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
       context,
     ).showSnackBar(const SnackBar(content: Text('Import started successfully!'), backgroundColor: Color(0xFF16A34A)));
     Navigator.pop(context);
+  }
+
+  Future<void> downloadTemplate() async {
+    String csv =
+        'Name,Email,Registration No,DOB,Phone,Gender,Department,Batch\n'
+        'Rahul Sharma,rahul@college.edu,2021CS101,2002-05-15,9876543210,Male,CSE,2021-2027\n'
+        'Priya Nair,priya@college.edu,2021CS102,2002-07-20,9222222222,Female,CSE,2021-2027\n';
+    final directory = await getApplicationDocumentsDirectory();
+    final path = "${directory.path}/student_import_template.csv";
+    final file = File(path);
+    await file.writeAsString(csv);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File saved successfully")));
   }
 
   @override
@@ -150,7 +166,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
                       const SizedBox(height: 16),
                       Center(
                         child: OutlinedButton.icon(
-                          onPressed: () {},
+                          onPressed: downloadTemplate,
                           icon: const Icon(Icons.download_outlined, size: 16, color: Color(0xFF1A56DB)),
                           label: Text(
                             'Download Excel Template',

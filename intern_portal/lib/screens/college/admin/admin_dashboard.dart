@@ -1,7 +1,10 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/dashboard_model.dart';
 import 'package:intern_portal/screens/college/admin/admin_profile.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'dart:math' as math;
 
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -15,21 +18,32 @@ class CollegeAdminDashboardScreen extends StatefulWidget {
 
 class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScreen> {
   int selectedNavIndex = 0;
+  DashboardData? dashboard;
+  bool isLoading = true;
   String _selectedBatch = 'All Batches';
   String _selectedYear = 'All Years';
   final List<String> _batches = ['All Batches', 'Fall 2024', 'Spring 2025'];
   final List<String> _years = ['All Years', '2023', '2024', '2025'];
-  final int _totalStudents = 9;
-  final int _totalFaculty = 5;
-  final int _departments = 2;
-  final int _batches2 = 1;
-  final int _regTotal = 0;
-  final int _regPending = 0;
-  final int _regApproved = 0;
-  final int _regRejected = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    loadDashboard();
+  }
+
+  Future<void> loadDashboard() async {
+    final data = await AdminServices.fetchDashboard();
+    setState(() {
+      dashboard = data;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: CommonAppBar(
@@ -65,6 +79,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
                   _buildDepartmentRegistrations(),
                   const SizedBox(height: 20),
                   _buildStatusBreakdown(),
+                  const SizedBox(height: 20),
+                  _buildRecentRegistrations(),
                 ],
               ),
             ),
@@ -145,11 +161,19 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
           Row(
             children: [
               Expanded(
-                child: _StatCard(icon: Icons.people_alt, label: 'TOTAL STUDENTS', value: '$_totalStudents'),
+                child: _StatCard(
+                  icon: Icons.people_alt,
+                  label: 'TOTAL STUDENTS',
+                  value: dashboard!.overview['total_students'].toString(),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _StatCard(icon: Icons.school, label: 'TOTAL FACULTY', value: '$_totalFaculty'),
+                child: _StatCard(
+                  icon: Icons.school,
+                  label: 'TOTAL FACULTY',
+                  value: dashboard!.overview['total_faculty'].toString(),
+                ),
               ),
             ],
           ),
@@ -157,11 +181,19 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
           Row(
             children: [
               Expanded(
-                child: _StatCard(icon: Icons.domain, label: 'DEPARTMENTS', value: '$_departments'),
+                child: _StatCard(
+                  icon: Icons.domain,
+                  label: 'DEPARTMENTS',
+                  value: dashboard!.overview['total_depts'].toString(),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _StatCard(icon: Icons.work, label: 'BATCHES', value: '$_batches2'),
+                child: _StatCard(
+                  icon: Icons.work,
+                  label: 'BATCHES',
+                  value: dashboard!.overview['total_batches'].toString(),
+                ),
               ),
             ],
           ),
@@ -185,13 +217,29 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
             child: Row(
               children: [
-                _RegCountTile(label: 'TOTAL', value: '$_regTotal', valueColor: const Color(0xFF1A56DB)),
+                _RegCountTile(
+                  label: 'TOTAL',
+                  value: dashboard!.stats['total'].toString(),
+                  valueColor: const Color(0xFF1A56DB),
+                ),
                 _RegDivider(),
-                _RegCountTile(label: 'PENDING', value: '$_regPending', valueColor: const Color(0xFFD97706)),
+                _RegCountTile(
+                  label: 'PENDING',
+                  value: dashboard!.stats['pending'].toString(),
+                  valueColor: const Color(0xFFD97706),
+                ),
                 _RegDivider(),
-                _RegCountTile(label: 'APPROVED', value: '$_regApproved', valueColor: const Color(0xFF16A34A)),
+                _RegCountTile(
+                  label: 'APPROVED',
+                  value: dashboard!.stats['approved'].toString(),
+                  valueColor: const Color(0xFF16A34A),
+                ),
                 _RegDivider(),
-                _RegCountTile(label: 'REJECTED', value: '$_regRejected', valueColor: const Color(0xFFDC2626)),
+                _RegCountTile(
+                  label: 'REJECTED',
+                  value: dashboard!.stats['rejected'].toString(),
+                  valueColor: const Color(0xFFDC2626),
+                ),
               ],
             ),
           ),
@@ -201,6 +249,8 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
   }
 
   Widget _buildDepartmentRegistrations() {
+    final List deptList = dashboard?.deptStats ?? [];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -209,34 +259,51 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Row(
               children: [
                 Icon(Icons.bar_chart_rounded, color: Color(0xFF1A56DB), size: 22),
                 SizedBox(width: 8),
-                Text(
-                  'Department Registrations',
-                  style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
-                ),
+                Text('Department Registrations', style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700)),
               ],
             ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 36),
-              decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.bar_chart_rounded, size: 40, color: Colors.grey.shade400),
-                  const SizedBox(height: 12),
-                  Text(
-                    'No registrations found',
-                    style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF94A3B8), fontWeight: FontWeight.w500),
+            const SizedBox(height: 20),
+
+            if (deptList.isEmpty)
+              Center(
+                child: Text('No registrations found', style: GoogleFonts.inter(fontSize: 14, color: Colors.grey)),
+              )
+            else
+              SizedBox(
+                height: 220,
+                child: BarChart(
+                  BarChartData(
+                    alignment: BarChartAlignment.spaceAround,
+                    maxY: _getMaxY(deptList),
+                    barGroups: _buildBarGroups(deptList),
+                    titlesData: FlTitlesData(
+                      leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            final index = value.toInt();
+                            if (index >= deptList.length) return const SizedBox();
+
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Text(deptList[index]['dept_code'], style: TextStyle(fontSize: 10)),
+                            );
+                          },
+                        ),
+                      ),
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    gridData: FlGridData(show: false),
                   ),
-                ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -244,6 +311,11 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
   }
 
   Widget _buildStatusBreakdown() {
+    final status = dashboard!.statusBreakdown;
+    final int approved = status['approved'] ?? 0;
+    final int total =
+        (status['pending'] ?? 0) + (status['approved'] ?? 0) + (status['rejected'] ?? 0) + (status['completed'] ?? 0);
+    final double percentage = total == 0 ? 0 : (approved / total) * 100;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -263,7 +335,7 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
               ],
             ),
             const SizedBox(height: 24),
-            Center(child: _DonutChart(percentage: 0)),
+            Center(child: _DonutChart(percentage: percentage)),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -291,6 +363,255 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildRecentRegistrations() {
+    final List recentList = dashboard!.recentRegistrations;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Recent Registrations',
+                style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w800, color: const Color(0xFF0F172A)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to full registrations list
+                },
+                child: Text(
+                  'View All',
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: const Color(0xFF1A56DB)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'STUDENT',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF94A3B8),
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'DEPT',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF94A3B8),
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'COMPANY',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF94A3B8),
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          'STATUS',
+                          textAlign: TextAlign.right,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: const Color(0xFF94A3B8),
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                if (recentList.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Center(
+                      child: Text(
+                        'No registrations found',
+                        style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF94A3B8)),
+                      ),
+                    ),
+                  )
+                else
+                  ...recentList.asMap().entries.map((entry) {
+                    final i = entry.key;
+                    final reg = entry.value;
+                    return Column(
+                      children: [
+                        _RecentRegRow(
+                          studentName: reg['student_name'] ?? '',
+                          dept: reg['dept_code'] ?? '',
+                          company: reg['company_name'] ?? '',
+                          status: reg['status'] ?? '',
+                        ),
+                        if (i < recentList.length - 1) const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                      ],
+                    );
+                  }),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+double _getMaxY(List list) {
+  if (list.isEmpty) return 10;
+  final max = list.map((e) => e['count'] as int).reduce((a, b) => a > b ? a : b);
+  return (max + 2).toDouble();
+}
+
+List<BarChartGroupData> _buildBarGroups(List list) {
+  return List.generate(list.length, (index) {
+    final item = list[index];
+    final value = (item['count'] ?? 0).toDouble();
+    return BarChartGroupData(
+      x: index,
+      barRods: [
+        BarChartRodData(toY: value, width: 16, color: const Color(0xFF0000FF), borderRadius: BorderRadius.zero),
+      ],
+    );
+  });
+}
+
+class _RecentRegRow extends StatelessWidget {
+  final String studentName;
+  final String dept;
+  final String company;
+  final String status;
+
+  const _RecentRegRow({required this.studentName, required this.dept, required this.company, required this.status});
+
+  Color get _statusBg {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return const Color(0xFFDCFCE7);
+      case 'pending':
+        return const Color(0xFFFEF3C7);
+      case 'rejected':
+        return const Color(0xFFFEE2E2);
+      default:
+        return const Color(0xFFF1F5F9);
+    }
+  }
+
+  Color get _statusFg {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return const Color(0xFF16A34A);
+      case 'pending':
+        return const Color(0xFFD97706);
+      case 'rejected':
+        return const Color(0xFFDC2626);
+      default:
+        return const Color(0xFF64748B);
+    }
+  }
+
+  bool get _showDot => status.toLowerCase() == 'approved' || status.toLowerCase() == 'rejected';
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          // Student name
+          Expanded(
+            flex: 3,
+            child: Text(
+              studentName,
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: const Color(0xFF0F172A)),
+            ),
+          ),
+          // Dept badge
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(color: const Color(0xFFEFF6FF), borderRadius: BorderRadius.circular(6)),
+              child: Text(
+                dept,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: const Color(0xFF1A56DB)),
+              ),
+            ),
+          ),
+          // Company
+          Expanded(
+            flex: 3,
+            child: Text(
+              company,
+              style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, color: const Color(0xFF475569)),
+            ),
+          ),
+          // Status badge
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: _statusBg, borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (_showDot) ...[
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(color: _statusFg, shape: BoxShape.circle),
+                      ),
+                      const SizedBox(width: 4),
+                    ],
+                    Flexible(
+                      child: Text(
+                        status.isNotEmpty ? status[0].toUpperCase() + status.substring(1) : '',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: _statusFg),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

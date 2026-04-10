@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/admin/dashboard_model.dart';
 import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/models/admin/internship_model.dart';
+import 'package:intern_portal/models/admin/profile_model.dart';
 import 'package:intern_portal/models/admin/student_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -360,5 +363,37 @@ class AdminServices {
     );
     final json = jsonDecode(response.body);
     return json['success'] == true;
+  }
+
+  static Future<AdminProfile?> fetchAdminProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.get(Uri.parse(ApiEndpoints.adminProfile), headers: {"Authorization": "Bearer $token"});
+    final json = jsonDecode(response.body);
+    if (json['success'] == true) {
+      return AdminProfile.fromJson(json['data']['profile']);
+    }
+    return null;
+  }
+
+  static Future<DashboardData?> fetchDashboard({int? batch, String? year}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final uri = Uri.parse(
+      "${ApiEndpoints.adminDashboard}?action=list"
+      "${batch != null ? "&batch=$batch" : ""}"
+      "${year != null ? "&year=$year" : ""}",
+    );
+    final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
+    debugPrint("DASHBOARD: ${response.body}");
+    try {
+      final json = jsonDecode(response.body);
+      if (json['success'] == true && json['data'] != null) {
+        return DashboardData.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Dashboard error: $e");
+    }
+    return null;
   }
 }

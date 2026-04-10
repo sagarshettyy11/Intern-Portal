@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/admin/profile_model.dart';
+import 'package:intern_portal/services/users/admin_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 const Color kPrimary = Color(0xFF1A56DB);
@@ -11,33 +14,6 @@ const Color kWhite = Colors.white;
 const Color kRedBg = Color(0xFFFEE2E2);
 const Color kRed = Color(0xFFDC2626);
 const Color kDivider = Color(0xFFE2E8F0);
-
-class _ProfileData {
-  final String fullName;
-  final String role;
-  final String contactNumber;
-  final String email;
-  final String designation;
-  final String branch;
-
-  const _ProfileData({
-    required this.fullName,
-    required this.role,
-    required this.contactNumber,
-    required this.email,
-    required this.designation,
-    required this.branch,
-  });
-}
-
-const _ProfileData _hodProfile = _ProfileData(
-  fullName: 'Dr. Aristhanes Murthy',
-  role: 'Academic Lead & Administrator',
-  contactNumber: '+91 98450 12345',
-  email: 'hod.cse@horizon.edu',
-  designation: 'Head of Department',
-  branch: 'Computer Science & Engineering',
-);
 
 class _LinkItem {
   final IconData icon;
@@ -58,8 +34,28 @@ class AdminProfileScreen extends StatefulWidget {
 }
 
 class _HodProfileScreenState extends State<AdminProfileScreen> {
+  AdminProfile? profile;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadProfile();
+  }
+
+  Future<void> loadProfile() async {
+    final data = await AdminServices.fetchAdminProfile();
+    setState(() {
+      profile = data;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: kBg,
       appBar: CommonAppBar(title: "Admin Profile", showBack: true),
@@ -73,9 +69,9 @@ class _HodProfileScreenState extends State<AdminProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    _ProfileHeader(),
+                    _ProfileHeader(profile: profile!),
                     const SizedBox(height: 20),
-                    _PersonalInfoCard(),
+                    _PersonalInfoCard(profile: profile!),
                     const SizedBox(height: 24),
                     _QuickLinksSection(),
                     const SizedBox(height: 24),
@@ -95,6 +91,10 @@ class _HodProfileScreenState extends State<AdminProfileScreen> {
 }
 
 class _ProfileHeader extends StatelessWidget {
+  final AdminProfile profile;
+
+  const _ProfileHeader({required this.profile});
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -102,20 +102,17 @@ class _ProfileHeader extends StatelessWidget {
         Container(
           width: 70,
           height: 70,
-          decoration: BoxDecoration(color: const Color(0xFF334155), borderRadius: BorderRadius.circular(12)),
-          child: const Icon(Icons.person, color: Colors.white70, size: 44),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+          child: const Icon(Icons.person, size: 44),
         ),
         const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                _hodProfile.fullName,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kText, height: 1.2),
-              ),
+              Text(profile.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
-              Text(_hodProfile.role, style: const TextStyle(fontSize: 13, color: kSubText)),
+              Text(profile.role),
             ],
           ),
         ),
@@ -125,39 +122,28 @@ class _ProfileHeader extends StatelessWidget {
 }
 
 class _PersonalInfoCard extends StatelessWidget {
+  final AdminProfile profile;
+  const _PersonalInfoCard({required this.profile});
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: kCardBg, borderRadius: BorderRadius.circular(16)),
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(color: kPrimary, borderRadius: BorderRadius.circular(10)),
-                child: const Icon(Icons.badge_outlined, color: kWhite, size: 20),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Personal Information',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: kText),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          _InfoRow(label: 'FULL NAME', value: _hodProfile.fullName),
+          Text("Personal Information", style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 16),
+          _InfoRow(label: 'FULL NAME', value: profile.name),
           const SizedBox(height: 14),
-          _InfoRow(label: 'CONTACT NUMBER', value: _hodProfile.contactNumber),
+          _InfoRow(label: 'CONTACT NUMBER', value: profile.phone),
           const SizedBox(height: 14),
-          _InfoRow(label: 'EMAIL ADDRESS', value: _hodProfile.email),
+          _InfoRow(label: 'EMAIL ADDRESS', value: profile.email),
           const SizedBox(height: 14),
-          _InfoRow(label: 'DESIGNATION', value: _hodProfile.designation),
+          _InfoRow(label: 'DESIGNATION', value: profile.designation),
           const SizedBox(height: 14),
-          _InfoRow(label: 'BRANCH', value: _hodProfile.branch),
+          _InfoRow(label: 'DEPARTMENT', value: profile.department),
+          const SizedBox(height: 14),
+          _InfoRow(label: 'COLLEGE', value: profile.college),
         ],
       ),
     );
