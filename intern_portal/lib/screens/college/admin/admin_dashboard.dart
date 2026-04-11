@@ -342,7 +342,14 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
               ],
             ),
             const SizedBox(height: 24),
-            Center(child: _DonutChart(percentage: percentage)),
+            Center(
+              child: _DonutChart(
+                approved: status['approved'] ?? 0,
+                pending: status['pending'] ?? 0,
+                rejected: status['rejected'] ?? 0,
+                completed: status['completed'] ?? 0,
+              ),
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -723,19 +730,30 @@ class _RegDivider extends StatelessWidget {
 }
 
 class _DonutChart extends StatelessWidget {
-  final double percentage;
-  const _DonutChart({required this.percentage});
+  final int approved;
+  final int pending;
+  final int rejected;
+  final int completed;
+
+  const _DonutChart({required this.approved, required this.pending, required this.rejected, required this.completed});
   @override
   Widget build(BuildContext context) {
+    final total = approved + pending + rejected + completed;
     return SizedBox(
       width: 160,
       height: 160,
       child: CustomPaint(
-        painter: _DonutPainter(percentage: percentage),
+        painter: _DonutPainter(approved: approved, pending: pending, rejected: rejected, completed: completed),
         child: Center(
-          child: Text(
-            '${percentage.toStringAsFixed(0)}%',
-            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                total.toString(), // 🔥 TOTAL COUNT
+                style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
+              ),
+              Text('Total', style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+            ],
           ),
         ),
       ),
@@ -744,32 +762,40 @@ class _DonutChart extends StatelessWidget {
 }
 
 class _DonutPainter extends CustomPainter {
-  final double percentage;
-  _DonutPainter({required this.percentage});
+  final int approved;
+  final int pending;
+  final int rejected;
+  final int completed;
+  _DonutPainter({required this.approved, required this.pending, required this.rejected, required this.completed});
   @override
   void paint(Canvas canvas, Size size) {
+    final total = approved + pending + rejected + completed;
+    if (total == 0) return;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width / 2) - 12;
     const strokeWidth = 20.0;
-    final bgPaint = Paint()
-      ..color = const Color(0xFFE2E8F0)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-    canvas.drawCircle(center, radius, bgPaint);
-    if (percentage > 0) {
-      final fgPaint = Paint()
-        ..color = const Color(0xFF1A56DB)
+    double startAngle = -math.pi / 2;
+    void drawSegment(int value, Color color) {
+      if (value == 0) return;
+      final sweep = 2 * math.pi * (value / total);
+      final paint = Paint()
+        ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
         ..strokeCap = StrokeCap.round;
-      final sweepAngle = 2 * math.pi * (percentage / 100);
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -math.pi / 2, sweepAngle, false, fgPaint);
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweep, false, paint);
+      startAngle += sweep;
     }
+
+    drawSegment(approved, const Color(0xFF1A56DB)); // Blue
+    drawSegment(pending, const Color(0xFFD97706)); // Orange
+    drawSegment(rejected, const Color(0xFFDC2626)); // Red
+    drawSegment(completed, const Color(0xFFCBD5E1)); // Grey
   }
 
   @override
-  bool shouldRepaint(_DonutPainter old) => old.percentage != percentage;
+  bool shouldRepaint(_DonutPainter old) =>
+      old.approved != approved || old.pending != pending || old.rejected != rejected || old.completed != completed;
 }
 
 class _LegendItem extends StatelessWidget {
