@@ -116,9 +116,13 @@ class AdminServices {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+
     final response = await http.post(
       Uri.parse("${ApiEndpoints.faculty}?action=add"),
-      headers: {"Authorization": "Bearer $token"},
+      headers: {
+        "Authorization": "Bearer $token",
+        // ❌ REMOVE Content-Type
+      },
       body: {
         "faculty_name": name,
         "faculty_email": email,
@@ -128,11 +132,17 @@ class AdminServices {
         "role": role,
       },
     );
+
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
+
     final json = jsonDecode(response.body);
+
     if (json['success'] == true) {
       return true;
+    } else {
+      throw Exception(json['message']);
     }
-    return false;
   }
 
   static Future<bool> editFaculty({
@@ -162,6 +172,8 @@ class AdminServices {
       },
     );
     final json = jsonDecode(response.body);
+    debugPrint("STATUS: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
     if (json['success'] == true) {
       return true;
     }
@@ -223,7 +235,7 @@ class AdminServices {
         "year": year,
         "duration": duration,
         "mode": mode,
-        "departments[]": departments.map((e) => e.toString()).toList(),
+        "departments": departments.join(","),
       },
     );
     final json = jsonDecode(response.body);
@@ -251,7 +263,7 @@ class AdminServices {
         "duration": duration,
         "mode": mode,
         "status": status,
-        "departments[]": departments.map((e) => e.toString()).toList(),
+        "departments": departments.join(","),
       },
     );
     final json = jsonDecode(response.body);

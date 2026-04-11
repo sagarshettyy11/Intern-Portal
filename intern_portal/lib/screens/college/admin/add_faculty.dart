@@ -205,11 +205,13 @@ class _AddFacultyFieldLabel extends StatelessWidget {
 class _AddFacultyTextField extends StatelessWidget {
   final String hint;
   final TextInputType? keyboardType;
-  const _AddFacultyTextField({required this.hint, this.keyboardType, required TextEditingController controller});
+  final TextEditingController controller;
+  const _AddFacultyTextField({required this.hint, this.keyboardType, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       keyboardType: keyboardType,
       style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827)),
       decoration: InputDecoration(

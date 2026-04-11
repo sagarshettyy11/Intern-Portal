@@ -273,7 +273,11 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                     ...students.asMap().entries.map(
                       (entry) => Padding(
                         padding: const EdgeInsets.only(bottom: 14),
-                        child: _StudentCard(student: entry.value, onDeactivate: () => _onDeactivateStudent(entry.key)),
+                        child: _StudentCard(
+                          student: entry.value,
+                          onDeactivate: () => _onDeactivateStudent(entry.key),
+                          onEditComplete: fetchStudents,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -295,7 +299,8 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
 class _StudentCard extends StatelessWidget {
   final StudentModel student;
   final VoidCallback onDeactivate;
-  const _StudentCard({required this.student, required this.onDeactivate});
+  final VoidCallback onEditComplete;
+  const _StudentCard({required this.student, required this.onDeactivate, required this.onEditComplete});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -359,7 +364,9 @@ class _StudentCard extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => EditStudentDetailsScreen(student: student)),
-                  );
+                  ).then((_) {
+                    onEditComplete();
+                  });
                 },
               ),
               GestureDetector(
