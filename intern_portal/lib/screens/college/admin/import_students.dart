@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
@@ -17,6 +19,7 @@ class ImportStudentsScreen extends StatefulWidget {
 class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
   bool _fileSelected = false;
   String? _fileName;
+  File? _selectedFile;
   void _pickFile() {
     setState(() {
       _fileSelected = true;
@@ -24,15 +27,16 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
     });
   }
 
-  void _importStudents() {
-    if (!_fileSelected) {
+  void _importStudents() async {
+    if (_selectedFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select a file first.')));
       return;
     }
+    String content = await _selectedFile!.readAsString();
+    debugPrint(content);
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Import started successfully!'), backgroundColor: Color(0xFF16A34A)));
-    Navigator.pop(context);
   }
 
   Future<void> downloadTemplate() async {
@@ -40,11 +44,10 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
         'Name,Email,Registration No,DOB,Phone,Gender,Department,Batch\n'
         'Rahul Sharma,rahul@college.edu,2021CS101,2002-05-15,9876543210,Male,CSE,2021-2027\n'
         'Priya Nair,priya@college.edu,2021CS102,2002-07-20,9222222222,Female,CSE,2021-2027\n';
-    final directory = await getApplicationDocumentsDirectory();
-    final path = "${directory.path}/student_import_template.csv";
-    final file = File(path);
-    await file.writeAsString(csv);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File saved successfully")));
+    await FileSaver.instance.saveFile(
+      name: "student_import_template",
+      bytes: Uint8List.fromList(csv.codeUnits),
+    );
   }
 
   @override

@@ -65,7 +65,7 @@ class SubmitReportPageState extends State<SubmitReportPage> {
   }
 
   Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg', 'csv', 'doc', 'docx'],
     );

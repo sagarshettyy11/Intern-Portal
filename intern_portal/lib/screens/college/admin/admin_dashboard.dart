@@ -319,10 +319,6 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
 
   Widget _buildStatusBreakdown() {
     final status = dashboard!.statusBreakdown;
-    final int approved = status['approved'] ?? 0;
-    final int total =
-        (status['pending'] ?? 0) + (status['approved'] ?? 0) + (status['rejected'] ?? 0) + (status['completed'] ?? 0);
-    final double percentage = total == 0 ? 0 : (approved / total) * 100;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
