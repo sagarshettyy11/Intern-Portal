@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/models/admin/faculty_model.dart';
 import 'package:intern_portal/screens/college/admin/add_faculty.dart';
 import 'package:intern_portal/screens/college/admin/admin_profile.dart';
@@ -18,6 +19,9 @@ class FacultyMasterPage extends StatefulWidget {
 class _FacultyMasterPageState extends State<FacultyMasterPage> {
   int selectedIndex = 1;
   List<Faculty> facultyList = [];
+  List<Department> departments = [];
+  bool showFilters = false;
+  int? selectedDept;
   bool isLoading = false;
   String search = '';
   String filter = 'all';
@@ -25,15 +29,16 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
   @override
   void initState() {
     super.initState();
-    loadFaculty();
+    loadInitialData();
   }
 
-  Future<void> loadFaculty() async {
+  Future<void> loadInitialData() async {
     setState(() => isLoading = true);
-    final data = await AdminServices.fetchFaculty(search: search, status: filter);
-    final List list = data['faculty'];
+    final deptData = await AdminServices.fetchDepartments();
+    final data = await AdminServices.fetchFaculty(search: search, status: filter, deptId: selectedDept);
     setState(() {
-      facultyList = list.map((e) => Faculty.fromJson(e)).toList();
+      departments = deptData;
+      facultyList = (data['faculty'] as List).map((e) => Faculty.fromJson(e)).toList();
       isLoading = false;
     });
   }
@@ -121,22 +126,109 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                     ),
                     onChanged: (value) {
                       search = value;
-                      loadFaculty();
+                      loadInitialData();
                     },
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      showFilters = !showFilters;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(Icons.tune, color: const Color(0xFF1A56DB)),
                   ),
-                  child: const Icon(Icons.tune, color: Color(0xFF1A56DB), fontWeight: FontWeight.w500, size: 20),
                 ),
               ],
             ),
           ),
+          if (showFilters) ...[
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      initialValue: filter,
+                      decoration: InputDecoration(
+                        labelText: "Status",
+                        labelStyle: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey[900],
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      ),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'all',
+                          child: Text('All', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                        ),
+                        DropdownMenuItem(
+                          value: 'active',
+                          child: Text('Active', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                        ),
+                        DropdownMenuItem(
+                          value: 'inactive',
+                          child: Text('Inactive', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                        ),
+                      ],
+                      onChanged: (val) {
+                        setState(() => filter = val!);
+                        loadInitialData();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: DropdownButtonFormField<int>(
+                      isExpanded: true,
+                      initialValue: selectedDept,
+                      decoration: InputDecoration(
+                        labelText: "Department",
+                        labelStyle: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey[900],
+                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      ),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
+                      items: [
+                        DropdownMenuItem<int>(
+                          value: null,
+                          child: Text('All', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                        ),
+                        ...departments.map((dept) {
+                          return DropdownMenuItem<int>(
+                            value: dept.id,
+                            child: Text(dept.name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                          );
+                        }),
+                      ],
+                      onChanged: (val) {
+                        setState(() => selectedDept = val);
+                        loadInitialData();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           ...facultyList.map((f) => _FacultyCard(faculty: f, onDeactivate: () => _showDeactivateDialog(f))),
         ],
@@ -164,7 +256,7 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
           Navigator.pop(context);
           final success = await AdminServices.deactivateFaculty(faculty.id);
           if (success) {
-            loadFaculty();
+            loadInitialData();
           }
         },
       ),
