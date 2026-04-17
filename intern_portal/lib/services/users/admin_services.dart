@@ -404,4 +404,34 @@ class AdminServices {
     }
     return null;
   }
+
+  static Future<List<Map<String, dynamic>>> fetchBatches() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.get(
+      Uri.parse("${ApiEndpoints.adminDashboard}?action=batches"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+    final json = jsonDecode(response.body);
+    if (json['success'] == true) {
+      final list = json['data']?['batches'] as List? ?? [];
+      return list.map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
+    }
+    return [];
+  }
+
+  static Future<List<String>> fetchYears() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.get(
+      Uri.parse("${ApiEndpoints.adminDashboard}?action=years"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+    final json = jsonDecode(response.body);
+    if (json['success'] == true) {
+      final list = json['data']?['years'] as List? ?? [];
+      return list.map<String>((e) => e.toString()).toList();
+    }
+    return [];
+  }
 }

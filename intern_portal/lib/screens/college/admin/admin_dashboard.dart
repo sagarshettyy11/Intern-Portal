@@ -20,22 +20,34 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
   int selectedNavIndex = 0;
   DashboardData? dashboard;
   bool isLoading = true;
-  String _selectedBatch = 'All Batches';
-  String _selectedYear = 'All Years';
-  final List<String> _batches = ['All Batches', 'Fall 2024', 'Spring 2025'];
-  final List<String> _years = ['All Years', '2023', '2024', '2025'];
+  int? _selectedBatchId;
+  String? _selectedYear;
+  List<Map<String, dynamic>> batchList = [];
+  List<String> yearList = [];
 
   @override
   void initState() {
     super.initState();
+    loadFilters();
     loadDashboard();
   }
 
   Future<void> loadDashboard() async {
-    final data = await AdminServices.fetchDashboard();
+    setState(() => isLoading = true);
+    final data = await AdminServices.fetchDashboard(batch: _selectedBatchId, year: _selectedYear);
     setState(() {
       dashboard = data;
       isLoading = false;
+    });
+  }
+
+  Future<void> loadFilters() async {
+    final batches = await AdminServices.fetchBatches();
+    final years = await AdminServices.fetchYears();
+
+    setState(() {
+      batchList = batches;
+      yearList = years;
     });
   }
 
@@ -136,20 +148,38 @@ class _CollegeAdminDashboardScreenState extends State<CollegeAdminDashboardScree
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          _FilterDropdown(
-            value: _selectedBatch,
-            items: _batches,
-            onChanged: (v) {
-              if (v != null) setState(() => _selectedBatch = v);
-            },
+          Expanded(
+            child: _FilterDropdown(
+              value: _selectedBatchId?.toString() ?? 'All',
+              items: ['All', ...batchList.map((b) => b['internship_master_id'].toString())],
+              onChanged: (v) {
+                setState(() {
+                  _selectedBatchId = v == 'All' ? null : int.parse(v!);
+                });
+                loadDashboard();
+              },
+              labelBuilder: (value) {
+                if (value == 'All') return 'All';
+                final batch = batchList.firstWhere(
+                  (b) => b['internship_master_id'].toString() == value,
+                  orElse: () => {},
+                );
+                return batch.isNotEmpty ? "${batch['internship_name']} (${batch['year']})" : value!;
+              },
+            ),
           ),
           const SizedBox(width: 12),
-          _FilterDropdown(
-            value: _selectedYear,
-            items: _years,
-            onChanged: (v) {
-              if (v != null) setState(() => _selectedYear = v);
-            },
+          Expanded(
+            child: _FilterDropdown(
+              value: _selectedYear ?? 'All',
+              items: ['All', ...yearList],
+              onChanged: (v) {
+                setState(() {
+                  _selectedYear = v == 'All' ? null : v;
+                });
+                loadDashboard();
+              },
+            ),
           ),
         ],
       ),
@@ -626,11 +656,12 @@ class _FilterDropdown extends StatelessWidget {
   final String value;
   final List<String> items;
   final ValueChanged<String?> onChanged;
-  const _FilterDropdown({required this.value, required this.items, required this.onChanged});
+  final String Function(String?)? labelBuilder;
+  const _FilterDropdown({required this.value, required this.items, required this.onChanged, this.labelBuilder});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
@@ -640,9 +671,12 @@ class _FilterDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           isDense: true,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: Color(0xFF64748B)),
-          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
-          items: items.map((v) => DropdownMenuItem(value: v, child: Text(v))).toList(),
+          isExpanded: true,
+          icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
+          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.black),
+          items: items.map((v) {
+            return DropdownMenuItem(value: v, child: Text(labelBuilder != null ? labelBuilder!(v) : v));
+          }).toList(),
           onChanged: onChanged,
         ),
       ),
@@ -748,7 +782,10 @@ class _DonutChart extends StatelessWidget {
                 total.toString(), // 🔥 TOTAL COUNT
                 style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w900, color: Color(0xFF0F172A)),
               ),
-              Text('Total', style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800)),
+              Text(
+                'Total',
+                style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
+              ),
             ],
           ),
         ),
