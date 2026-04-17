@@ -18,6 +18,9 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
   List<Department> departments = [];
   bool isLoading = true;
   int currentIndex = 3;
+  bool showFilters = false;
+  String statusFilter = 'all';
+  String search = '';
 
   @override
   void initState() {
@@ -27,8 +30,17 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
 
   void loadDepartments() async {
     final data = await AdminServices.fetchDepartments();
+    List<Department> filtered = data;
+    if (search.isNotEmpty) {
+      filtered = filtered.where((d) => d.name.toLowerCase().contains(search.toLowerCase())).toList();
+    }
+    if (statusFilter == 'active') {
+      filtered = filtered.where((d) => d.isActive).toList();
+    } else if (statusFilter == 'inactive') {
+      filtered = filtered.where((d) => !d.isActive).toList();
+    }
     setState(() {
-      departments = data;
+      departments = filtered;
       isLoading = false;
     });
   }
@@ -88,6 +100,52 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
                     ),
                     const SizedBox(height: 10),
                     _buildActionRow(),
+                    if (showFilters) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                        child: DropdownButtonFormField<String>(
+                          initialValue: statusFilter,
+                          isExpanded: true,
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
+                          decoration: InputDecoration(
+                            labelText: "Status",
+                            labelStyle: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.grey[900],
+                            ),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              value: 'all',
+                              child: Text('All', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                            ),
+                            DropdownMenuItem(
+                              value: 'active',
+                              child: Text(
+                                'Active',
+                                style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: 'inactive',
+                              child: Text(
+                                'Inactive',
+                                style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ],
+                          onChanged: (val) {
+                            setState(() => statusFilter = val!);
+                            loadDepartments();
+                          },
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 10),
                     ...departments.map(
                       (dept) => Padding(
@@ -138,15 +196,19 @@ class _DepartmentMasterPageState extends State<DepartmentMasterPage> {
           ),
         ),
         const SizedBox(width: 10),
-        Container(
-          width: 48,
-          height: 50,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
+        GestureDetector(
+          onTap: () {
+            setState(() => showFilters = !showFilters);
+          },
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.tune, color: Color(0xFF1A56DB)),
           ),
-          child: const Icon(Icons.tune_rounded, color: Color(0xFF1A56DB), fontWeight: FontWeight.w500, size: 22),
         ),
       ],
     );
