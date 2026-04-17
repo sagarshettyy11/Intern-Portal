@@ -1,48 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class FacultyPerformancePage extends StatelessWidget {
   const FacultyPerformancePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(6)),
-              child: const Icon(Icons.school, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Intern Portal',
-              style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700, fontSize: 15),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black54),
-            onPressed: () {},
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
+            ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Blue header banner
             Container(
               width: double.infinity,
               color: Colors.white,
@@ -50,19 +37,15 @@ class FacultyPerformancePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'HOD Dashboard',
-                    style: TextStyle(fontSize: 13, color: Colors.grey[500], fontWeight: FontWeight.w500),
-                  ),
                   const SizedBox(height: 6),
-                  const Text(
+                  Text(
                     'Faculty Performance',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF3B6EF0)),
+                    style: GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF0000FF)),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Real-time academic oversight dashboard',
-                    style: TextStyle(fontSize: 13, color: Colors.grey[500]),
+                    style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -72,7 +55,6 @@ class FacultyPerformancePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Stat cards
                   Row(
                     children: [
                       Expanded(
@@ -106,24 +88,20 @@ class FacultyPerformancePage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 22),
-
-                  // Faculty Guide Roster
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Faculty Guide Roster',
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
-                      const Text(
+                      Text(
                         'Sort by Rating',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
                   const SizedBox(height: 14),
-
-                  // Guide card 1 — primary button
                   _FacultyCard(
                     name: 'Dr. Sarah Jenkins',
                     role: 'Senior Faculty Lead',
@@ -132,8 +110,6 @@ class FacultyPerformancePage extends StatelessWidget {
                     isPrimary: true,
                   ),
                   const SizedBox(height: 12),
-
-                  // Guide card 2 — outline button
                   _FacultyCard(
                     name: 'Dr. Michael Chen',
                     role: 'Research Coordinator',
@@ -142,13 +118,12 @@ class FacultyPerformancePage extends StatelessWidget {
                     isPrimary: false,
                   ),
                   const SizedBox(height: 12),
-
-                  // Guide card 3 — no button (partial, bottom cut off)
-                  _FacultyCardNoButton(
+                  _FacultyCard(
                     name: 'Dr. Elena Rodriguez',
                     role: 'Thesis Supervisor',
                     students: '9 Students Assigned',
                     rating: 4.8,
+                    isPrimary: false,
                   ),
                   const SizedBox(height: 20),
                 ],
@@ -170,9 +145,7 @@ class _FacultyStatCard extends StatelessWidget {
   final Color? iconColor;
   final String label;
   final String value;
-
   const _FacultyStatCard({required this.icon, this.iconColor, required this.label, required this.value});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -185,16 +158,21 @@ class _FacultyStatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: iconColor ?? const Color(0xFF3B6EF0), size: 24),
+          Icon(icon, color: iconColor ?? const Color(0xFF3B6EF0), size: 24, fontWeight: FontWeight.w800),
           const SizedBox(height: 12),
           Text(
             label,
-            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.4),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black87),
           ),
         ],
       ),
@@ -202,15 +180,12 @@ class _FacultyStatCard extends StatelessWidget {
   }
 }
 
-// ── Faculty card with button ──────────────────────────────────────────────────
-
 class _FacultyCard extends StatelessWidget {
   final String name;
   final String role;
   final String students;
   final double rating;
   final bool isPrimary;
-
   const _FacultyCard({
     required this.name,
     required this.role,
@@ -218,7 +193,6 @@ class _FacultyCard extends StatelessWidget {
     required this.rating,
     required this.isPrimary,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -232,13 +206,12 @@ class _FacultyCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              // Avatar
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[300],
+                  color: Colors.grey[800],
                   child: Icon(Icons.person, size: 36, color: Colors.grey[500]),
                 ),
               ),
@@ -249,16 +222,22 @@ class _FacultyCard extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: Colors.black87),
                     ),
                     const SizedBox(height: 2),
-                    Text(role, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      role,
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                    ),
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        Icon(Icons.school_outlined, size: 13, color: Colors.grey[400]),
+                        Icon(Icons.school_outlined, size: 13, color: Colors.grey[800]),
                         const SizedBox(width: 4),
-                        Text(students, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+                        Text(
+                          students,
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+                        ),
                       ],
                     ),
                   ],
@@ -274,7 +253,7 @@ class _FacultyCard extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(
                       rating.toString(),
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -282,8 +261,6 @@ class _FacultyCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-
-          // View Workload button
           SizedBox(
             width: double.infinity,
             height: 44,
@@ -295,9 +272,9 @@ class _FacultyCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child: Text(
                       'View Workload',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                     ),
                   )
                 : OutlinedButton(
@@ -307,83 +284,11 @@ class _FacultyCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       backgroundColor: const Color(0xFFF4F6FB),
                     ),
-                    child: const Text(
+                    child: Text(
                       'View Workload',
-                      style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Color(0xFF0000FF), fontWeight: FontWeight.w800, fontSize: 14),
                     ),
                   ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Faculty card without button ───────────────────────────────────────────────
-
-class _FacultyCardNoButton extends StatelessWidget {
-  final String name;
-  final String role;
-  final String students;
-  final double rating;
-
-  const _FacultyCardNoButton({required this.name, required this.role, required this.students, required this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: 60,
-              height: 60,
-              color: Colors.grey[300],
-              child: Icon(Icons.person, size: 36, color: Colors.grey[500]),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black87),
-                ),
-                const SizedBox(height: 2),
-                Text(role, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Icon(Icons.school_outlined, size: 13, color: Colors.grey[400]),
-                    const SizedBox(width: 4),
-                    Text(students, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(color: const Color(0xFFFFF8E1), borderRadius: BorderRadius.circular(20)),
-            child: Row(
-              children: [
-                const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
-                const SizedBox(width: 3),
-                Text(
-                  rating.toString(),
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
-              ],
-            ),
           ),
         ],
       ),

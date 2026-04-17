@@ -1,67 +1,42 @@
-import 'package:flutter/material.dart';
-import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'dart:math' as math;
-
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class OverallAnalyticsPage extends StatelessWidget {
   const OverallAnalyticsPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(
-                color: const Color(0xFF3B6EF0),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Icon(Icons.school, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Intern Portal',
-              style: TextStyle(
-                  color: Color(0xFF3B6EF0),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Colors.black54),
-            onPressed: () {},
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
+            ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'HOD Dashboard',
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w500),
+            Text(
+              'Department Analytics',
+              style: GoogleFonts.inter(fontSize: 22, color: Color(0xFF0000FF), fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 16),
-
-            // Top 4 stat cards
             Row(
               children: [
                 Expanded(
@@ -110,14 +85,9 @@ class OverallAnalyticsPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Career Outcomes donut
-            const Text(
+            Text(
               'Career Outcomes',
-              style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
             ),
             const SizedBox(height: 12),
             Container(
@@ -127,10 +97,7 @@ class OverallAnalyticsPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -140,23 +107,25 @@ class OverallAnalyticsPage extends StatelessWidget {
                     width: 180,
                     child: CustomPaint(
                       painter: _CareerDonutPainter(),
-                      child: const Center(
+                      child: Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               '62%',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
+                              style: GoogleFonts.inter(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black87,
+                              ),
                             ),
                             Text(
                               'PLACED',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey,
-                                  letterSpacing: 0.5),
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                           ],
                         ),
@@ -167,46 +136,30 @@ class OverallAnalyticsPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _LegendDot(
-                          color: const Color(0xFF3B6EF0),
-                          label: 'Full-time Job'),
+                      _LegendDot(color: const Color(0xFF3B6EF0), label: 'Full-time Job'),
                       const SizedBox(width: 16),
-                      _LegendDot(
-                          color: const Color(0xFF1A1A2E),
-                          label: 'Further Study'),
+                      _LegendDot(color: const Color(0xFF1A1A2E), label: 'Further Study'),
                     ],
                   ),
                   const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _LegendDot(
-                          color: Colors.grey.shade300,
-                          label: 'Searching'),
-                    ],
+                    children: [_LegendDot(color: Colors.grey.shade300, label: 'Searching')],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-
-            // Completion Breakdown
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Completion Breakdown',
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
                 ),
-                const Text(
+                Text(
                   'VIEW ALL',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF3B6EF0),
-                      fontWeight: FontWeight.w700),
+                  style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800),
                 ),
               ],
             ),
@@ -216,10 +169,7 @@ class OverallAnalyticsPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -258,32 +208,20 @@ class OverallAnalyticsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Student Feedback Trends
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Student Feedback\nTrends',
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87),
+                Text(
+                  'Student Feedback Trends',
+                  style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEFF4FF),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Text(
-                    'SENTIMENT:\nPOSITIVE',
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: Color(0xFF3B6EF0),
-                        fontWeight: FontWeight.w700),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    'SENTIMENT: POSITIVE',
+                    style: GoogleFonts.inter(fontSize: 10, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -296,10 +234,7 @@ class OverallAnalyticsPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
@@ -318,8 +253,7 @@ class OverallAnalyticsPage extends StatelessWidget {
                     iconColor: Colors.green,
                     iconBg: const Color(0xFFE8F5E9),
                     title: 'Company Satisfaction',
-                    subtitle:
-                        'Top rated employers this term: TechSolutions Ltd, Global Systems, and Innovate Corp.',
+                    subtitle: 'Top rated employers this term: TechSolutions Ltd, Global Systems, and Innovate Corp.',
                   ),
                   Divider(height: 20, color: Colors.grey[100]),
                   _FeedbackItem(
@@ -327,21 +261,15 @@ class OverallAnalyticsPage extends StatelessWidget {
                     iconColor: Colors.orange,
                     iconBg: const Color(0xFFFFF3E0),
                     title: 'Relocation Hurdles',
-                    subtitle:
-                        '15% students mentioned difficulty in finding affordable housing near major IT hubs.',
+                    subtitle: '15% students mentioned difficulty in finding affordable housing near major IT hubs.',
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-
-            // Artifacts Availability
             const Text(
               'Artifacts Availability',
-              style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
             Container(
@@ -350,34 +278,16 @@ class OverallAnalyticsPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2))
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
                 ],
               ),
               child: Column(
                 children: [
-                  _ArtifactBar(
-                    label: 'OFFER LETTERS',
-                    current: 1120,
-                    total: 1240,
-                    color: const Color(0xFF3B6EF0),
-                  ),
+                  _ArtifactBar(label: 'OFFER LETTERS', current: 1120, total: 1240, color: const Color(0xFF3B6EF0)),
                   const SizedBox(height: 14),
-                  _ArtifactBar(
-                    label: 'COMPLETION CERTIFICATES',
-                    current: 912,
-                    total: 1240,
-                    color: Colors.green,
-                  ),
+                  _ArtifactBar(label: 'COMPLETION CERTIFICATES', current: 912, total: 1240, color: Colors.green),
                   const SizedBox(height: 14),
-                  _ArtifactBar(
-                    label: 'EMPLOYER FEEDBACK FORMS',
-                    current: 650,
-                    total: 1240,
-                    color: Colors.orange,
-                  ),
+                  _ArtifactBar(label: 'EMPLOYER FEEDBACK FORMS', current: 650, total: 1240, color: Colors.orange),
                 ],
               ),
             ),
@@ -393,15 +303,12 @@ class OverallAnalyticsPage extends StatelessWidget {
   }
 }
 
-// ── Analytic stat card ────────────────────────────────────────────────────────
-
 class _AnalyticStatCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String label;
   final String value;
   final bool isHighlighted;
-
   const _AnalyticStatCard({
     required this.icon,
     required this.iconColor,
@@ -409,7 +316,6 @@ class _AnalyticStatCard extends StatelessWidget {
     required this.value,
     required this.isHighlighted,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -417,33 +323,30 @@ class _AnalyticStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isHighlighted ? const Color(0xFF3B6EF0) : Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2))
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: iconColor, size: 22),
+          Icon(icon, color: iconColor, size: 22, fontWeight: FontWeight.bold),
           const SizedBox(height: 10),
           Text(
             label,
-            style: TextStyle(
-                fontSize: 10,
-                color: isHighlighted ? Colors.white70 : Colors.grey[500],
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.3),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: isHighlighted ? Colors.white70 : Colors.grey[800],
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.3,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: isHighlighted ? Colors.white : Colors.black87),
+            style: GoogleFonts.inter(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: isHighlighted ? Colors.white : Colors.black87,
+            ),
           ),
         ],
       ),
@@ -451,21 +354,13 @@ class _AnalyticStatCard extends StatelessWidget {
   }
 }
 
-// ── Career donut painter ──────────────────────────────────────────────────────
-
 class _CareerDonutPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 16;
     const strokeWidth = 22.0;
-
-    final segments = [
-      (0.62, const Color(0xFF3B6EF0)),   // Placed full-time
-      (0.20, const Color(0xFF1A1A2E)),   // Further study
-      (0.18, Colors.grey),                // Searching
-    ];
-
+    final segments = [(0.62, const Color(0xFF3B6EF0)), (0.20, const Color(0xFF1A1A2E)), (0.18, Colors.grey)];
     double startAngle = -math.pi / 2;
     for (final seg in segments) {
       final sweepAngle = 2 * math.pi * seg.$1;
@@ -488,30 +383,25 @@ class _CareerDonutPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-// ── Legend dot ────────────────────────────────────────────────────────────────
-
 class _LegendDot extends StatelessWidget {
   final Color color;
   final String label;
   const _LegendDot({required this.color, required this.label});
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-            width: 10,
-            height: 10,
-            decoration:
-                BoxDecoration(color: color, shape: BoxShape.circle)),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 5),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+        Text(label, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800)),
       ],
     );
   }
 }
-
-// ── Completion row ────────────────────────────────────────────────────────────
 
 class _CompletionRow extends StatelessWidget {
   final String initials;
@@ -522,7 +412,6 @@ class _CompletionRow extends StatelessWidget {
   final Color statusColor;
   final String time;
   final bool isLast;
-
   const _CompletionRow({
     required this.initials,
     required this.initialsColor,
@@ -533,7 +422,6 @@ class _CompletionRow extends StatelessWidget {
     required this.time,
     required this.isLast,
   });
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -547,10 +435,7 @@ class _CompletionRow extends StatelessWidget {
                 backgroundColor: initialsColor.withValues(alpha: 0.15),
                 child: Text(
                   initials,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: initialsColor),
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: initialsColor),
                 ),
               ),
               const SizedBox(width: 12),
@@ -558,14 +443,11 @@ class _CompletionRow extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            color: Colors.black87)),
-                    Text(company,
-                        style: TextStyle(
-                            fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      name,
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
+                    ),
+                    Text(company, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800)),
                   ],
                 ),
               ),
@@ -574,28 +456,20 @@ class _CompletionRow extends StatelessWidget {
                 children: [
                   Text(
                     status,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: statusColor),
+                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800, color: statusColor),
                   ),
                   const SizedBox(height: 2),
-                  Text(time,
-                      style:
-                          TextStyle(fontSize: 11, color: Colors.grey[400])),
+                  Text(time, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[700], fontWeight: FontWeight.w800)),
                 ],
               ),
             ],
           ),
         ),
-        if (!isLast)
-          Divider(height: 1, color: Colors.grey[100], indent: 16),
+        if (!isLast) Divider(height: 1, color: Colors.grey[100], indent: 16),
       ],
     );
   }
 }
-
-// ── Feedback item ─────────────────────────────────────────────────────────────
 
 class _FeedbackItem extends StatelessWidget {
   final IconData icon;
@@ -603,7 +477,6 @@ class _FeedbackItem extends StatelessWidget {
   final Color iconBg;
   final String title;
   final String subtitle;
-
   const _FeedbackItem({
     required this.icon,
     required this.iconColor,
@@ -611,7 +484,6 @@ class _FeedbackItem extends StatelessWidget {
     required this.title,
     required this.subtitle,
   });
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -620,8 +492,7 @@ class _FeedbackItem extends StatelessWidget {
         Container(
           width: 36,
           height: 36,
-          decoration: BoxDecoration(
-              color: iconBg, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(8)),
           child: Icon(icon, color: iconColor, size: 18),
         ),
         const SizedBox(width: 12),
@@ -629,15 +500,20 @@ class _FeedbackItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: Colors.black87)),
+              Text(
+                title,
+                style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
+              ),
               const SizedBox(height: 4),
-              Text(subtitle,
-                  style: TextStyle(
-                      fontSize: 12, color: Colors.grey[600], height: 1.4)),
+              Text(
+                subtitle,
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: Colors.grey[800],
+                  height: 1.4,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ],
           ),
         ),
@@ -646,21 +522,12 @@ class _FeedbackItem extends StatelessWidget {
   }
 }
 
-// ── Artifact bar ──────────────────────────────────────────────────────────────
-
 class _ArtifactBar extends StatelessWidget {
   final String label;
   final int current;
   final int total;
   final Color color;
-
-  const _ArtifactBar({
-    required this.label,
-    required this.current,
-    required this.total,
-    required this.color,
-  });
-
+  const _ArtifactBar({required this.label, required this.current, required this.total, required this.color});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -669,17 +536,14 @@ class _ArtifactBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label,
-                style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[600],
-                    letterSpacing: 0.3)),
-            Text('$current / $total',
-                style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: color)),
+            Text(
+              label,
+              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.grey[800], letterSpacing: 0.3),
+            ),
+            Text(
+              '$current / $total',
+              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: color),
+            ),
           ],
         ),
         const SizedBox(height: 6),

@@ -675,7 +675,10 @@ class _FilterDropdown extends StatelessWidget {
           icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
           style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.black),
           items: items.map((v) {
-            return DropdownMenuItem(value: v, child: Text(labelBuilder != null ? labelBuilder!(v) : v));
+            return DropdownMenuItem(
+              value: v,
+              child: Text(labelBuilder != null ? labelBuilder!(v) : v, overflow: TextOverflow.ellipsis),
+            );
           }).toList(),
           onChanged: onChanged,
         ),

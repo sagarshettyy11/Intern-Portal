@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'dart:math' as math;
-
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class StudentPerformancePage extends StatelessWidget {
@@ -11,52 +13,32 @@ class StudentPerformancePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(6)),
-              child: const Icon(Icons.school, color: Colors.white, size: 16),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              'Intern Portal',
-              style: TextStyle(color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700, fontSize: 15),
-            ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black54),
-            onPressed: () {},
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
+            ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(height: 1, color: Colors.grey[200]),
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'HOD Dashboard',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black54),
-            ),
             const SizedBox(height: 4),
-            const Text(
+            Text(
               'Department\nPerformance Analytics',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.black87),
             ),
             const SizedBox(height: 16),
-
-            // Filter chips
             Row(
               children: [
                 Container(
@@ -64,9 +46,9 @@ class StudentPerformancePage extends StatelessWidget {
                   decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     children: [
-                      const Text(
+                      Text(
                         'Academic Year 2023-24',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(width: 4),
                       const Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.white),
@@ -81,13 +63,14 @@ class StudentPerformancePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.grey[300]!),
                   ),
-                  child: const Text('Semester 7↑', style: TextStyle(fontSize: 12, color: Colors.black87)),
+                  child: Text(
+                    'Semester 7',
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.black87, fontWeight: FontWeight.w800),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-
-            // Stats row
             Row(
               children: [
                 Expanded(
@@ -122,8 +105,6 @@ class StudentPerformancePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Internship Completion donut
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -136,9 +117,9 @@ class StudentPerformancePage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const Text(
+                  Text(
                     'Internship Completion %',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.black87),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -146,15 +127,27 @@ class StudentPerformancePage extends StatelessWidget {
                     width: 160,
                     child: CustomPaint(
                       painter: _DonutPainter(value: 0.65),
-                      child: const Center(
+                      child: Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
                               '65%',
-                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
+                              style: GoogleFonts.inter(
+                                fontSize: 28,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                            Text('COMPLETED', style: TextStyle(fontSize: 10, color: Colors.grey, letterSpacing: 0.5)),
+                            Text(
+                              'COMPLETED',
+                              style: GoogleFonts.inter(
+                                fontSize: 10,
+                                color: Colors.grey,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -164,7 +157,12 @@ class StudentPerformancePage extends StatelessWidget {
                   Text(
                     'Ongoing semester internships are\nprojected to reach 85% by next month.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600], height: 1.5),
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: Colors.grey[800],
+                      height: 1.5,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -186,15 +184,19 @@ class StudentPerformancePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Report Submission\nConsistency',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                        style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
                       Row(
-                        children: const [
+                        children: [
                           Text(
                             'MONTHLY\nTREND',
-                            style: TextStyle(fontSize: 10, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700),
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              color: Color(0xFF3B6EF0),
+                              fontWeight: FontWeight.w800,
+                            ),
                             textAlign: TextAlign.right,
                           ),
                           SizedBox(width: 4),
@@ -211,21 +213,23 @@ class StudentPerformancePage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      'JAN',
-                      'FEB',
-                      'MAR',
-                      'APR',
-                      'MAY',
-                      'JUN',
-                    ].map((m) => Text(m, style: TextStyle(fontSize: 10, color: Colors.grey[500]))).toList(),
+                    children: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN']
+                        .map(
+                          (m) => Text(
+                            m,
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-
-            // Grade Distribution
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -239,9 +243,9 @@ class StudentPerformancePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Grade Distribution',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 16),
                   _GradeBar(grade: 'GRADE A+', value: 342, max: 500, color: const Color(0xFF1A1A7E)),
@@ -257,8 +261,6 @@ class StudentPerformancePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Department Comparison radar
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -272,9 +274,9 @@ class StudentPerformancePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Department Comparison',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.black87),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -290,33 +292,37 @@ class StudentPerformancePage extends StatelessWidget {
                         decoration: const BoxDecoration(color: Color(0xFF3B6EF0), shape: BoxShape.circle),
                       ),
                       const SizedBox(width: 6),
-                      Text('CURRENT DEPT', style: TextStyle(fontSize: 11, color: Colors.grey[600])),
+                      Text(
+                        'CURRENT DEPT',
+                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                      ),
                       const SizedBox(width: 16),
                       Container(
                         width: 10,
                         height: 10,
                         decoration: BoxDecoration(color: Colors.grey[400], shape: BoxShape.circle),
                       ),
-                      const SizedBox(width: 6),
-                      Text('AVERAGE', style: TextStyle(fontSize: 11, color: Colors.grey[600])),
+                      SizedBox(width: 6),
+                      Text(
+                        'AVERAGE',
+                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
-
-            // Performance Alerts
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Performance Alerts',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
-                const Text(
+                Text(
                   'VIEW ALL',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700),
+                  style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -351,16 +357,12 @@ class StudentPerformancePage extends StatelessWidget {
   }
 }
 
-// ── Dept stat card ────────────────────────────────────────────────────────────
-
 class _DeptStatCard extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final String label;
   final String value;
-
   const _DeptStatCard({required this.icon, this.iconColor, required this.label, required this.value});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -377,12 +379,17 @@ class _DeptStatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(fontSize: 10, color: Colors.grey[500], fontWeight: FontWeight.w600, letterSpacing: 0.3),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.3,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.black87),
           ),
         ],
       ),
@@ -390,19 +397,14 @@ class _DeptStatCard extends StatelessWidget {
   }
 }
 
-// ── Donut painter ─────────────────────────────────────────────────────────────
-
 class _DonutPainter extends CustomPainter {
   final double value;
   const _DonutPainter({required this.value});
-
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2 - 12;
     const strokeWidth = 18.0;
-
-    // Background arc
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       0,
@@ -413,8 +415,6 @@ class _DonutPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth,
     );
-
-    // Foreground arc
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -math.pi / 2,
@@ -432,8 +432,6 @@ class _DonutPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-// ── Line chart painter ────────────────────────────────────────────────────────
-
 class _LineChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -443,7 +441,6 @@ class _LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
-
     final points = [
       Offset(0, size.height * 0.6),
       Offset(size.width * 0.2, size.height * 0.3),
@@ -452,7 +449,6 @@ class _LineChartPainter extends CustomPainter {
       Offset(size.width * 0.8, size.height * 0.15),
       Offset(size.width, size.height * 0.4),
     ];
-
     final path = Path()..moveTo(points[0].dx, points[0].dy);
     for (int i = 0; i < points.length - 1; i++) {
       final mid = Offset((points[i].dx + points[i + 1].dx) / 2, (points[i].dy + points[i + 1].dy) / 2);
@@ -466,16 +462,12 @@ class _LineChartPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-// ── Grade bar ─────────────────────────────────────────────────────────────────
-
 class _GradeBar extends StatelessWidget {
   final String grade;
   final int value;
   final int max;
   final Color color;
-
   const _GradeBar({required this.grade, required this.value, required this.max, required this.color});
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -484,7 +476,7 @@ class _GradeBar extends StatelessWidget {
           width: 72,
           child: Text(
             grade,
-            style: TextStyle(fontSize: 10, color: Colors.grey[600], fontWeight: FontWeight.w600),
+            style: GoogleFonts.inter(fontSize: 10, color: Colors.grey[800], fontWeight: FontWeight.w800),
           ),
         ),
         Expanded(
@@ -492,7 +484,7 @@ class _GradeBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: value / max,
-              backgroundColor: Colors.grey[100],
+              backgroundColor: Colors.grey[800],
               color: color,
               minHeight: 8,
             ),
@@ -501,14 +493,12 @@ class _GradeBar extends StatelessWidget {
         const SizedBox(width: 10),
         Text(
           value.toString(),
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black87),
+          style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800, color: Colors.black87),
         ),
       ],
     );
   }
 }
-
-// ── Radar chart painter ───────────────────────────────────────────────────────
 
 class _RadarChartPainter extends CustomPainter {
   @override
@@ -519,13 +509,10 @@ class _RadarChartPainter extends CustomPainter {
     final labels = ['PLACEMENT', 'INDUSTRY', 'AVG GRADE', 'SUBMISSION', 'FEEDBACK'];
     final currentValues = [0.85, 0.75, 0.70, 0.80, 0.65];
     final avgValues = [0.65, 0.60, 0.58, 0.62, 0.55];
-
     final gridPaint = Paint()
       ..color = Colors.grey.shade200
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
-
-    // Draw grid
     for (int ring = 1; ring <= 4; ring++) {
       final r = radius * ring / 4;
       final path = Path();
@@ -542,8 +529,6 @@ class _RadarChartPainter extends CustomPainter {
       path.close();
       canvas.drawPath(path, gridPaint);
     }
-
-    // Draw axes
     for (int i = 0; i < sides; i++) {
       final angle = -math.pi / 2 + (2 * math.pi * i / sides);
       canvas.drawLine(
@@ -552,14 +537,8 @@ class _RadarChartPainter extends CustomPainter {
         gridPaint,
       );
     }
-
-    // Draw average shape
     _drawRadarShape(canvas, center, radius, avgValues, Colors.grey.shade400, sides);
-
-    // Draw current dept shape
     _drawRadarShape(canvas, center, radius, currentValues, const Color(0xFF3B6EF0), sides);
-
-    // Labels
     final labelPaint = TextPainter(textDirection: TextDirection.ltr);
     for (int i = 0; i < sides; i++) {
       final angle = -math.pi / 2 + (2 * math.pi * i / sides);
@@ -567,7 +546,7 @@ class _RadarChartPainter extends CustomPainter {
       final y = center.dy + (radius + 18) * math.sin(angle);
       labelPaint.text = TextSpan(
         text: labels[i],
-        style: TextStyle(fontSize: 8, color: Colors.grey[600]),
+        style: GoogleFonts.inter(fontSize: 9, color: Colors.grey[900], fontWeight: FontWeight.w800),
       );
       labelPaint.layout();
       labelPaint.paint(canvas, Offset(x - labelPaint.width / 2, y - labelPaint.height / 2));
@@ -582,7 +561,6 @@ class _RadarChartPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
-
     final path = Path();
     for (int i = 0; i < sides; i++) {
       final angle = -math.pi / 2 + (2 * math.pi * i / sides);
@@ -604,8 +582,6 @@ class _RadarChartPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-// ── Alert card ────────────────────────────────────────────────────────────────
-
 class _AlertCard extends StatelessWidget {
   final Color color;
   final Color borderColor;
@@ -613,7 +589,6 @@ class _AlertCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-
   const _AlertCard({
     required this.color,
     required this.borderColor,
@@ -622,7 +597,6 @@ class _AlertCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -642,10 +616,13 @@ class _AlertCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                 ),
                 const SizedBox(height: 2),
-                Text(subtitle, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w800),
+                ),
               ],
             ),
           ),

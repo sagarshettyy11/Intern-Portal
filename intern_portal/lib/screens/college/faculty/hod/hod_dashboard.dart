@@ -31,11 +31,6 @@ class HodDashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'HOD Dashboard',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            const SizedBox(height: 16),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -53,17 +48,17 @@ class HodDashboardPage extends StatelessWidget {
                     'ACADEMIC YEAR 2023-24',
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[800],
                       letterSpacing: 0.5,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Overview Analytics',
-                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.black87),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -137,8 +132,8 @@ class HodDashboardPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Departmental\nProgress',
-                        style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                        'Departmental Progress',
+                        style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -150,7 +145,7 @@ class HodDashboardPage extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Semester 6', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500)),
+                            Text('Semester 6', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800)),
                             const SizedBox(width: 4),
                             Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.grey[600]),
                           ],
@@ -168,11 +163,17 @@ class HodDashboardPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('2021-22', style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
-                      Text('2022-23', style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500])),
+                      Text(
+                        '2021-22',
+                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        '2022-23',
+                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                      ),
                       Text(
                         '2023-24',
-                        style: GoogleFonts.inter(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w600),
+                        style: GoogleFonts.inter(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -322,7 +323,7 @@ class _StatCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: iconColor, size: 22),
+              Icon(icon, color: iconColor, size: 22, fontWeight: FontWeight.bold),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
@@ -331,7 +332,7 @@ class _StatCard extends StatelessWidget {
                 ),
                 child: Text(
                   badge,
-                  style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: badgeColor),
+                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: badgeColor),
                 ),
               ),
             ],
@@ -341,15 +342,15 @@ class _StatCard extends StatelessWidget {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: Colors.grey[500],
-              fontWeight: FontWeight.w600,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.3,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.inter(fontSize: valueFontSize, fontWeight: FontWeight.bold, color: Colors.black87),
+            style: GoogleFonts.inter(fontSize: valueFontSize, fontWeight: FontWeight.w800, color: Colors.black87),
           ),
         ],
       ),
@@ -371,7 +372,10 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 5),
-        Text(label, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
+        Text(
+          label,
+          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+        ),
       ],
     );
   }
@@ -461,7 +465,7 @@ class _ApprovalRow extends StatelessWidget {
                 backgroundColor: initialsColor.withValues(alpha: 0.15),
                 child: Text(
                   initials,
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.bold, color: initialsColor),
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: initialsColor),
                 ),
               ),
               const SizedBox(width: 12),
@@ -471,9 +475,12 @@ class _ApprovalRow extends StatelessWidget {
                   children: [
                     Text(
                       name,
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                     ),
-                    Text(guide, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      guide,
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                    ),
                   ],
                 ),
               ),
@@ -485,11 +492,14 @@ class _ApprovalRow extends StatelessWidget {
                     decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(20)),
                     child: Text(
                       tag,
-                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, color: tagColor),
+                      style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: tagColor),
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(time, style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400])),
+                  Text(
+                    time,
+                    style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[700], fontWeight: FontWeight.w800),
+                  ),
                 ],
               ),
             ],
@@ -534,9 +544,12 @@ class _GuideLoadCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.black87),
                   ),
-                  Text(mentees, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                  Text(
+                    mentees,
+                    style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800, color: Colors.grey[800]),
+                  ),
                 ],
               ),
               Column(
@@ -546,14 +559,14 @@ class _GuideLoadCard extends StatelessWidget {
                     'RESPONSE TIME',
                     style: GoogleFonts.inter(
                       fontSize: 9,
-                      color: Colors.grey[500],
-                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                      fontWeight: FontWeight.w800,
                       letterSpacing: 0.3,
                     ),
                   ),
                   Text(
                     responseTime,
-                    style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
+                    style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.black87),
                   ),
                 ],
               ),
