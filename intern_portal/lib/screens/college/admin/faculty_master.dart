@@ -215,7 +215,11 @@ class _FacultyMasterPageState extends State<FacultyMasterPage> {
                         ...departments.map((dept) {
                           return DropdownMenuItem<int>(
                             value: dept.id,
-                            child: Text(dept.name, style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800)),
+                            child: Text(
+                              dept.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800),
+                            ),
                           );
                         }),
                       ],

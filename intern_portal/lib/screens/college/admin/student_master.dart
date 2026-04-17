@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/admin/department_model.dart';
 import 'package:intern_portal/models/admin/student_model.dart';
 import 'package:intern_portal/screens/college/admin/add_student.dart';
 import 'package:intern_portal/screens/college/admin/admin_profile.dart';
@@ -19,33 +20,42 @@ class StudentsListScreen extends StatefulWidget {
 class _StudentsListScreenState extends State<StudentsListScreen> {
   int selectedTab = 2;
   List<StudentModel> students = [];
+  bool showFilters = false;
+  String search = '';
+  String filter = 'all';
+  int? selectedDept;
+  String selectedBatch = '';
+  List<Department> departments = [];
   bool isLoading = true;
   int total = 0;
   int active = 0;
   int inactive = 0;
 
-  Future<void> fetchStudents({String search = ''}) async {
-    try {
-      final response = await AdminServices.fetchStudents(search: search);
-      if (response != null) {
-        setState(() {
-          students = response.students;
-          total = response.stats.total;
-          active = response.stats.active;
-          inactive = response.stats.inactive;
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      debugPrint("Error: $e");
-      setState(() => isLoading = false);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    fetchStudents();
+    loadInitialData();
+  }
+
+  Future<void> loadInitialData() async {
+    setState(() => isLoading = true);
+
+    final deptData = await AdminServices.fetchDepartments();
+    final response = await AdminServices.fetchStudents(
+      search: search,
+      status: filter,
+      deptId: selectedDept,
+      batch: selectedBatch,
+    );
+
+    setState(() {
+      departments = deptData;
+      students = response?.students ?? [];
+      total = response?.stats.total ?? 0;
+      active = response?.stats.active ?? 0;
+      inactive = response?.stats.inactive ?? 0;
+      isLoading = false;
+    });
   }
 
   void _onDeactivateStudent(int index) {
@@ -57,7 +67,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
           final studentId = students[index].studentId;
           final success = await AdminServices.deactivateStudent(studentId);
           if (success) {
-            fetchStudents();
+            loadInitialData();
           }
           Navigator.pop(context);
         },
@@ -213,28 +223,195 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                                 contentPadding: EdgeInsets.symmetric(vertical: 10),
                               ),
                               onChanged: (value) {
-                                fetchStudents(search: value);
+                                search = value;
+                                loadInitialData();
                               },
                             ),
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Container(
-                          height: 46,
-                          width: 46,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.tune,
-                            color: Color(0xFF1A56DB),
-                            fontWeight: FontWeight.w500,
-                            size: 20,
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showFilters = !showFilters;
+                            });
+                          },
+                          child: Container(
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1A56DB).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.tune,
+                              color: Color(0xFF1A56DB),
+                              fontWeight: FontWeight.w500,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ],
                     ),
+                    if (showFilters) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DropdownButtonFormField<String>(
+                                    initialValue: filter,
+                                    isExpanded: true,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: "Status",
+                                      labelStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                    ),
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: 'all',
+                                        child: Text(
+                                          'All',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'active',
+                                        child: Text(
+                                          'Active',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'inactive',
+                                        child: Text(
+                                          'Inactive',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (val) {
+                                      setState(() => filter = val!);
+                                      loadInitialData();
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: DropdownButtonFormField<int>(
+                                    initialValue: selectedDept,
+                                    isExpanded: true,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: "Dept",
+                                      labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                    ),
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: null,
+                                        child: Text(
+                                          'All',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      ...departments.map((dept) {
+                                        return DropdownMenuItem<int>(
+                                          value: dept.id,
+                                          child: Text(
+                                            dept.name,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                    onChanged: (val) {
+                                      setState(() => selectedDept = val);
+                                      loadInitialData();
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: DropdownButtonFormField<String>(
+                                    initialValue: selectedBatch.isEmpty ? null : selectedBatch,
+                                    isExpanded: true,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: "Batch",
+                                      labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                    ),
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: '',
+                                        child: Text(
+                                          'All',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: '2023',
+                                        child: Text(
+                                          '2023',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: '2024',
+                                        child: Text(
+                                          '2024',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: '2025',
+                                        child: Text(
+                                          '2025',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: '2026',
+                                        child: Text(
+                                          '2026',
+                                          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800),
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (val) {
+                                      setState(() => selectedBatch = val ?? '');
+                                      loadInitialData();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,7 +435,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                             Navigator.push(context, MaterialPageRoute(builder: (_) => const AddStudentScreen())).then((
                               _,
                             ) {
-                              fetchStudents();
+                              loadInitialData();
                             });
                           },
                           icon: const Icon(Icons.add_circle_outline, size: 18, color: Color(0xFF1A56DB)),
@@ -276,7 +453,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                         child: _StudentCard(
                           student: entry.value,
                           onDeactivate: () => _onDeactivateStudent(entry.key),
-                          onEditComplete: fetchStudents,
+                          onEditComplete: loadInitialData,
                         ),
                       ),
                     ),
