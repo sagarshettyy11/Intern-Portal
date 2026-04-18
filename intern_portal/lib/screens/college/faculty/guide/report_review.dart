@@ -14,11 +14,13 @@ class ReportDetailsPage extends StatefulWidget {
 }
 
 class _ReportDetailsPageState extends State<ReportDetailsPage> {
+  bool isEditing = false;
   final TextEditingController feedbackController = TextEditingController();
   final TextEditingController scoreController = TextEditingController();
   bool isLoading = true;
   ReportDetailsModel? report;
-  bool get isEditable => report!.canEvaluate || report!.canEdit;
+  bool get isEvaluateMode => report!.canEvaluate;
+  bool get isEditMode => report!.canEdit && isEditing;
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,30 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
       feedbackController.text = report?.feedback ?? '';
       scoreController.text = report?.score?.toString() ?? '';
     });
+  }
+
+  Future<void> submitEvaluation(String action) async {
+    final score = double.tryParse(scoreController.text);
+    if (score == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please enter a valid score")));
+      return;
+    }
+
+    final success = await GuideServices.evaluateReport(
+      reportId: widget.reportId,
+      action: action,
+      score: score,
+      feedback: feedbackController.text,
+    );
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Evaluation saved successfully")));
+      setState(() {
+        isEditing = false;
+      });
+      loadDetails();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Something went wrong")));
+    }
   }
 
   @override
@@ -218,24 +244,48 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                           ),
                         ],
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "${report!.score ?? 0}",
-                              style: GoogleFonts.inter(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2563EB),
+                      (isEvaluateMode || isEditMode)
+                          ? SizedBox(
+                              width: 90,
+                              child: TextField(
+                                controller: scoreController,
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF2563EB),
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 6),
+                                  hintText: "0",
+                                  suffixText: "/100",
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                              ),
+                            )
+                          : RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "${report!.score ?? 0}",
+                                    style: GoogleFonts.inter(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF2563EB),
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' /100',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            TextSpan(
-                              text: ' /100',
-                              style: GoogleFonts.inter(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -258,16 +308,30 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: Colors.grey[200]!),
                     ),
-                    child: Text(
-                      report!.feedback ?? "No feedback provided",
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        color: Colors.grey[800],
-                        height: 1.6,
-                        fontWeight: FontWeight.w700,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
+                    child: (isEvaluateMode || isEditMode)
+                        ? TextField(
+                            controller: feedbackController,
+                            maxLines: null,
+                            expands: true,
+                            textAlignVertical: TextAlignVertical.top,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Colors.grey[800],
+                              height: 1.6,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            decoration: const InputDecoration(hintText: "Enter feedback...", border: InputBorder.none),
+                          )
+                        : Text(
+                            report!.feedback ?? "No feedback provided",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Colors.grey[800],
+                              height: 1.6,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 10),
                   Container(
@@ -293,26 +357,78 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Colors.grey[200]!)),
-        ),
-        child: Row(
+      bottomNavigationBar: buildBottomBar(),
+    );
+  }
+
+  Widget actionContainer({required List<Widget> children}) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
+      child: Row(children: children),
+    );
+  }
+
+  ButtonStyle outlinedStyle() {
+    return OutlinedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      side: BorderSide(color: Colors.grey[300]!),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );
+  }
+
+  ButtonStyle elevatedStyle() {
+    return ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF2563EB),
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 0,
+    );
+  }
+
+  Widget buildBottomBar() {
+    final d = report!;
+    if (d.canEvaluate) {
+      return actionContainer(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => submitEvaluation("reject"),
+              style: outlinedStyle(),
+              child: Text(
+                'Reject',
+                style: GoogleFonts.inter(color: Colors.red, fontWeight: FontWeight.w800, fontSize: 14),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => submitEvaluation("approve"),
+              style: elevatedStyle(),
+              child: Text(
+                'Approve',
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    if (d.canEdit) {
+      // 👉 editing ON
+      if (isEditing) {
+        return actionContainer(
           children: [
             Expanded(
               child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentReportsPage()));
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  side: BorderSide(color: Colors.grey[300]!),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
+                onPressed: () => setState(() => isEditing = false),
+                style: outlinedStyle(),
                 child: Text(
-                  'Back to Dashboard',
+                  'Cancel',
                   style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
@@ -320,22 +436,58 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2563EB),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  elevation: 0,
-                ),
+                onPressed: () => submitEvaluation(d.status.toLowerCase() == "approved" ? "approve" : "reject"),
+                style: elevatedStyle(),
                 child: Text(
-                  'Edit Evaluation',
+                  'Update Evaluation',
                   style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                 ),
               ),
             ),
           ],
+        );
+      }
+      return actionContainer(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: outlinedStyle(),
+              child: Text(
+                'Back',
+                style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 14),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => setState(() => isEditing = true),
+              style: elevatedStyle(),
+              child: Text(
+                'Edit Evaluation',
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    // 🔒 3. VIEW ONLY (no edit, no evaluate)
+    return actionContainer(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            style: outlinedStyle(),
+            child: Text(
+              'Back',
+              style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 14),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
