@@ -9,6 +9,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
   final bool showDivider;
   final Widget? customTitle;
+
   const CommonAppBar({
     super.key,
     this.title,
@@ -19,6 +20,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showDivider = true,
     this.customTitle,
   });
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,21 +40,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       title:
           customTitle ??
           (showLogo
-              ? Row(
-                  children: [
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(color: const Color(0xFF3B6EF0), borderRadius: BorderRadius.circular(8)),
-                      child: const Icon(Icons.school, color: Colors.white, size: 18),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Intern Portal",
-                      style: GoogleFonts.inter(color: Colors.black87, fontWeight: FontWeight.w800, fontSize: 20),
-                    ),
-                  ],
-                )
+              ? Image.asset('assets/intern_portal.png', height: 130, fit: BoxFit.contain)
               : Text(
                   title ?? "",
                   style: GoogleFonts.inter(

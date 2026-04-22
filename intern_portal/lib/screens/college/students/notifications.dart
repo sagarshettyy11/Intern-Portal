@@ -1,0 +1,272 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+
+class NotificationItem {
+  final IconData icon;
+  final String title;
+  final String body;
+  final bool isUnread;
+  final bool hasAvatar;
+  final String? avatarUrl;
+  final String senderName;
+  final String date;
+  final bool hasAttachment;
+  const NotificationItem({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.isUnread = false,
+    this.hasAvatar = false,
+    this.avatarUrl,
+    required this.senderName,
+    required this.date,
+    this.hasAttachment = false,
+  });
+}
+
+class NotificationsScreen extends StatefulWidget {
+  const NotificationsScreen({super.key});
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  static const Color primaryBlue = Color(0xFF1A3FBB);
+  static const Color lightBlue = Color(0xFFE8EEFF);
+  static const Color bgColor = Color(0xFFF2F4F7);
+  static const Color textDark = Color(0xFF1A1A2E);
+  static const Color textGrey = Color(0xFF9AA0B4);
+  static const Color cardWhite = Colors.white;
+
+  final List<NotificationItem> notifications = const [
+    NotificationItem(
+      icon: Icons.mail_outline_rounded,
+      title: 'Message from your Guide',
+      body: 'Submit the hardcopy of the document as requested in the internship portal by tomorrow morning.',
+      isUnread: true,
+      hasAvatar: true,
+      avatarUrl: 'https://i.pravatar.cc/150?img=51',
+      senderName: 'Prof. Mark Davis',
+      date: 'Apr 14, 2026',
+      hasAttachment: true,
+    ),
+    NotificationItem(
+      icon: Icons.assignment_outlined,
+      title: 'Internship Update',
+      body: 'Your application for "Senior Research Associate" has been moved to the interview stage.',
+      isUnread: false,
+      hasAvatar: false,
+      senderName: 'Career Services',
+      date: 'Apr 12, 2026',
+    ),
+    NotificationItem(
+      icon: Icons.verified_outlined,
+      title: 'Profile Verified',
+      body: 'Your academic credentials have been successfully verified by the registrar\'s office.',
+      isUnread: false,
+      hasAvatar: false,
+      senderName: 'Registrar Office',
+      date: 'Apr 10, 2026',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: bgColor,
+      appBar: CommonAppBar(title: "Notfications", showBack: true),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 12),
+            _buildInboxHeader(),
+            const SizedBox(height: 16),
+            ...notifications.map((n) => _buildNotificationCard(n)),
+            const SizedBox(height: 12),
+            _buildEmptyCard(),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInboxHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'STATUS UPDATE',
+          style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.4, color: primaryBlue),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Text(
+              'Inbox',
+              style: GoogleFonts.inter(fontSize: 30, fontWeight: FontWeight.bold, color: textDark),
+            ),
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(color: primaryBlue, borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                '1 unread',
+                style: GoogleFonts.inter(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotificationCard(NotificationItem item) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: item.isUnread ? cardWhite : const Color(0xFFF8F9FC),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: item.isUnread ? 0.06 : 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title Row
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildIconBox(item.icon, item.isUnread),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  item.title,
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: item.isUnread ? FontWeight.bold : FontWeight.w600,
+                    color: item.isUnread ? textDark : const Color(0xFF444444),
+                  ),
+                ),
+              ),
+              if (item.isUnread)
+                const Padding(
+                  padding: EdgeInsets.only(top: 2),
+                  child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Body Text
+          Padding(
+            padding: const EdgeInsets.only(left: 52),
+            child: Text(
+              item.body,
+              style: GoogleFonts.inter(fontSize: 13, height: 1.5, color: item.isUnread ? textDark : textGrey),
+            ),
+          ),
+          const SizedBox(height: 14),
+          const Divider(height: 1, color: Color(0xFFEEEFF3)),
+          const SizedBox(height: 12),
+          // Footer Row
+          Row(
+            children: [
+              if (item.hasAvatar && item.avatarUrl != null) ...[
+                CircleAvatar(radius: 12, backgroundImage: NetworkImage(item.avatarUrl!)),
+                const SizedBox(width: 7),
+                Text(
+                  item.senderName,
+                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: textDark),
+                ),
+              ] else ...[
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
+                  child: const Icon(Icons.business_outlined, size: 13, color: textGrey),
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  item.senderName,
+                  style: GoogleFonts.inter(fontSize: 12, color: textGrey, fontWeight: FontWeight.w500),
+                ),
+              ],
+              const Spacer(),
+              if (item.hasAttachment) ...[
+                const Icon(Icons.attach_file_rounded, size: 14, color: primaryBlue),
+                const SizedBox(width: 3),
+                Text(
+                  'Attachment',
+                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: primaryBlue),
+                ),
+              ] else
+                Text(item.date, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+            ],
+          ),
+          if (item.hasAttachment) ...[
+            const SizedBox(height: 4),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(item.date, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconBox(IconData icon, bool isUnread) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: isUnread ? lightBlue : const Color(0xFFEEEFF3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(icon, size: 22, color: isUnread ? primaryBlue : textGrey),
+    );
+  }
+
+  Widget _buildEmptyCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F9FC),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE4E6EE), width: 1),
+      ),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              Icon(Icons.image_outlined, size: 40, color: Colors.grey.shade300),
+              Icon(Icons.settings, size: 18, color: Colors.grey.shade300),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'No more notifications',
+            style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: textDark),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'You\'re all caught up for today. New alerts\nwill appear here as they arrive.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.inter(fontSize: 12.5, height: 1.5, color: textGrey),
+          ),
+        ],
+      ),
+    );
+  }
+}

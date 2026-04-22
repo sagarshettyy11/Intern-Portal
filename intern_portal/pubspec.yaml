@@ -48,3 +48,5 @@ flutter:
   assets:
     - assets/intern.jpeg
     - assets/splash_screen.png
+    - assets/intern_portal.png
+    - assets/intern_icon.png
