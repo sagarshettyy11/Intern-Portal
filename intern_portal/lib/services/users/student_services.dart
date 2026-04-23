@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/student/certificate_models.dart';
 import 'package:intern_portal/models/student/dashboard_models.dart';
 import 'package:intern_portal/models/student/internship_models.dart';
+import 'package:intern_portal/models/student/notification_models.dart';
 import 'package:intern_portal/models/student/student_models.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:intern_portal/services/authentication/auth_storage.dart';
@@ -163,5 +165,54 @@ class StudentServices {
       return StudentProfile.fromJson(json['data']);
     }
     return null;
+  }
+
+  static Future<Map<String, dynamic>> fetchNotifications({int page = 1, int perPage = 15}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final uri = Uri.parse(
+      ApiEndpoints.notifications,
+    ).replace(queryParameters: {"action": "list", "page": page.toString(), "per_page": perPage.toString()});
+    final response = await http.get(
+      uri,
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
+    );
+    final json = jsonDecode(response.body);
+    if (response.statusCode == 200 && json['success'] == true) {
+      return {
+        "notifications": (json['data']['notifications'] as List).map((e) => NotificationModel.fromJson(e)).toList(),
+        "unread": json['data']['unread_count'],
+        "total": json['data']['total'],
+      };
+    }
+    throw Exception("Failed to load notifications");
+  }
+
+  static Future<bool> markAllNotificationsRead() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final response = await http.post(
+      Uri.parse("${ApiEndpoints.notifications}?action=mark_all"),
+      headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+    );
+    final json = jsonDecode(response.body);
+    return json['success'] == true;
+  }
+
+  static Future<Map<String, dynamic>> fetchCertificates() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final res = await http.get(
+      Uri.parse("${ApiEndpoints.myCertificate}?action=list"),
+      headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+    );
+    final json = jsonDecode(res.body);
+    if (res.statusCode == 200 && json['success'] == true) {
+      return {
+        "stats": json['data']['stats'],
+        "issued": (json['data']['issued'] as List).map((e) => CertificateModel.fromJson(e)).toList(),
+      };
+    }
+    throw Exception("Failed to load certificates");
   }
 }

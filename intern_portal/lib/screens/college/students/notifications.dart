@@ -1,29 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/student/notification_models.dart';
+import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
-
-class NotificationItem {
-  final IconData icon;
-  final String title;
-  final String body;
-  final bool isUnread;
-  final bool hasAvatar;
-  final String? avatarUrl;
-  final String senderName;
-  final String date;
-  final bool hasAttachment;
-  const NotificationItem({
-    required this.icon,
-    required this.title,
-    required this.body,
-    this.isUnread = false,
-    this.hasAvatar = false,
-    this.avatarUrl,
-    required this.senderName,
-    required this.date,
-    this.hasAttachment = false,
-  });
-}
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -38,38 +17,28 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   static const Color textDark = Color(0xFF1A1A2E);
   static const Color textGrey = Color(0xFF9AA0B4);
   static const Color cardWhite = Colors.white;
+  List<NotificationModel> notifications = [];
+  int unreadCount = 0;
+  bool isLoading = true;
 
-  final List<NotificationItem> notifications = const [
-    NotificationItem(
-      icon: Icons.mail_outline_rounded,
-      title: 'Message from your Guide',
-      body: 'Submit the hardcopy of the document as requested in the internship portal by tomorrow morning.',
-      isUnread: true,
-      hasAvatar: true,
-      avatarUrl: 'https://i.pravatar.cc/150?img=51',
-      senderName: 'Prof. Mark Davis',
-      date: 'Apr 14, 2026',
-      hasAttachment: true,
-    ),
-    NotificationItem(
-      icon: Icons.assignment_outlined,
-      title: 'Internship Update',
-      body: 'Your application for "Senior Research Associate" has been moved to the interview stage.',
-      isUnread: false,
-      hasAvatar: false,
-      senderName: 'Career Services',
-      date: 'Apr 12, 2026',
-    ),
-    NotificationItem(
-      icon: Icons.verified_outlined,
-      title: 'Profile Verified',
-      body: 'Your academic credentials have been successfully verified by the registrar\'s office.',
-      isUnread: false,
-      hasAvatar: false,
-      senderName: 'Registrar Office',
-      date: 'Apr 10, 2026',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadNotifications();
+  }
+
+  Future<void> loadNotifications() async {
+    try {
+      final data = await StudentServices.fetchNotifications();
+      setState(() {
+        notifications = data['notifications'];
+        unreadCount = data['unread'];
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +53,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             const SizedBox(height: 12),
             _buildInboxHeader(),
             const SizedBox(height: 16),
-            ...notifications.map((n) => _buildNotificationCard(n)),
+            if (notifications.isEmpty) _buildEmptyCard() else ...notifications.map((n) => _buildNotificationCard(n)),
             const SizedBox(height: 12),
-            _buildEmptyCard(),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -114,7 +81,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(color: primaryBlue, borderRadius: BorderRadius.circular(20)),
               child: Text(
-                '1 unread',
+                '$unreadCount unread',
                 style: GoogleFonts.inter(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
               ),
             ),
@@ -124,16 +91,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget _buildNotificationCard(NotificationItem item) {
+  Widget _buildNotificationCard(NotificationModel item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: item.isUnread ? cardWhite : const Color(0xFFF8F9FC),
+        color: !item.isRead ? cardWhite : const Color(0xFFF8F9FC),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: item.isUnread ? 0.06 : 0.03),
+            color: Colors.black.withValues(alpha: !item.isRead ? 0.06 : 0.03),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -146,19 +113,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildIconBox(item.icon, item.isUnread),
+              _buildIconBox(getIcon(item.eventType), !item.isRead),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   item.title,
                   style: GoogleFonts.inter(
                     fontSize: 15,
-                    fontWeight: item.isUnread ? FontWeight.bold : FontWeight.w600,
-                    color: item.isUnread ? textDark : const Color(0xFF444444),
+                    fontWeight: !item.isRead ? FontWeight.bold : FontWeight.w600,
+                    color: !item.isRead ? textDark : const Color(0xFF444444),
                   ),
                 ),
               ),
-              if (item.isUnread)
+              if (!item.isRead)
                 const Padding(
                   padding: EdgeInsets.only(top: 2),
                   child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
@@ -166,12 +133,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ],
           ),
           const SizedBox(height: 10),
-          // Body Text
           Padding(
             padding: const EdgeInsets.only(left: 52),
             child: Text(
-              item.body,
-              style: GoogleFonts.inter(fontSize: 13, height: 1.5, color: item.isUnread ? textDark : textGrey),
+              item.message,
+              style: GoogleFonts.inter(fontSize: 13, height: 1.5, color: !item.isRead ? textDark : textGrey),
             ),
           ),
           const SizedBox(height: 14),
@@ -180,28 +146,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           // Footer Row
           Row(
             children: [
-              if (item.hasAvatar && item.avatarUrl != null) ...[
-                CircleAvatar(radius: 12, backgroundImage: NetworkImage(item.avatarUrl!)),
-                const SizedBox(width: 7),
-                Text(
-                  item.senderName,
-                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: textDark),
-                ),
-              ] else ...[
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
-                  child: const Icon(Icons.business_outlined, size: 13, color: textGrey),
-                ),
-                const SizedBox(width: 7),
-                Text(
-                  item.senderName,
-                  style: GoogleFonts.inter(fontSize: 12, color: textGrey, fontWeight: FontWeight.w500),
-                ),
-              ],
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
+                child: const Icon(Icons.business_outlined, size: 13, color: textGrey),
+              ),
+              const SizedBox(width: 7),
+              Text(
+                item.actorName ?? "System",
+                style: GoogleFonts.inter(fontSize: 12, color: textGrey, fontWeight: FontWeight.w500),
+              ),
+
               const Spacer(),
-              if (item.hasAttachment) ...[
+              if (item.attachmentUrl != null) ...[
                 const Icon(Icons.attach_file_rounded, size: 14, color: primaryBlue),
                 const SizedBox(width: 3),
                 Text(
@@ -209,19 +167,32 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: primaryBlue),
                 ),
               ] else
-                Text(item.date, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+                Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
             ],
           ),
-          if (item.hasAttachment) ...[
+          if (item.attachmentUrl != null) ...[
             const SizedBox(height: 4),
             Align(
               alignment: Alignment.centerRight,
-              child: Text(item.date, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+              child: Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
             ),
           ],
         ],
       ),
     );
+  }
+
+  IconData getIcon(String type) {
+    switch (type) {
+      case 'MESSAGE':
+        return Icons.mail_outline;
+      case 'REPORT':
+        return Icons.assignment_outlined;
+      case 'CERTIFICATE':
+        return Icons.verified_outlined;
+      default:
+        return Icons.notifications_none;
+    }
   }
 
   Widget _buildIconBox(IconData icon, bool isUnread) {

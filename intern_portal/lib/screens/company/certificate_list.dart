@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/screens/company/upload_certificate.dart';
+import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -15,11 +16,8 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   String _activeFilter = 'All Status';
   final TextEditingController _searchCtrl = TextEditingController();
   static const _filters = ['All Status', 'Pending Upload', 'Issued'];
-  static const _records = [
-    {'name': 'Arjun Vardhan', 'id': 'ID: INT-2023-0045', 'period': 'Jun 2023 - Dec 2023', 'status': 'NOT UPLOADED'},
-    {'name': 'Meera Krishnan', 'id': 'ID: INT-2023-0089', 'period': 'Jul 2023 - Jan 2024', 'status': 'NOT UPLOADED'},
-    {'name': 'Sarah Wilson', 'id': 'ID: INT-2023-0012', 'period': 'May 2023 - Nov 2023', 'status': 'ISSUED'},
-  ];
+  List<Map<String, dynamic>> _records = [];
+  bool isLoading = true;
 
   @override
   void dispose() {
@@ -28,7 +26,39 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    loadCertificates();
+  }
+
+  Future<void> loadCertificates() async {
+    final data = await CertificateService.fetchCertificates();
+    setState(() {
+      _records = data;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    List<Map<String, dynamic>> filtered = _records.where((r) {
+      final query = _searchCtrl.text.toLowerCase();
+      final matchesSearch = r['name'].toLowerCase().contains(query) || r['id'].toLowerCase().contains(query);
+      final matchesFilter = _activeFilter == 'All Status'
+          ? true
+          : _activeFilter == 'Issued'
+          ? r['status'] == 'ISSUED'
+          : r['status'] == 'NOT UPLOADED';
+      return matchesSearch && matchesFilter;
+    }).toList();
+
+    int total = _records.length;
+    int issued = _records.where((r) => r['status'] == 'ISSUED').length;
+    int pending = total - issued;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
       appBar: CommonAppBar(
@@ -49,20 +79,23 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildStatsRow(),
+            _buildStatsRow(total, issued, pending),
             const SizedBox(height: 14),
             _buildSearchBar(),
             const SizedBox(height: 12),
             _buildFilterTabs(),
             const SizedBox(height: 16),
-            _buildRecentRecordsHeader(),
+            _buildRecentRecordsHeader(pending),
             const SizedBox(height: 12),
-            ..._records.map(
-              (r) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _CertificateRecordCard(record: r),
+            if (filtered.isEmpty)
+              const Center(child: Text("No certificates found"))
+            else
+              ...filtered.map(
+                (r) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _CertificateRecordCard(record: r, onRefresh: loadCertificates),
+                ),
               ),
-            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -74,7 +107,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
     );
   }
 
-  Widget _buildStatsRow() {
+  Widget _buildStatsRow(int total, int issued, int pending) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -85,11 +118,11 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
       child: IntrinsicHeight(
         child: Row(
           children: [
-            Expanded(child: _statItem('TOTAL', '124', const Color(0xFF1A56DB))),
+            Expanded(child: _statItem('TOTAL', total.toString(), const Color(0xFF1A56DB))),
             VerticalDivider(color: Colors.grey.shade200, thickness: 1, width: 1),
-            Expanded(child: _statItem('ISSUED', '86', const Color(0xFF057A55))),
+            Expanded(child: _statItem('ISSUED', issued.toString(), const Color(0xFF057A55))),
             VerticalDivider(color: Colors.grey.shade200, thickness: 1, width: 1),
-            Expanded(child: _statItem('PENDING', '38', const Color(0xFFE02424))),
+            Expanded(child: _statItem('PENDING', pending.toString(), const Color(0xFFE02424))),
           ],
         ),
       ),
@@ -120,6 +153,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   Widget _buildSearchBar() {
     return TextField(
       controller: _searchCtrl,
+      onChanged: (_) => setState(() {}),
       style: GoogleFonts.inter(fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search by student name or ID...',
@@ -178,7 +212,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
     );
   }
 
-  Widget _buildRecentRecordsHeader() {
+  Widget _buildRecentRecordsHeader(int pending) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -187,7 +221,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
           style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827)),
         ),
         Text(
-          '38 PENDING',
+          '$pending PENDING',
           style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1A56DB)),
         ),
       ],
@@ -197,7 +231,8 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
 
 class _CertificateRecordCard extends StatelessWidget {
   final Map<String, dynamic> record;
-  const _CertificateRecordCard({required this.record});
+  final VoidCallback onRefresh;
+  const _CertificateRecordCard({required this.record, required this.onRefresh});
   bool get _isIssued => record['status'] == 'ISSUED';
   @override
   Widget build(BuildContext context) {
@@ -253,7 +288,6 @@ class _CertificateRecordCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // Action Button
           SizedBox(
             width: double.infinity,
             child: _isIssued
@@ -272,8 +306,9 @@ class _CertificateRecordCard extends StatelessWidget {
                     ),
                   )
                 : ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => UploadCertificateScreen()));
+                    onPressed: () async {
+                      await Navigator.push(context, MaterialPageRoute(builder: (context) => UploadCertificateScreen()));
+                      onRefresh();
                     },
                     icon: const Icon(Icons.upload_rounded, color: Colors.white, size: 18),
                     label: Text(
