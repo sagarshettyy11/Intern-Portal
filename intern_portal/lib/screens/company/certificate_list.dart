@@ -136,8 +136,8 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
           label,
           style: GoogleFonts.inter(
             fontSize: 10,
-            color: Color(0xFF9CA3AF),
-            fontWeight: FontWeight.w700,
+            color: Colors.grey[800],
+            fontWeight: FontWeight.w800,
             letterSpacing: 0.7,
           ),
         ),
@@ -157,8 +157,8 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
       style: GoogleFonts.inter(fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search by student name or ID...',
-        hintStyle: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14),
-        prefixIcon: const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
+        hintStyle: GoogleFonts.inter(color: Colors.grey[700], fontSize: 14),
+        prefixIcon: Icon(Icons.search, color: Colors.grey[700], size: 20),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -253,7 +253,7 @@ class _CertificateRecordCard extends StatelessWidget {
               Text(
                 record['name'] as String,
                 style: GoogleFonts.inter(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                   fontSize: 15,
                   color: _isIssued ? const Color(0xFF9CA3AF) : const Color(0xFF111827),
                 ),
@@ -296,7 +296,7 @@ class _CertificateRecordCard extends StatelessWidget {
                     icon: const Icon(Icons.verified_outlined, size: 16, color: Color(0xFF9CA3AF)),
                     label: Text(
                       'View Certificate',
-                      style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontWeight: FontWeight.w800, fontSize: 14),
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 13),
@@ -313,7 +313,7 @@ class _CertificateRecordCard extends StatelessWidget {
                     icon: const Icon(Icons.upload_rounded, color: Colors.white, size: 18),
                     label: Text(
                       'Upload',
-                      style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                      style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1A56DB),

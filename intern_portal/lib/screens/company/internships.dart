@@ -173,12 +173,17 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
           children: [
             Text(
               value,
-              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: numColor),
+              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: numColor),
             ),
             const SizedBox(height: 3),
             Text(
               label,
-              style: GoogleFonts.inter(fontSize: 9.5, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: kGrey),
+              style: GoogleFonts.inter(
+                fontSize: 9.5,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.5,
+                color: Colors.grey[800],
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -204,8 +209,8 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search student or ID...',
-                hintStyle: GoogleFonts.inter(color: kGrey, fontSize: 14),
-                prefixIcon: Icon(Icons.search, color: kGrey, size: 20),
+                hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+                prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 14),
               ),
@@ -238,7 +243,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
           children: [
             Text(
               'LIVE APPLICATIONS',
-              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.4, color: kBlue),
+              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF1B3FAB)),
             ),
             SizedBox(height: 2),
             Text(
@@ -250,7 +255,10 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(bottom: 4),
-          child: Text('65 Total', style: GoogleFonts.inter(fontSize: 13, color: kGrey)),
+          child: Text(
+            '65 Total',
+            style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
@@ -278,10 +286,13 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
                 children: [
                   Text(
                     r.name,
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: kDark),
+                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w800, color: kDark),
                   ),
                   const SizedBox(height: 2),
-                  Text(r.studentId, style: GoogleFonts.inter(fontSize: 12, color: kGrey)),
+                  Text(
+                    r.studentId,
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                  ),
                 ],
               ),
               const Spacer(),
@@ -305,12 +316,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
                 children: [
                   Text(
                     'GUIDE STATUS',
-                    style: GoogleFonts.inter(
-                      fontSize: 9.5,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                      color: kGrey,
-                    ),
+                    style: GoogleFonts.inter(fontSize: 9.5, fontWeight: FontWeight.w800, color: Colors.grey[800]),
                   ),
                   const SizedBox(height: 4),
                   _guideBadge(r.guideStatus, r.guideStatusColor, r.guideStatusBg),
@@ -330,9 +336,12 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
   Widget _iconRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 17, color: kGrey),
+        Icon(icon, size: 17, color: Colors.grey[800]),
         const SizedBox(width: 8),
-        Text(text, style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF444558))),
+        Text(
+          text,
+          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
+        ),
       ],
     );
   }
@@ -343,12 +352,17 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(fontSize: 9.5, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: kGrey),
+          style: GoogleFonts.inter(
+            fontSize: 9.5,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.6,
+            color: Colors.grey[800],
+          ),
         ),
         const SizedBox(height: 3),
         Text(
           value,
-          style: GoogleFonts.inter(fontSize: 13.5, fontWeight: FontWeight.w600, color: kDark),
+          style: GoogleFonts.inter(fontSize: 13.5, fontWeight: FontWeight.w800, color: kDark),
         ),
       ],
     );
@@ -380,7 +394,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
       ),
       child: Text(
         text,
-        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, color: color, letterSpacing: 0.3),
+        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: color, letterSpacing: 0.3),
       ),
     );
   }
@@ -413,7 +427,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
                   ),
                   child: Text(
                     'View',
-                    style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: kDark),
+                    style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF14142B)),
                   ),
                 ),
               ),
@@ -462,7 +476,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
       width: 44,
       height: 44,
       decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
-      child: Icon(icon, color: iconColor, size: 20),
+      child: Icon(icon, color: iconColor, size: 20, fontWeight: FontWeight.w800),
     );
   }
 }

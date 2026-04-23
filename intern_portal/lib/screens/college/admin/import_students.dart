@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/services/api_endpoints.dart';
+import 'package:intern_portal/services/users/auth_headers.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,23 +25,42 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
   bool _fileSelected = false;
   String? _fileName;
   File? _selectedFile;
-  void _pickFile() {
-    setState(() {
-      _fileSelected = true;
-      _fileName = 'students_batch_2024.xlsx';
-    });
+
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['csv']);
+    if (result != null) {
+      setState(() {
+        _selectedFile = File(result.files.single.path!);
+        _fileName = result.files.single.name;
+        _fileSelected = true;
+      });
+    }
   }
 
-  void _importStudents() async {
+  Future<void> _importStudents() async {
     if (_selectedFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select a file first.')));
       return;
     }
-    String content = await _selectedFile!.readAsString();
-    debugPrint(content);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Import started successfully!'), backgroundColor: Color(0xFF16A34A)));
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse("${ApiEndpoints.student}?action=import_excel"));
+      final headers = await AuthHeaders.get();
+      request.headers.addAll(headers);
+      request.files.add(await http.MultipartFile.fromPath('excel_file', _selectedFile!.path));
+      final response = await request.send();
+      final resBody = await response.stream.bytesToString();
+      final json = jsonDecode(resBody);
+      if (json['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(json['message'] ?? "Import successful"), backgroundColor: const Color(0xFF16A34A)),
+        );
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(json['message'] ?? "Import failed")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Something went wrong")));
+    }
   }
 
   Future<void> downloadTemplate() async {
@@ -44,10 +68,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
         'Name,Email,Registration No,DOB,Phone,Gender,Department,Batch\n'
         'Rahul Sharma,rahul@college.edu,2021CS101,2002-05-15,9876543210,Male,CSE,2021-2027\n'
         'Priya Nair,priya@college.edu,2021CS102,2002-07-20,9222222222,Female,CSE,2021-2027\n';
-    await FileSaver.instance.saveFile(
-      name: "student_import_template",
-      bytes: Uint8List.fromList(csv.codeUnits),
-    );
+    await FileSaver.instance.saveFile(name: "student_import_template", bytes: Uint8List.fromList(csv.codeUnits));
   }
 
   @override

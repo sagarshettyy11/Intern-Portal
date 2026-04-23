@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/pages/login.dart';
 import 'package:intern_portal/pages/unified_login.dart';
 import 'package:intern_portal/screens/company/attendance_overview.dart';
+import 'package:intern_portal/screens/company/internships.dart';
+import 'package:intern_portal/screens/company/upload_certificate.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
 void main() {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const AttendanceOverviewScreen(),
+      home: const InternshipRequestsScreen(),
       routes: {'/login': (context) => const LoginPage(), '/UnifiedLogin': (context) => const UnifiedLoginPage()},
     );
   }

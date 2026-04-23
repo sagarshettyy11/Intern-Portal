@@ -107,13 +107,15 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 decoration: BoxDecoration(color: const Color(0xFFFFE4E4), borderRadius: BorderRadius.circular(20)),
                 child: Text(
                   '0% CRITICAL',
-                  style: GoogleFonts.inter(color: Color(0xFFE02424), fontSize: 11, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.inter(color: Color(0xFFE02424), fontSize: 11, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 2),
-          Text('ID: STU-2026-0882', style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 13)),
+          Text(
+            'ID: STU-2026-0882',
+            style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 14),
           Row(
             children: [
@@ -122,7 +124,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
               _infoCol('ACADEMIC YEAR', 'Junior Year • Sem 2'),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -131,13 +133,13 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   color: Color(0xFF6B7280),
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                   letterSpacing: 0.6,
                 ),
               ),
               Text(
                 '0%',
-                style: GoogleFonts.inter(color: Color(0xFFE02424), fontWeight: FontWeight.w700, fontSize: 14),
+                style: GoogleFonts.inter(color: Color(0xFFE02424), fontWeight: FontWeight.w800, fontSize: 14),
               ),
             ],
           ),
@@ -162,17 +164,12 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(
-            fontSize: 10,
-            color: Color(0xFF9CA3AF),
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.7,
-          ),
+          style: GoogleFonts.inter(fontSize: 10, color: Color(0xFF9CA3AF), fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
+          style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
         ),
       ],
     );
@@ -205,7 +202,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             style: GoogleFonts.inter(
               fontSize: 10,
               color: Color(0xFF9CA3AF),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.6,
             ),
           ),
@@ -228,7 +225,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             icon: const Icon(Icons.upload_rounded, color: Colors.white, size: 18),
             label: Text(
               'Upload',
-              style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+              style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1A56DB),
@@ -245,7 +242,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             icon: const Icon(Icons.download_rounded, color: Color(0xFF1A56DB), size: 18),
             label: Text(
               'Report',
-              style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w600, fontSize: 15),
+              style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w800, fontSize: 15),
             ),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -281,7 +278,6 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             ],
           ),
           const SizedBox(height: 12),
-          // Day labels
           Row(
             children: _weekDays
                 .map(
@@ -384,7 +380,10 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
           decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2)),
         ),
         const SizedBox(width: 4),
-        Text(label, style: GoogleFonts.inter(fontSize: 10, color: Color(0xFF6B7280))),
+        Text(
+          label,
+          style: GoogleFonts.inter(fontSize: 10, color: Color(0xFF6B7280), fontWeight: FontWeight.w800),
+        ),
       ],
     );
   }
@@ -396,15 +395,15 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
         children: [
           Text(
             'Update Entry: April $_selectedDay',
-            style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827)),
+            style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
           ),
           const SizedBox(height: 14),
           Text(
             'STATUS',
             style: GoogleFonts.inter(
               fontSize: 11,
-              color: Color(0xFF9CA3AF),
-              fontWeight: FontWeight.w700,
+              color: Colors.grey[900],
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
             ),
           ),
@@ -424,7 +423,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             style: GoogleFonts.inter(
               fontSize: 11,
               color: Color(0xFF9CA3AF),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.8,
             ),
           ),
@@ -435,7 +434,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             style: GoogleFonts.inter(fontSize: 13),
             decoration: InputDecoration(
               hintText: 'e.g. Attended guest lecture on Cloud Computing...',
-              hintStyle: GoogleFonts.inter(color: Color(0xFFD1D5DB), fontSize: 13),
+              hintStyle: GoogleFonts.inter(color: Colors.grey[600], fontSize: 13, fontWeight: FontWeight.w800),
               filled: true,
               fillColor: const Color(0xFFF9FAFB),
               contentPadding: const EdgeInsets.all(12),
@@ -466,7 +465,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
               ),
               child: Text(
                 'Save Changes',
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
               ),
             ),
           ),
@@ -499,8 +498,8 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 label,
                 style: GoogleFonts.inter(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: isActive ? const Color(0xFF1A56DB) : const Color(0xFF9CA3AF),
+                  fontWeight: FontWeight.w900,
+                  color: isActive ? const Color(0xFF1A56DB) : Colors.grey[800],
                 ),
               ),
             ],

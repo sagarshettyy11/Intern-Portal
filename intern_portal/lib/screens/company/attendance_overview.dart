@@ -169,8 +169,8 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             label,
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: Color(0xFF9CA3AF),
-              fontWeight: FontWeight.w700,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.7,
             ),
           ),
@@ -193,8 +193,8 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             'EXPORT BATCH ATTENDANCE',
             style: GoogleFonts.inter(
               fontSize: 10,
-              color: Color(0xFF9CA3AF),
-              fontWeight: FontWeight.w700,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w800,
               letterSpacing: 0.7,
             ),
           ),
@@ -206,7 +206,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
               icon: const Icon(Icons.download_rounded, color: Colors.white, size: 18),
               label: Text(
                 'Export Batch Attendance',
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF374151),
@@ -271,14 +271,14 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1A56DB),
+                backgroundColor: const Color(0xFF0000FF),
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 elevation: 0,
               ),
               child: Text(
                 'Apply Filter',
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15),
               ),
             ),
           ),
@@ -293,12 +293,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.inter(
-            fontSize: 10,
-            color: Color(0xFF9CA3AF),
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.7,
-          ),
+          style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 4),
         Container(
@@ -314,7 +309,14 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             underline: const SizedBox(),
             icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF6B7280), size: 18),
             style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF111827)),
-            items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+            items: items
+                .map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e, style: GoogleFonts.inter(fontWeight: FontWeight.w800)),
+                  ),
+                )
+                .toList(),
             onChanged: onChanged,
           ),
         ),
@@ -328,8 +330,8 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
       style: GoogleFonts.inter(fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search student or ID...',
-        hintStyle: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 14),
-        prefixIcon: const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
+        hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+        prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -337,7 +339,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
         enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF1A56DB)),
+          borderSide: const BorderSide(color: Color(0xFF0000FF)),
         ),
       ),
     );
@@ -382,45 +384,49 @@ class _StudentCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Name + badge
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 student['name'] as String,
-                style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827)),
+                style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(20)),
                 child: Text(
                   status,
-                  style: GoogleFonts.inter(color: statusTextColor, fontSize: 11, fontWeight: FontWeight.w700),
+                  style: GoogleFonts.inter(color: statusTextColor, fontSize: 11, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 2),
-          Text(student['id'] as String, style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 12)),
+          Text(
+            student['id'] as String,
+            style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 12, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 8),
-          // Domain icon + name
           Row(
             children: [
-              const Icon(Icons.laptop_outlined, size: 14, color: Color(0xFF6B7280)),
+              Icon(Icons.laptop_outlined, size: 14, color: Colors.grey[700], fontWeight: FontWeight.w800),
               const SizedBox(width: 5),
               Text(
                 student['domain'] as String,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF374151)),
+                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.grey[700]),
               ),
             ],
           ),
           const SizedBox(height: 2),
           Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, size: 12, color: Color(0xFF9CA3AF)),
+              Icon(Icons.calendar_today_outlined, size: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
               const SizedBox(width: 5),
-              Text(student['period'] as String, style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF9CA3AF))),
+              Text(
+                student['period'] as String,
+                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -433,12 +439,7 @@ class _StudentCard extends StatelessWidget {
                 children: [
                   Text(
                     'ATTENDANCE',
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      color: Color(0xFF9CA3AF),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                    ),
+                    style: GoogleFonts.inter(fontSize: 10, color: Colors.black87, fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(height: 2),
                   Row(
@@ -449,7 +450,7 @@ class _StudentCard extends StatelessWidget {
                       ),
                       if (pct == 0.0) ...[
                         const SizedBox(width: 4),
-                        Icon(Icons.arrow_upward_rounded, color: attendanceColor, size: 16),
+                        Icon(Icons.arrow_upward_rounded, color: attendanceColor, size: 16, fontWeight: FontWeight.w800),
                       ],
                     ],
                   ),
@@ -463,10 +464,10 @@ class _StudentCard extends StatelessWidget {
                   children: [
                     Text(
                       'View Attendance',
-                      style: GoogleFonts.inter(color: Color(0xFF1A56DB), fontWeight: FontWeight.w600, fontSize: 13),
+                      style: GoogleFonts.inter(color: Color(0xFF0000FF), fontWeight: FontWeight.w800, fontSize: 13),
                     ),
                     SizedBox(width: 2),
-                    Icon(Icons.chevron_right, color: Color(0xFF1A56DB), size: 18),
+                    Icon(Icons.chevron_right, color: Color(0xFF0000FF), size: 18, fontWeight: FontWeight.w800),
                   ],
                 ),
               ),
