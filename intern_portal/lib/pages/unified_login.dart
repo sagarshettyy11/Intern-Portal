@@ -5,6 +5,7 @@ import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart
 import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
 import 'package:intern_portal/screens/college/students/dashboard.dart';
 import 'package:intern_portal/screens/college/students/secure_account.dart';
+import 'package:intern_portal/screens/company/internships.dart';
 import 'package:intern_portal/services/authentication/auth_services.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
@@ -212,6 +213,8 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                             NavigationService.pushReplacement(HodDashboardPage());
                                           } else if (role == "CollegeAdmin") {
                                             NavigationService.pushReplacement(CollegeAdminDashboardScreen());
+                                          } else if (role == "Company") {
+                                            NavigationService.pushReplacement(InternshipRequestsScreen());
                                           } else {
                                             CustomSnackbar.show(message: "Invalid role", isSuccess: false);
                                           }

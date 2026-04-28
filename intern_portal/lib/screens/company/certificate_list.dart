@@ -32,7 +32,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   }
 
   Future<void> loadCertificates() async {
-    final data = await CertificateService.fetchCertificates();
+    final data = await CompanyService.fetchCertificates();
     setState(() {
       _records = data;
       isLoading = false;

@@ -1,14 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/hod/profile_model.dart';
+import 'package:intern_portal/services/users/hod_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HodProfilePage extends StatelessWidget {
+class HodProfilePage extends StatefulWidget {
   const HodProfilePage({super.key});
   @override
+  State<HodProfilePage> createState() => _HodProfilePageState();
+}
+
+class _HodProfilePageState extends State<HodProfilePage> {
+  HodProfile? profile;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadProfile();
+  }
+
+  Future<void> loadProfile() async {
+    final data = await HodServices.fetchProfile();
+    if (!mounted) return;
+    setState(() {
+      profile = data;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
       appBar: CommonAppBar(
@@ -48,12 +75,12 @@ class HodProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Dr. Aristhanes Murthy',
+                        profile?.name ?? '',
                         style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Academic Lead & Administrator',
+                        profile?.designation ?? "",
                         style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
                       ),
                     ],
@@ -88,15 +115,15 @@ class HodProfilePage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  _InfoRow(label: 'FULL NAME', value: 'Dr. Aristhanes Murthy'),
+                  _InfoRow(label: 'FULL NAME', value: profile?.name ?? ""),
                   const SizedBox(height: 12),
-                  _InfoRow(label: 'CONTACT NUMBER', value: '+91 98450 12345'),
+                  _InfoRow(label: 'CONTACT NUMBER', value: profile?.phone ?? ""),
                   const SizedBox(height: 12),
-                  _InfoRow(label: 'EMAIL ADDRESS', value: 'hod.cse@horizon.edu'),
+                  _InfoRow(label: 'EMAIL ADDRESS', value: profile?.email ?? ""),
                   const SizedBox(height: 12),
-                  _InfoRow(label: 'DESIGNATION', value: 'Head of Department'),
+                  _InfoRow(label: 'DESIGNATION', value: profile?.designation ?? ""),
                   const SizedBox(height: 12),
-                  _InfoRow(label: 'BRANCH', value: 'Computer Science & Engineering'),
+                  _InfoRow(label: 'BRANCH', value: profile?.department ?? ""),
                 ],
               ),
             ),

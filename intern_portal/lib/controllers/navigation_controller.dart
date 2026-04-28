@@ -22,6 +22,7 @@ import 'package:intern_portal/screens/college/students/profile.dart';
 import 'package:intern_portal/screens/college/students/report_overview.dart';
 import 'package:intern_portal/screens/company/attendance_overview.dart';
 import 'package:intern_portal/screens/company/certificate_list.dart';
+import 'package:intern_portal/screens/company/company_profile.dart';
 import 'package:intern_portal/screens/company/internships.dart';
 
 class StudentBottomNavController {
@@ -116,19 +117,18 @@ class CompanyBottomNavController {
   static void onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const CollegeAdminDashboardScreen()));
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyMasterPage()));
-        break;
-      case 2:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const InternshipRequestsScreen()));
         break;
-      case 3:
+      case 2:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const AttendanceOverviewScreen()));
         break;
-      case 4:
+      case 3:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const CertificatesListScreen()));
+        break;
+      case 4:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const CompanyProfileScreen()));
         break;
     }
   }

@@ -93,13 +93,11 @@ class _GuideNotificationsState extends State<GuideNotifications> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
                     _buildPageTitle(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _buildTabRow(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _buildAlertsList(),
-                    const SizedBox(height: 80),
                   ],
                 ),
               ),
@@ -172,12 +170,7 @@ class _GuideNotificationsState extends State<GuideNotifications> {
             padding: const EdgeInsets.only(top: 8, bottom: 12),
             child: Text(
               alert.groupLabel!,
-              style: GoogleFonts.inter(
-                color: Color(0xFF6B7280),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.1,
-              ),
+              style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 12, fontWeight: FontWeight.w800),
             ),
           ),
         );
@@ -230,13 +223,13 @@ class _GuideNotificationsState extends State<GuideNotifications> {
                     Expanded(
                       child: Text(
                         alert.title,
-                        style: GoogleFonts.inter(color: Color(0xFF111827), fontSize: 15, fontWeight: FontWeight.w700),
+                        style: GoogleFonts.inter(color: Color(0xFF111827), fontSize: 15, fontWeight: FontWeight.w800),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       alert.time,
-                      style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 11, fontWeight: FontWeight.w500),
+                      style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 11, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -248,7 +241,7 @@ class _GuideNotificationsState extends State<GuideNotifications> {
                         ? [
                             TextSpan(
                               text: alert.boldName,
-                              style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+                              style: GoogleFonts.inter(fontWeight: FontWeight.w800),
                             ),
                             TextSpan(text: alert.body),
                           ]

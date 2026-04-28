@@ -167,7 +167,7 @@ class StudentPerformancePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            /* const SizedBox(height: 16),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -311,7 +311,7 @@ class StudentPerformancePage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            ),*/
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -327,7 +327,6 @@ class StudentPerformancePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-
             _AlertCard(
               color: const Color(0xFFFFF1F1),
               borderColor: const Color(0xFFFFCDD2),
@@ -432,7 +431,7 @@ class _DonutPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => false;
 }
 
-class _LineChartPainter extends CustomPainter {
+/* class _LineChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -580,7 +579,7 @@ class _RadarChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter old) => false;
-}
+} */
 
 class _AlertCard extends StatelessWidget {
   final Color color;
