@@ -141,13 +141,16 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 14),
-          Row(
+          Column(
             children: [
-              _infoCol('DOMAIN', info?.domain ?? ''),
-              const SizedBox(width: 28),
-              _infoCol('ROLE', info?.jobTitle ?? ''),
-              const SizedBox(width: 28),
-              _infoCol('DEPARTMENT', info?.department ?? ''),
+              Row(
+                children: [
+                  _infoCol('DOMAIN', info?.domain ?? ''),
+                  const SizedBox(width: 28),
+                  _infoCol('ROLE', info?.jobTitle ?? ''),
+                ],
+              ),
+              Row(children: [_infoCol('DEPARTMENT', info?.department ?? '')]),
             ],
           ),
           const SizedBox(height: 8),

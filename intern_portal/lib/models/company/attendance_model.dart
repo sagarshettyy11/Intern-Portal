@@ -4,8 +4,8 @@ class AttendanceSummary {
   AttendanceSummary({required this.totalStudents, required this.avgAttendance});
   factory AttendanceSummary.fromJson(Map<String, dynamic> json) {
     return AttendanceSummary(
-      totalStudents: json['total_students'] ?? 0,
-      avgAttendance: (json['average_attendance'] ?? 0).toDouble(),
+      totalStudents: int.tryParse(json['total_students'].toString()) ?? 0,
+      avgAttendance: double.tryParse(json['average_attendance'].toString()) ?? 0.0,
     );
   }
 }
@@ -29,12 +29,12 @@ class AttendanceStudent {
   });
   factory AttendanceStudent.fromJson(Map<String, dynamic> json) {
     return AttendanceStudent(
-      internshipId: json['internship_id'],
+      internshipId: int.tryParse(json['internship_id'].toString()) ?? 0,
       name: json['student_name'] ?? '',
       regNo: json['registration_no'] ?? '',
       domain: json['internship_domain'] ?? '',
       period: "${json['start_date'] ?? ''} - ${json['end_date'] ?? ''}",
-      attendance: (json['attendance_pct'] ?? 0).toDouble(),
+      attendance: double.tryParse(json['attendance_pct'].toString()) ?? 0.0,
       status: json['attendance_label'] ?? '',
     );
   }
@@ -77,14 +77,14 @@ class AttendanceInfo {
 
   factory AttendanceInfo.fromJson(Map<String, dynamic> json) {
     return AttendanceInfo(
-      internshipId: json['internship_id'],
+      internshipId: int.tryParse(json['internship_id'].toString()) ?? 0,
       name: json['student_name'] ?? '',
       regNo: json['registration_no'] ?? '',
       domain: json['internship_domain'] ?? '',
       college: json['college_name'] ?? '',
       department: json['department_name'] ?? '',
       jobTitle: json['job_title'] ?? '',
-      attendance: (json['attendance_pct'] ?? 0).toDouble(),
+      attendance: double.tryParse(json['attendance_pct'].toString()) ?? 0.0,
       status: json['attendance_label'] ?? '',
     );
   }

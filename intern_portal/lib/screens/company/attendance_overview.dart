@@ -14,10 +14,10 @@ class AttendanceOverviewScreen extends StatefulWidget {
 }
 
 class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
-  String _year = '2023-24';
-  String _college = 'Engineering';
-  String _batch = 'Batch A';
-  String _branch = 'CS';
+  // String _year = '2023-24';
+  // String _college = 'Engineering';
+  // String _batch = 'Batch A';
+  // String _branch = 'CS';
   final TextEditingController _searchCtrl = TextEditingController();
   List<AttendanceStudent> students = [];
   AttendanceSummary? summary;
@@ -30,7 +30,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
   }
 
   Future<void> loadAttendance() async {
-    final res = await CompanyService.fetchAttendance(search: _searchCtrl.text, batch: _batch);
+    final res = await CompanyService.fetchAttendance(search: _searchCtrl.text);
     setState(() {
       students = res?.students ?? [];
       summary = res?.summary;
@@ -68,8 +68,8 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             _buildTopStats(),
             const SizedBox(height: 14),
             _buildExportCard(),
-            const SizedBox(height: 14),
-            _buildFiltersCard(),
+            // const SizedBox(height: 14),
+            // _buildFiltersCard(),
             const SizedBox(height: 14),
             _buildSearchBar(),
             const SizedBox(height: 16),
@@ -167,7 +167,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
     );
   }
 
-  Widget _buildFiltersCard() {
+  /* Widget _buildFiltersCard() {
     return _card(
       child: Column(
         children: [
@@ -268,7 +268,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
         ),
       ],
     );
-  }
+  } */
 
   Widget _buildSearchBar() {
     return TextField(
