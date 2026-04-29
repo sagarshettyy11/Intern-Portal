@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -76,10 +77,7 @@ class CompanyService {
       final res = await http.post(
         Uri.parse("${ApiEndpoints.internshipReq}?action=update_status"),
         headers: headers,
-        body: jsonEncode({
-          "internship_id": internshipId,
-          "company_status": status, 
-        }),
+        body: jsonEncode({"internship_id": internshipId, "company_status": status}),
       );
       final json = jsonDecode(res.body);
       return json['success'] == true;
@@ -158,6 +156,36 @@ class CompanyService {
       return json['success'] == true;
     } catch (e) {
       debugPrint("Mark Attendance ERROR: $e");
+      return false;
+    }
+  }
+
+  static Future<bool> uploadCertificate({
+    required int internshipId,
+    required int studentId,
+    required File file,
+    String verificationId = '',
+  }) async {
+    try {
+      final headers = await AuthHeaders.get();
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse("${ApiEndpoints.certificate}?action=upload&internship_id=$internshipId&student_id=$studentId"),
+      );
+      request.headers.addAll(headers);
+      request.files.add(await http.MultipartFile.fromPath('certificate_file', file.path));
+      if (verificationId.isNotEmpty) {
+        request.fields['verification_id'] = verificationId;
+      }
+      final response = await request.send();
+      final resBody = await response.stream.bytesToString();
+      debugPrint("UPLOAD STATUS: ${response.statusCode}");
+      debugPrint("UPLOAD BODY: $resBody");
+      final json = jsonDecode(resBody);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("UPLOAD ERROR: $e");
       return false;
     }
   }

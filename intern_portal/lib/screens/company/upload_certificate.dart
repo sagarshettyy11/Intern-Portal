@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/company/certificate_model.dart';
+import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
 class UploadCertificateScreen extends StatefulWidget {
-  const UploadCertificateScreen({super.key});
+  final CertificateModel record;
+
+  const UploadCertificateScreen({super.key, required this.record});
   @override
   State<UploadCertificateScreen> createState() => _UploadCertificateScreenState();
 }
@@ -98,14 +102,14 @@ class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
             ],
           ),
           Text(
-            'Benjamin Thorne',
+            widget.record.studentName,
             style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 22, color: Color(0xFF111827)),
           ),
           const SizedBox(height: 6),
           Row(
             children: [
               Expanded(child: _profileField('DEPARTMENT', 'Digital Product\nDesign')),
-              Expanded(child: _profileField('INTERNSHIP ID', 'SF-2024-8842')),
+              Expanded(child: _profileField('INTERNSHIP ID', widget.record.internshipId.toString())),
             ],
           ),
           const Divider(color: Color(0xFFF3F4F6), thickness: 1),
@@ -273,7 +277,24 @@ class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          if (_selectedFile == null) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select a file")));
+            return;
+          }
+          final success = await CompanyService.uploadCertificate(
+            internshipId: widget.record.internshipId,
+            studentId: widget.record.studentId,
+            file: _selectedFile!,
+            verificationId: _serialCtrl.text,
+          );
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Upload successful")));
+            Navigator.pop(context);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Upload failed")));
+          }
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF1A56DB),
           padding: const EdgeInsets.symmetric(vertical: 16),

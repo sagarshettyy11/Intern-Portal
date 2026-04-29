@@ -310,7 +310,10 @@ class _CertificateRecordCard extends StatelessWidget {
                   )
                 : ElevatedButton.icon(
                     onPressed: () async {
-                      await Navigator.push(context, MaterialPageRoute(builder: (context) => UploadCertificateScreen()));
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => UploadCertificateScreen(record: record)),
+                      );
                       onRefresh();
                     },
                     icon: const Icon(Icons.upload_rounded, color: Colors.white, size: 18),
