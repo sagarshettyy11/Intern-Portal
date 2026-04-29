@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/hod/analytics_model.dart';
 import 'package:intern_portal/models/hod/dashboard_model.dart';
 import 'package:intern_portal/models/hod/faculty_model.dart';
 import 'package:intern_portal/models/hod/profile_model.dart';
@@ -90,6 +91,34 @@ class HodServices {
       return null;
     } catch (e) {
       debugPrint("Faculty ERROR: $e");
+      return null;
+    }
+  }
+
+  static Future<AnalyticsResponse?> fetchAnalytics({String search = '', String batch = '', String year = ''}) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final uri = Uri.parse(ApiEndpoints.analytics).replace(
+        queryParameters: {
+          if (search.isNotEmpty) 'search': search,
+          if (batch.isNotEmpty) 'batch': batch,
+          if (year.isNotEmpty) 'year': year,
+        },
+      );
+      final res = await http.get(uri, headers: headers);
+      debugPrint("ANALYTICS STATUS: ${res.statusCode}");
+      debugPrint("ANALYTICS BODY: ${res.body}");
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        if (json['success'] == true) {
+          return AnalyticsResponse.fromJson(json['data']);
+        } else {
+          debugPrint("API Error: ${json['message']}");
+        }
+      }
+      return null;
+    } catch (e) {
+      debugPrint("Analytics ERROR: $e");
       return null;
     }
   }

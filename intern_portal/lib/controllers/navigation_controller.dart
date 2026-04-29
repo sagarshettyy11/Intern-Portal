@@ -10,6 +10,7 @@ import 'package:intern_portal/screens/college/faculty/guide/internship_review.da
 import 'package:intern_portal/screens/college/faculty/guide/report_review.dart';
 import 'package:intern_portal/screens/college/faculty/guide/internship_request.dart';
 import 'package:intern_portal/screens/college/faculty/guide/student_report.dart';
+import 'package:intern_portal/screens/college/faculty/hod/analytics.dart';
 import 'package:intern_portal/screens/college/faculty/hod/faculty_performance.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
@@ -82,7 +83,7 @@ class HodBottomNavController {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyPerformancePage()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const OverallAnalyticsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const AnalyticsScreen()));
         break;
       case 4:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const HodProfilePage()));
