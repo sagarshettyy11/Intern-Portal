@@ -1,14 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/hod/faculty_model.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/services/users/hod_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class FacultyPerformancePage extends StatelessWidget {
+class FacultyPerformancePage extends StatefulWidget {
   const FacultyPerformancePage({super.key});
   @override
+  State<FacultyPerformancePage> createState() => _FacultyPerformancePageState();
+}
+
+class _FacultyPerformancePageState extends State<FacultyPerformancePage> {
+  FacultyPerformance? data;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    final res = await HodServices.fetchFacultyPerformance();
+    setState(() {
+      data = res;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (data == null) {
+      return const Scaffold(body: Center(child: Text("Failed to load data")));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
       appBar: CommonAppBar(
@@ -58,11 +87,19 @@ class FacultyPerformancePage extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _FacultyStatCard(icon: Icons.badge_outlined, label: 'ACTIVE GUIDES', value: '24'),
+                        child: _FacultyStatCard(
+                          icon: Icons.badge_outlined,
+                          label: 'ACTIVE GUIDES',
+                          value: data!.stats.totalGuides.toString(),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _FacultyStatCard(icon: Icons.group_outlined, label: 'TOTAL STUDENTS', value: '286'),
+                        child: _FacultyStatCard(
+                          icon: Icons.group_outlined,
+                          label: 'TOTAL STUDENTS',
+                          value: data!.stats.totalStudents.toString(),
+                        ),
                       ),
                     ],
                   ),
@@ -74,7 +111,7 @@ class FacultyPerformancePage extends StatelessWidget {
                           icon: Icons.star_border_rounded,
                           iconColor: Colors.amber,
                           label: 'DEPT AVG RATING',
-                          value: '4.62',
+                          value: "${data!.stats.avgCompletion}%",
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -82,7 +119,7 @@ class FacultyPerformancePage extends StatelessWidget {
                         child: _FacultyStatCard(
                           icon: Icons.check_box_outlined,
                           label: 'COMPLETION RATE',
-                          value: '88.4%',
+                          value: (data!.stats.avgCompletion / 20).toStringAsFixed(2),
                         ),
                       ),
                     ],
@@ -102,28 +139,19 @@ class FacultyPerformancePage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  _FacultyCard(
-                    name: 'Dr. Sarah Jenkins',
-                    role: 'Senior Faculty Lead',
-                    students: '12 Students Assigned',
-                    rating: 4.9,
-                    isPrimary: true,
-                  ),
-                  const SizedBox(height: 12),
-                  _FacultyCard(
-                    name: 'Dr. Michael Chen',
-                    role: 'Research Coordinator',
-                    students: '15 Students Assigned',
-                    rating: 4.7,
-                    isPrimary: false,
-                  ),
-                  const SizedBox(height: 12),
-                  _FacultyCard(
-                    name: 'Dr. Elena Rodriguez',
-                    role: 'Thesis Supervisor',
-                    students: '9 Students Assigned',
-                    rating: 4.8,
-                    isPrimary: false,
+                  Column(
+                    children: data!.guides.map((g) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _FacultyCard(
+                          name: g.name,
+                          role: g.designation,
+                          students: "${g.totalAssigned} Students Assigned",
+                          rating: g.rating,
+                          isPrimary: g.rating >= 4.5,
+                        ),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 20),
                 ],

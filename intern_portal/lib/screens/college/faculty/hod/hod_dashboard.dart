@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/hod/dashboard_model.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/services/users/hod_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
-class HodDashboardPage extends StatelessWidget {
+class HodDashboardPage extends StatefulWidget {
   const HodDashboardPage({super.key});
   @override
+  State<HodDashboardPage> createState() => _HodDashboardPageState();
+}
+
+class _HodDashboardPageState extends State<HodDashboardPage> {
+  HodDashboard? data;
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loadDashboard();
+  }
+
+  Future<void> loadDashboard() async {
+    final res = await HodServices.fetchDashboard();
+    setState(() {
+      data = res;
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    if (data == null) {
+      return const Scaffold(body: Center(child: Text("Failed to load dashboard")));
+    }
+    final batches = data!.batchYears.entries.toList();
+
+    final chartData = batches.map((e) {
+      final b = e.value;
+      final total = b.total == 0 ? 1 : b.total;
+      final applied = (total - b.notApplied) / total;
+      final ongoing = b.ongoing / total;
+      final completed = b.completed / total;
+      return [applied, ongoing, completed];
+    }).toList();
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
       appBar: CommonAppBar(
@@ -68,7 +107,7 @@ class HodDashboardPage extends StatelessWidget {
                           badge: '+12%',
                           badgeColor: Colors.green,
                           label: 'TOTAL STUDENTS',
-                          value: '1,240',
+                          value: data!.stats.totalStudents.toString(),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -79,7 +118,7 @@ class HodDashboardPage extends StatelessWidget {
                           badge: 'Stable',
                           badgeColor: Colors.blue,
                           label: 'ACTIVE\nINTERNSHIPS',
-                          value: '482',
+                          value: data!.stats.activeInternships.toString(),
                         ),
                       ),
                     ],
@@ -91,7 +130,7 @@ class HodDashboardPage extends StatelessWidget {
                         child: _StatCard(
                           icon: Icons.star_border_rounded,
                           iconColor: const Color(0xFF3B6EF0),
-                          badge: '4.8/5.0',
+                          badge: "${data!.stats.avgRating}/5",
                           badgeColor: Colors.orange,
                           label: 'GUIDE\nPERFORMANCE',
                           value: 'Excellent',
@@ -106,7 +145,7 @@ class HodDashboardPage extends StatelessWidget {
                           badge: '+2%',
                           badgeColor: Colors.green,
                           label: 'COMPLETION RATE',
-                          value: '94.2%',
+                          value: "${data!.stats.completionRate}%",
                         ),
                       ),
                     ],
@@ -135,47 +174,23 @@ class HodDashboardPage extends StatelessWidget {
                         'Departmental Progress',
                         style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black87),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF4F6FB),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey[300]!),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Semester 6', style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800)),
-                            const SizedBox(width: 4),
-                            Icon(Icons.keyboard_arrow_down, size: 16, color: Colors.grey[600]),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
                     height: 100,
                     width: double.infinity,
-                    child: CustomPaint(painter: _BarChartPainter()),
+                    child: CustomPaint(painter: _BarChartPainter(chartData)),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '2021-22',
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        '2022-23',
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[800], fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        '2023-24',
-                        style: GoogleFonts.inter(fontSize: 11, color: Color(0xFF3B6EF0), fontWeight: FontWeight.w800),
-                      ),
-                    ],
+                    children: batches.map((e) {
+                      return Text(
+                        e.key,
+                        style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.grey[800]),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 12),
                   Row(
@@ -214,52 +229,19 @@ class HodDashboardPage extends StatelessWidget {
                 ],
               ),
               child: Column(
-                children: [
-                  _ApprovalRow(
-                    initials: 'AR',
-                    initialsColor: const Color(0xFF3B6EF0),
-                    name: 'Alex Rivera',
-                    guide: 'Guide: Dr. Sarah Chen',
-                    tag: 'Final Report',
-                    tagColor: const Color(0xFF3B6EF0),
-                    tagBg: const Color(0xFFE8F1FF),
-                    time: '2m ago',
-                    isLast: false,
-                  ),
-                  _ApprovalRow(
-                    initials: 'MK',
-                    initialsColor: Colors.orange,
-                    name: 'Maya Kapoor',
-                    guide: 'Guide: Prof. Mark Davis',
-                    tag: 'Mid-term',
-                    tagColor: Colors.orange,
-                    tagBg: const Color(0xFFFFF3E0),
-                    time: '15m ago',
-                    isLast: false,
-                  ),
-                  _ApprovalRow(
-                    initials: 'JL',
-                    initialsColor: Colors.purple,
-                    name: 'Jordan Lee',
-                    guide: 'Guide: Dr. Robert Fox',
-                    tag: 'NOC Verified',
-                    tagColor: Colors.purple,
-                    tagBg: const Color(0xFFF3E5F5),
-                    time: '1h ago',
-                    isLast: false,
-                  ),
-                  _ApprovalRow(
-                    initials: 'ST',
-                    initialsColor: Colors.teal,
-                    name: 'Sanya Thakur',
-                    guide: 'Guide: Dr. Sarah Chen',
-                    tag: 'Certificate',
+                children: data!.recentApprovals.map((a) {
+                  return _ApprovalRow(
+                    initials: a.studentName.substring(0, 2).toUpperCase(),
+                    initialsColor: Colors.blue,
+                    name: a.studentName,
+                    guide: "Guide: ${a.guideName}",
+                    tag: a.status,
                     tagColor: Colors.white,
-                    tagBg: const Color(0xFF1A1A2E),
-                    time: '3h ago',
-                    isLast: true,
-                  ),
-                ],
+                    tagBg: Colors.blue,
+                    time: a.date,
+                    isLast: false,
+                  );
+                }).toList(),
               ),
             ),
             const SizedBox(height: 16),
@@ -268,22 +250,21 @@ class HodDashboardPage extends StatelessWidget {
               style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 12),
-            _GuideLoadCard(
-              name: 'Dr. Sarah Chen',
-              mentees: '8 Mentees',
-              responseTime: '~2.4 hrs',
-              progress: 0.78,
-              progressColor: const Color(0xFF3B6EF0),
+            Column(
+              children: data!.guideLoads.map((g) {
+                final double progress = g.mentees == 0 ? 0 : g.completed / g.mentees;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _GuideLoadCard(
+                    name: g.name,
+                    mentees: "${g.mentees} Mentees",
+                    responseTime: "~2 hrs", // optional
+                    progress: progress,
+                    progressColor: const Color(0xFF3B6EF0),
+                  ),
+                );
+              }).toList(),
             ),
-            const SizedBox(height: 10),
-            _GuideLoadCard(
-              name: 'Prof. Mark Davis',
-              mentees: '5 Mentees',
-              responseTime: '~4.1 hrs',
-              progress: 0.50,
-              progressColor: const Color(0xFF3B6EF0),
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -382,53 +363,44 @@ class _LegendDot extends StatelessWidget {
 }
 
 class _BarChartPainter extends CustomPainter {
+  final List<List<double>> groups;
+
+  _BarChartPainter(this.groups);
+
   @override
   void paint(Canvas canvas, Size size) {
     final bluePaint = Paint()..color = const Color(0xFF3B6EF0);
     final darkPaint = Paint()..color = const Color(0xFF1A1A2E);
     final greyPaint = Paint()..color = Colors.grey.shade300;
-    final barWidth = size.width * 0.09;
+
+    final barWidth = size.width * 0.08;
     final gap = size.width * 0.02;
-    final groups = [
-      [0.45, 0.55, 0.35],
-      [0.55, 0.60, 0.42],
-      [0.72, 0.75, 0.50],
-    ];
-    final groupWidth = size.width / 3;
+
+    final groupWidth = size.width / groups.length;
+
     for (int g = 0; g < groups.length; g++) {
-      final startX = g * groupWidth + groupWidth * 0.15;
+      final startX = g * groupWidth + groupWidth * 0.2;
+
       final heights = groups[g];
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(startX, size.height * (1 - heights[0]), barWidth, size.height * heights[0]),
-          const Radius.circular(3),
-        ),
-        bluePaint,
-      );
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(startX + barWidth + gap, size.height * (1 - heights[1]), barWidth, size.height * heights[1]),
-          const Radius.circular(3),
-        ),
-        darkPaint,
-      );
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            startX + (barWidth + gap) * 2,
-            size.height * (1 - heights[2]),
-            barWidth,
-            size.height * heights[2],
+
+      final paints = [bluePaint, darkPaint, greyPaint];
+
+      for (int i = 0; i < heights.length; i++) {
+        final h = heights[i];
+
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(startX + i * (barWidth + gap), size.height * (1 - h), barWidth, size.height * h),
+            const Radius.circular(3),
           ),
-          const Radius.circular(3),
-        ),
-        greyPaint,
-      );
+          paints[i],
+        );
+      }
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter old) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 class _ApprovalRow extends StatelessWidget {
