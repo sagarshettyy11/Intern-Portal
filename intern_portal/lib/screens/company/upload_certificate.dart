@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
@@ -11,12 +13,34 @@ class UploadCertificateScreen extends StatefulWidget {
 class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
   final TextEditingController _serialCtrl = TextEditingController();
   final bool _isDragOver = false;
+  File? _selectedFile;
   String? _fileName;
 
   @override
   void dispose() {
     _serialCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      final result = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+      );
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        setState(() {
+          _fileName = file.name;
+          if (file.path != null) {
+            _selectedFile = File(file.path!);
+          }
+        });
+        debugPrint("Selected file: ${file.path}");
+      }
+    } catch (e) {
+      debugPrint("File pick error: $e");
+    }
   }
 
   @override
@@ -200,13 +224,12 @@ class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
                   child: const Icon(Icons.upload_file_outlined, color: Color(0xFF0000FF), size: 28),
                 ),
                 const SizedBox(height: 14),
-                if (_fileName != null) ...[
-                  Text(
-                    _fileName!,
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF1A56DB)),
+                if (_selectedFile != null &&
+                    (_fileName!.endsWith('.jpg') || _fileName!.endsWith('.jpeg') || _fileName!.endsWith('.png'))) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Image.file(_selectedFile!, height: 100, fit: BoxFit.cover),
                   ),
-                  const SizedBox(height: 4),
-                  Text('File selected', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700])),
                 ] else ...[
                   Text(
                     'Drop file here',
@@ -244,12 +267,6 @@ class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
         ),
       ],
     );
-  }
-
-  void _pickFile() {
-    setState(() {
-      _fileName = 'certificate_benjamin.pdf';
-    });
   }
 
   Widget _buildUploadButton() {
