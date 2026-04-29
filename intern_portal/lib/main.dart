@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const UploadCertificateScreen(),
+      home: const UnifiedLoginPage(),
       routes: {'/login': (context) => const LoginPage(), '/UnifiedLogin': (context) => const UnifiedLoginPage()},
     );
   }
