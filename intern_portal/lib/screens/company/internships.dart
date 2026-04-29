@@ -1,42 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/company/internship_req_model.dart';
+import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-enum RequestStatus { pending, verified, approved }
-
-class InternRequest {
-  final String name;
-  final String studentId;
-  final RequestStatus headerStatus;
-  final String faculty;
-  final String role;
-  final IconData roleIcon;
-  final String startDate;
-  final String endDate;
-  final String guideStatus;
-  final Color guideStatusColor;
-  final Color guideStatusBg;
-  final String appliedOn;
-  final String actionType;
-
-  const InternRequest({
-    required this.name,
-    required this.studentId,
-    required this.headerStatus,
-    required this.faculty,
-    required this.role,
-    required this.roleIcon,
-    required this.startDate,
-    required this.endDate,
-    required this.guideStatus,
-    required this.guideStatusColor,
-    required this.guideStatusBg,
-    required this.appliedOn,
-    required this.actionType,
-  });
-}
 
 class InternshipRequestsScreen extends StatefulWidget {
   const InternshipRequestsScreen({super.key});
@@ -49,57 +17,37 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
   static const Color kBlue = Color(0xFF1B3FAB);
   static const Color kDark = Color(0xFF14142B);
   static const Color kGrey = Color(0xFF9A9CB0);
+  List<InternshipRequestModel> _requests = [];
+  CompanyStats? stats;
+  bool isLoading = true;
 
-  final List<InternRequest> _requests = const [
-    InternRequest(
-      name: 'Alex Thompson',
-      studentId: 'ID: ST-8829',
-      headerStatus: RequestStatus.pending,
-      faculty: 'Faculty of Tech • Computer Science',
-      role: 'DevOps Engineer Role',
-      roleIcon: Icons.desktop_windows_outlined,
-      startDate: 'Aug 15, 2024',
-      endDate: 'Dec 20, 2024',
-      guideStatus: 'PENDING',
-      guideStatusColor: Color(0xFF1B3FAB),
-      guideStatusBg: Color(0xFFE8EDFF),
-      appliedOn: 'Jul 10, 2024',
-      actionType: 'approve_reject',
-    ),
-    InternRequest(
-      name: 'Maya Rodriguez',
-      studentId: 'ID: ST-9011',
-      headerStatus: RequestStatus.verified,
-      faculty: 'Business School • Analytics',
-      role: 'Data Analyst Intern',
-      roleIcon: Icons.trending_up_rounded,
-      startDate: 'Sep 01, 2024',
-      endDate: 'Nov 30, 2024',
-      guideStatus: 'APPROVED',
-      guideStatusColor: Color(0xFF1E8A4C),
-      guideStatusBg: Color(0xFFE6F7ED),
-      appliedOn: 'Aug 05, 2024',
-      actionType: 'review',
-    ),
-    InternRequest(
-      name: 'Jordan Lee',
-      studentId: 'ID: ST-4432',
-      headerStatus: RequestStatus.approved,
-      faculty: 'Design Dept • UI/UX',
-      role: 'Product Designer Role',
-      roleIcon: Icons.palette_outlined,
-      startDate: 'Oct 01, 2024',
-      endDate: 'Jan 15, 2025',
-      guideStatus: 'APPROVED',
-      guideStatusColor: Color(0xFF1E8A4C),
-      guideStatusBg: Color(0xFFE6F7ED),
-      appliedOn: 'Sep 12, 2024',
-      actionType: 'processing',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadRequests();
+  }
+
+  Future<void> loadRequests() async {
+    final res = await CompanyService.fetchInternshipRequests();
+    setState(() {
+      _requests = res?.requests ?? [];
+      stats = res?.stats;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<InternshipRequestModel> filteredRequests() {
+      final query = _searchController.text.toLowerCase();
+
+      if (query.isEmpty) return _requests;
+
+      return _requests.where((r) {
+        return r.name.toLowerCase().contains(query) || r.studentId.toLowerCase().contains(query);
+      }).toList();
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
       appBar: CommonAppBar(
@@ -126,7 +74,8 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             const SizedBox(height: 20),
             _sectionHeader(),
             const SizedBox(height: 14),
-            ..._requests.map(_buildRequestCard),
+
+            ...filteredRequests().map(_buildRequestCard),
           ],
         ),
       ),
@@ -147,13 +96,28 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
   Widget _statsRow() {
     return Row(
       children: [
-        _statCard('12', 'PENDING', numColor: const Color(0xFF1B3FAB), bg: Colors.white),
+        _statCard(stats?.pending.toString() ?? '0', 'PENDING', numColor: const Color(0xFF1B3FAB), bg: Colors.white),
         const SizedBox(width: 8),
-        _statCard('45', 'APPROVED', numColor: const Color(0xFFA07830), bg: const Color(0xFFFFF8EE)),
+        _statCard(
+          stats?.approved.toString() ?? '0',
+          'APPROVED',
+          numColor: const Color(0xFFA07830),
+          bg: const Color(0xFFFFF8EE),
+        ),
         const SizedBox(width: 8),
-        _statCard('08', 'REJECTED', numColor: const Color(0xFFCC2222), bg: const Color(0xFFFFEEEE)),
+        _statCard(
+          stats?.rejected.toString() ?? '0',
+          'REJECTED',
+          numColor: const Color(0xFFCC2222),
+          bg: const Color(0xFFFFEEEE),
+        ),
         const SizedBox(width: 8),
-        _statCard('05', 'GUIDE APP.', numColor: const Color(0xFF555770), bg: const Color(0xFFF0F0F4)),
+        _statCard(
+          stats?.guideApproved.toString() ?? '0',
+          'GUIDE APP.',
+          numColor: const Color(0xFF555770),
+          bg: const Color(0xFFF0F0F4),
+        ),
       ],
     );
   }
@@ -207,12 +171,15 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             ),
             child: TextField(
               controller: _searchController,
+              onChanged: (value) {
+                setState(() {});
+              },
               decoration: InputDecoration(
                 hintText: 'Search student or ID...',
-                hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
+                hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14, fontWeight: FontWeight.bold),
                 prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
             ),
           ),
@@ -256,7 +223,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
         Padding(
           padding: EdgeInsets.only(bottom: 4),
           child: Text(
-            '65 Total',
+            '${stats?.pending ?? 0} Total',
             style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.bold),
           ),
         ),
@@ -264,7 +231,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
     );
   }
 
-  Widget _buildRequestCard(InternRequest r) {
+  Widget _buildRequestCard(InternshipRequestModel r) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
@@ -300,7 +267,9 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             ],
           ),
           const SizedBox(height: 14),
-          _iconRow(Icons.school_outlined, r.faculty),
+          _iconRow(Icons.school_outlined, r.department),
+          const SizedBox(height: 6),
+          _iconRow(Icons.school_outlined, r.college),
           const SizedBox(height: 6),
           _iconRow(r.roleIcon, r.role),
           const SizedBox(height: 14),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/company/certificate_model.dart';
+import 'package:intern_portal/models/company/internship_req_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:intern_portal/services/users/auth_headers.dart';
 
@@ -24,7 +25,6 @@ class CompanyService {
     } catch (e) {
       debugPrint("Certificate ERROR: $e");
     }
-
     return null;
   }
 
@@ -40,6 +40,30 @@ class CompanyService {
     final json = jsonDecode(res.body);
     if (json['success']) {
       return json['data']['profile'];
+    }
+    return null;
+  }
+
+  static Future<InternshipRequestResponse?> fetchInternshipRequests({String search = '', String status = ''}) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final uri = Uri.parse(ApiEndpoints.internshipReq).replace(
+        queryParameters: {
+          'action': 'list',
+          if (search.isNotEmpty) 'search': search,
+          if (status.isNotEmpty) 'company_status': status,
+        },
+      );
+      final res = await http.get(uri, headers: headers);
+      debugPrint("REQ STATUS: ${res.statusCode}");
+      debugPrint("REQ BODY: ${res.body}");
+      if (!res.body.startsWith('{')) return null;
+      final json = jsonDecode(res.body);
+      if (json['success'] == true) {
+        return InternshipRequestResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Request ERROR: $e");
     }
     return null;
   }
