@@ -1,56 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/hod/student_report_model.dart';
+import 'package:intern_portal/services/users/hod_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 
-class ReportModel {
-  final String reportNumber;
-  final String title;
-  final String description;
-  final String submitted;
-  final String status;
-
-  const ReportModel({
-    required this.reportNumber,
-    required this.title,
-    required this.description,
-    required this.submitted,
-    required this.status,
-  });
-}
-
 class StudentReviewScreen extends StatefulWidget {
-  const StudentReviewScreen({super.key});
+  final int studentId;
+  const StudentReviewScreen({super.key, required this.studentId});
   @override
   State<StudentReviewScreen> createState() => _StudentReviewScreenState();
 }
 
 class _StudentReviewScreenState extends State<StudentReviewScreen> {
-  final List<ReportModel> _reports = const [
-    ReportModel(
-      reportNumber: 'REPORT #24',
-      title: 'Weekly Progress #3',
-      description: 'Completed the integration of OAuth2 authentication and started working on the...',
-      submitted: 'Submitted: 12 Oct 2023',
-      status: 'PENDING',
-    ),
-    ReportModel(
-      reportNumber: 'REPORT #23',
-      title: 'Backend API Documentation',
-      description: 'Detailed documentation of all REST endpoints including request/response schemas and...',
-      submitted: 'Submitted: 05 Oct 2023',
-      status: 'APPROVED',
-    ),
-    ReportModel(
-      reportNumber: 'REPORT #22',
-      title: 'Weekly Progress #2',
-      description: 'Finalized the database schema migrations and implemented the initial CRUD operations for...',
-      submitted: 'Submitted: 28 Sep 2023',
-      status: 'APPROVED',
-    ),
-  ];
+  StudentReportResponse? data;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    final res = await HodServices.fetchStudentReports(studentId: widget.studentId);
+    setState(() {
+      data = res;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF3F5F8),
       appBar: CommonAppBar(title: "Guide Workload", showBack: true),
@@ -67,7 +50,9 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             const SizedBox(height: 20),
             _buildReportsHeader(),
             const SizedBox(height: 14),
-            ..._reports.map((r) => Padding(padding: const EdgeInsets.only(bottom: 14), child: _buildReportCard(r))),
+            ...(data?.reports ?? []).map(
+              (r) => Padding(padding: const EdgeInsets.only(bottom: 14), child: _buildReportCard(r)),
+            ),
             const SizedBox(height: 8),
           ],
         ),
@@ -103,7 +88,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(color: const Color(0xFFE8EDF2), borderRadius: BorderRadius.circular(20)),
                   child: Text(
-                    'ACTIVE',
+                    data?.internship?.status ?? 'N/A',
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -116,21 +101,27 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Alex Johnson',
+              data?.student.name ?? '',
               style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
             ),
             const SizedBox(height: 4),
             Row(
               children: [
-                Text('USN: 4SF21CS001', style: GoogleFonts.inter(fontSize: 13, color: Colors.black54)),
+                Text(
+                  'USN: ${data?.student.registrationNo ?? ''}',
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.black54),
+                ),
                 SizedBox(width: 12),
-                Text('Batch: 2024', style: GoogleFonts.inter(fontSize: 13, color: Colors.black54)),
+                Text(
+                  'Batch: ${data?.student.batch ?? ''}',
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.black54),
+                ),
               ],
             ),
             const SizedBox(height: 8),
-            _buildContactRow(Icons.email_outlined, 'alex.j@university.edu'),
+            _buildContactRow(Icons.email_outlined, data?.student.email ?? ''),
             const SizedBox(height: 4),
-            _buildContactRow(Icons.phone_outlined, '+1 (555) 012-3456'),
+            _buildContactRow(Icons.phone_outlined, data?.student.phone ?? ''),
             const SizedBox(height: 16),
             Divider(color: Colors.grey[200], height: 1),
             const SizedBox(height: 14),
@@ -156,10 +147,13 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                       ),
                     ),
                     Text(
-                      'TechCorp Solutions Inc',
+                      data?.internship?.company ?? 'Not Assigned',
                       style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1565C0)),
                     ),
-                    Text('01 Feb 2026 - 30 May 2026', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                    Text(
+                      '${data?.internship?.startDate ?? ''} - ${data?.internship?.endDate ?? ''}',
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                    ),
                   ],
                 ),
               ],
@@ -182,7 +176,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'FullStack developer',
+                        data?.internship?.role ?? 'Not Assigned',
                         style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
                       ),
                     ],
@@ -203,7 +197,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Dr. Sarah Miller',
+                        data?.internship?.guide ?? 'Not Assigned',
                         style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
                       ),
                     ],
@@ -229,10 +223,10 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
 
   Widget _buildStatsRow() {
     final stats = [
-      {'label': 'TOTAL', 'value': '24', 'color': const Color(0xFF1565C0)},
-      {'label': 'DONE', 'value': '18', 'color': const Color(0xFF2E7D32)},
-      {'label': 'PEND', 'value': '04', 'color': const Color(0xFFF57C00)},
-      {'label': 'REJ', 'value': '02', 'color': const Color(0xFFC62828)},
+      {'label': 'TOTAL', 'value': data?.stats.total.toString() ?? '0', 'color': const Color(0xFF1565C0)},
+      {'label': 'DONE', 'value': data?.stats.approved.toString() ?? '0', 'color': const Color(0xFF2E7D32)},
+      {'label': 'PEND', 'value': data?.stats.pending.toString() ?? '0', 'color': const Color(0xFFF57C00)},
+      {'label': 'REJ', 'value': data?.stats.rejected.toString() ?? '0', 'color': const Color(0xFFC62828)},
     ];
     return Container(
       decoration: BoxDecoration(
@@ -275,6 +269,21 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
   }
 
   Widget _buildProgressCard() {
+    final internship = data?.internship;
+    if (internship == null || internship.startDate.isEmpty || internship.endDate.isEmpty) {
+      return const SizedBox();
+    }
+    DateTime? start = DateTime.tryParse(internship.startDate);
+    DateTime? end = DateTime.tryParse(internship.endDate);
+    DateTime now = DateTime.now();
+    double progress = 0;
+    int daysLeft = 0;
+    if (start != null && end != null) {
+      final totalDays = end.difference(start).inDays;
+      final completedDays = now.difference(start).inDays;
+      progress = (completedDays / totalDays).clamp(0, 1);
+      daysLeft = end.difference(now).inDays;
+    }
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -311,11 +320,11 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '75%',
+                  '${(progress * 100).toInt()}%',
                   style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
                 ),
                 Text(
-                  '90 Days Left',
+                  daysLeft > 0 ? '$daysLeft Days Left' : 'Completed',
                   style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], fontWeight: FontWeight.w500),
                 ),
               ],
@@ -324,7 +333,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: LinearProgressIndicator(
-                value: 0.75,
+                value: progress,
                 minHeight: 10,
                 backgroundColor: const Color(0xFFE0E7F5),
                 valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF1565C0)),
@@ -361,9 +370,8 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
     );
   }
 
-  Widget _buildReportCard(ReportModel report) {
+  Widget _buildReportCard(Report report) {
     final statusConfig = _statusConfig(report.status);
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -379,7 +387,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  report.reportNumber,
+                  'REPORT #${report.id}',
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
@@ -403,7 +411,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Text(report.submitted, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                  child: Text(report.date, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
                 ),
                 // Download button
                 GestureDetector(

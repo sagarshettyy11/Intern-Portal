@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/company/certificate_model.dart';
 import 'package:intern_portal/screens/company/upload_certificate.dart';
 import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -16,7 +17,8 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   String _activeFilter = 'All Status';
   final TextEditingController _searchCtrl = TextEditingController();
   static const _filters = ['All Status', 'Pending Upload', 'Issued'];
-  List<Map<String, dynamic>> _records = [];
+  List<CertificateModel> _records = [];
+  CertificateStats? stats;
   bool isLoading = true;
 
   @override
@@ -32,9 +34,10 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
   }
 
   Future<void> loadCertificates() async {
-    final data = await CompanyService.fetchCertificates();
+    final res = await CompanyService.fetchCertificates();
     setState(() {
-      _records = data;
+      _records = res?.certificates ?? [];
+      stats = res?.stats;
       isLoading = false;
     });
   }
@@ -44,20 +47,20 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    List<Map<String, dynamic>> filtered = _records.where((r) {
+    List<CertificateModel> filtered = _records.where((r) {
       final query = _searchCtrl.text.toLowerCase();
-      final matchesSearch = r['name'].toLowerCase().contains(query) || r['id'].toLowerCase().contains(query);
+      final matchesSearch = r.studentName.toLowerCase().contains(query) || r.studentId.toString().contains(query);
       final matchesFilter = _activeFilter == 'All Status'
           ? true
           : _activeFilter == 'Issued'
-          ? r['status'] == 'ISSUED'
-          : r['status'] == 'NOT UPLOADED';
+          ? r.status == 'ISSUED'
+          : r.status == 'NOT UPLOADED';
       return matchesSearch && matchesFilter;
     }).toList();
 
-    int total = _records.length;
-    int issued = _records.where((r) => r['status'] == 'ISSUED').length;
-    int pending = total - issued;
+    int total = stats?.totalInterns ?? 0;
+    int issued = stats?.issued ?? 0;
+    int pending = stats?.pending ?? 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
@@ -101,7 +104,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
         ),
       ),
       bottomNavigationBar: CompanyAppBottomNav(
-        currentIndex: 4,
+        currentIndex: 3,
         onTap: (index) => CompanyBottomNavController.onItemTapped(context, index),
       ),
     );
@@ -230,10 +233,10 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
 }
 
 class _CertificateRecordCard extends StatelessWidget {
-  final Map<String, dynamic> record;
+  final CertificateModel record;
   final VoidCallback onRefresh;
   const _CertificateRecordCard({required this.record, required this.onRefresh});
-  bool get _isIssued => record['status'] == 'ISSUED';
+  bool get _isIssued => record.status == 'ISSUED';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -251,7 +254,7 @@ class _CertificateRecordCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                record['name'] as String,
+                record.studentName,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w800,
                   fontSize: 15,
@@ -263,7 +266,7 @@ class _CertificateRecordCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            record['id'] as String,
+            record.studentId.toString(),
             style: GoogleFonts.inter(
               fontSize: 12,
               color: _isIssued ? const Color(0xFFD1D5DB) : const Color(0xFF6B7280),
@@ -279,7 +282,7 @@ class _CertificateRecordCard extends StatelessWidget {
               ),
               const SizedBox(width: 5),
               Text(
-                record['period'] as String,
+                record.period,
                 style: GoogleFonts.inter(
                   fontSize: 12,
                   color: _isIssued ? const Color(0xFFD1D5DB) : const Color(0xFF6B7280),

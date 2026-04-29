@@ -211,19 +211,19 @@ class CompanyAppBottomNav extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.work_outline, fontWeight: FontWeight.bold),
-            label: 'STUDENTS',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart, fontWeight: FontWeight.bold),
             label: 'INTERNSHIPS',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold),
+            icon: Icon(Icons.bar_chart, fontWeight: FontWeight.bold),
             label: 'ATTENDANCE',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            icon: Icon(Icons.verified_user_outlined, fontWeight: FontWeight.bold),
             label: 'CERTIFICATES',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            label: 'PROFILE',
           ),
         ],
       ),

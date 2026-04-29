@@ -138,7 +138,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       bottomNavigationBar: CompanyAppBottomNav(
-        currentIndex: 4,
+        currentIndex: 1,
         onTap: (index) => CompanyBottomNavController.onItemTapped(context, index),
       ),
     );

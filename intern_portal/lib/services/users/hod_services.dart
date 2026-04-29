@@ -6,6 +6,7 @@ import 'package:intern_portal/models/hod/dashboard_model.dart';
 import 'package:intern_portal/models/hod/faculty_model.dart';
 import 'package:intern_portal/models/hod/profile_model.dart';
 import 'package:intern_portal/models/hod/student_model.dart';
+import 'package:intern_portal/models/hod/student_report_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:intern_portal/services/users/auth_headers.dart';
 
@@ -119,6 +120,33 @@ class HodServices {
       return null;
     } catch (e) {
       debugPrint("Analytics ERROR: $e");
+      return null;
+    }
+  }
+
+  static Future<StudentReportResponse?> fetchStudentReports({required int studentId, int? internshipId}) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final uri = Uri.parse(ApiEndpoints.studentAnalytics).replace(
+        queryParameters: {
+          'student_id': studentId.toString(),
+          if (internshipId != null) 'internship_id': internshipId.toString(),
+        },
+      );
+      final res = await http.get(uri, headers: headers);
+      debugPrint("STUDENT REPORT STATUS: ${res.statusCode}");
+      debugPrint("STUDENT REPORT BODY: ${res.body}");
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        if (json['success'] == true) {
+          return StudentReportResponse.fromJson(json['data']);
+        } else {
+          debugPrint("API Error: ${json['message']}");
+        }
+      }
+      return null;
+    } catch (e) {
+      debugPrint("Student Report ERROR: $e");
       return null;
     }
   }

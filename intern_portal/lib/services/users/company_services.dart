@@ -2,18 +2,30 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/company/certificate_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:intern_portal/services/users/auth_headers.dart';
 
 class CompanyService {
-  static Future<List<Map<String, dynamic>>> fetchCertificates() async {
-    final headers = await AuthHeaders.get();
-    final res = await http.get(Uri.parse(ApiEndpoints.certificate), headers: headers);
-    final json = jsonDecode(res.body);
-    if (json['success']) {
-      return List<Map<String, dynamic>>.from(json['data']);
+  static Future<CertificateResponse?> fetchCertificates() async {
+    try {
+      final headers = await AuthHeaders.get();
+      final res = await http.get(Uri.parse("${ApiEndpoints.certificate}?action=list"), headers: headers);
+      debugPrint("CERT STATUS: ${res.statusCode}");
+      debugPrint("CERT BODY: ${res.body}");
+      if (!res.body.startsWith('{')) {
+        debugPrint("Invalid API response:\n${res.body}");
+        return null;
+      }
+      final json = jsonDecode(res.body);
+      if (json['success'] == true) {
+        return CertificateResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Certificate ERROR: $e");
     }
-    return [];
+
+    return null;
   }
 
   static Future<Map<String, dynamic>?> fetchProfile() async {

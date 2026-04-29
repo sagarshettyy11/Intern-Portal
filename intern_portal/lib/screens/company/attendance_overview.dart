@@ -138,7 +138,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
         ),
       ),
       bottomNavigationBar: CompanyAppBottomNav(
-        currentIndex: 3,
+        currentIndex: 2,
         onTap: (index) => CompanyBottomNavController.onItemTapped(context, index),
       ),
     );
