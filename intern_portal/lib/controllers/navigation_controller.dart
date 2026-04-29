@@ -9,6 +9,7 @@ import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart
 import 'package:intern_portal/screens/college/faculty/guide/internship_review.dart';
 import 'package:intern_portal/screens/college/faculty/guide/report_review.dart';
 import 'package:intern_portal/screens/college/faculty/guide/internship_request.dart';
+import 'package:intern_portal/screens/college/faculty/guide/student_certificates.dart';
 import 'package:intern_portal/screens/college/faculty/guide/student_report.dart';
 import 'package:intern_portal/screens/college/faculty/hod/analytics.dart';
 import 'package:intern_portal/screens/college/faculty/hod/faculty_performance.dart';
@@ -61,7 +62,7 @@ class GuideBottomNavController {
         Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const StudentReportsPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const CertificatesPage()));
         break;
       case 4:
         Navigator.push(context, MaterialPageRoute(builder: (_) => const FacultyProfilePage()));

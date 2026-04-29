@@ -76,16 +76,16 @@ class GuideAppBottomNav extends StatelessWidget {
             label: 'MENTEES',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fact_check, fontWeight: FontWeight.bold),
-            label: 'REPORTS',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.checklist, fontWeight: FontWeight.bold),
             label: 'REVIEW',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.verified, fontWeight: FontWeight.bold),
             label: 'CERTS',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline, fontWeight: FontWeight.bold),
+            label: 'PROFILE',
           ),
         ],
       ),

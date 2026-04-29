@@ -36,6 +36,14 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
     });
   }
 
+  Future<void> _updateStatus(int id, String status) async {
+    final success = await CompanyService.updateInternshipStatus(internshipId: id, status: status);
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request $status")));
+      loadRequests();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<InternshipRequestModel> filteredRequests() {
@@ -296,7 +304,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          _actionButtons(r.actionType),
+          _actionButtons(r.actionType, r),
         ],
       ),
     );
@@ -379,7 +387,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
     );
   }
 
-  Widget _actionButtons(String type) {
+  Widget _actionButtons(String type, InternshipRequestModel r) {
     switch (type) {
       case 'approve_reject':
         return Row(
@@ -402,9 +410,21 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            _circleActionBtn(icon: Icons.close, iconColor: const Color(0xFFCC2222), bg: const Color(0xFFFFEEEE)),
+            _circleActionBtn(
+              icon: Icons.close,
+              iconColor: const Color(0xFFCC2222),
+              bg: const Color(0xFFFFEEEE),
+              onTap: () => _updateStatus(r.internshipId, "Rejected"),
+            ),
+
             const SizedBox(width: 10),
-            _circleActionBtn(icon: Icons.check, iconColor: const Color(0xFF1E8A4C), bg: const Color(0xFFE6F7ED)),
+
+            _circleActionBtn(
+              icon: Icons.check,
+              iconColor: const Color(0xFF1E8A4C),
+              bg: const Color(0xFFE6F7ED),
+              onTap: () => _updateStatus(r.internshipId, "Approved"),
+            ),
           ],
         );
 
@@ -440,12 +460,20 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
     }
   }
 
-  Widget _circleActionBtn({required IconData icon, required Color iconColor, required Color bg}) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
-      child: Icon(icon, color: iconColor, size: 20, fontWeight: FontWeight.w800),
+  Widget _circleActionBtn({
+    required IconData icon,
+    required Color iconColor,
+    required Color bg,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
+        child: Icon(icon, color: iconColor, size: 20),
+      ),
     );
   }
 }

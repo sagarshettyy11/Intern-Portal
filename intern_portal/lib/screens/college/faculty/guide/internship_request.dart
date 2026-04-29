@@ -25,7 +25,6 @@ class _InternshipRequestsPageState extends State<InternshipRequestsPage> {
         stats = res['stats'];
         final allRequests = res['requests']['data'];
         requests = allRequests.where((r) => (r['status_display'] ?? '').toLowerCase() == 'pending').toList();
-
         isLoading = false;
       });
     } else {

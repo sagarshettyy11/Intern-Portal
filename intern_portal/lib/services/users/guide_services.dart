@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
 import 'package:intern_portal/models/guide/guide_internship_model.dart';
@@ -50,7 +51,15 @@ class GuideServices {
       Uri.parse(url),
       headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
     );
-    final json = jsonDecode(response.body);
+    final body = response.body;
+
+    if (!body.startsWith('{')) {
+      debugPrint("❌ API ERROR RESPONSE:");
+      debugPrint(body);
+      throw Exception("API not returning JSON");
+    }
+
+    final json = jsonDecode(body);
     if (json['success'] == true) {
       return InternshipReviewModel.fromJson(json['data']);
     }

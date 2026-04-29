@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/company/attendance_model.dart';
+import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intl/intl.dart';
 
 class AttendanceManagementScreen extends StatefulWidget {
-  const AttendanceManagementScreen({super.key});
+  final AttendanceStudent student;
+  const AttendanceManagementScreen({super.key, required this.student});
   @override
   State<AttendanceManagementScreen> createState() => _AttendanceManagementScreenState();
 }
@@ -39,6 +42,25 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
       weeks.add(week);
     }
     return weeks;
+  }
+
+  AttendanceInfo? info;
+  List<AttendanceLog> logs = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    final res = await CompanyService.fetchStudentAttendance(widget.student.internshipId);
+    setState(() {
+      info = res?.info;
+      logs = res?.logs ?? [];
+      isLoading = false;
+    });
   }
 
   /* Color _dotColor(String key) {
@@ -98,29 +120,34 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Alex Johnson',
+                info?.name ?? '',
                 style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 20, color: Color(0xFF111827)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(color: const Color(0xFFFFE4E4), borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                  color: getStatusBg(info?.status ?? ''),
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Text(
-                  '0% CRITICAL',
+                  '${info?.attendance ?? 0}% ${info?.status ?? ''}',
                   style: GoogleFonts.inter(color: Color(0xFFE02424), fontSize: 11, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
           ),
           Text(
-            'ID: STU-2026-0882',
+            'ID: ${info?.regNo ?? ''}',
             style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 13, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 14),
           Row(
             children: [
-              _infoCol('DOMAIN', 'Software Engineering'),
+              _infoCol('DOMAIN', info?.domain ?? ''),
               const SizedBox(width: 28),
-              _infoCol('ACADEMIC YEAR', 'Junior Year • Sem 2'),
+              _infoCol('ROLE', info?.jobTitle ?? ''),
+              const SizedBox(width: 28),
+              _infoCol('DEPARTMENT', info?.department ?? ''),
             ],
           ),
           const SizedBox(height: 8),
@@ -137,7 +164,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 ),
               ),
               Text(
-                '0%',
+                '${info?.attendance ?? 0}%',
                 style: GoogleFonts.inter(color: Color(0xFFE02424), fontWeight: FontWeight.w800, fontSize: 14),
               ),
             ],
@@ -155,6 +182,32 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
         ],
       ),
     );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'critical':
+        return const Color(0xFFE02424);
+      case 'warning':
+        return const Color(0xFFF0A500);
+      case 'at risk':
+        return const Color(0xFFF59E0B);
+      default:
+        return const Color(0xFF1A56DB);
+    }
+  }
+
+  Color getStatusBg(String status) {
+    switch (status.toLowerCase()) {
+      case 'critical':
+        return const Color(0xFFFFE4E4);
+      case 'warning':
+        return const Color(0xFFFEF3C7);
+      case 'at risk':
+        return const Color(0xFFFEF3C7);
+      default:
+        return const Color(0xFFE6F0FF);
+    }
   }
 
   Widget _infoCol(String label, String value) {
@@ -440,7 +493,21 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final date = DateFormat(
+                  'yyyy-MM-dd',
+                ).format(DateTime(_currentMonth.year, _currentMonth.month, _selectedDay));
+                final success = await CompanyService.markAttendance(
+                  internshipId: widget.student.internshipId,
+                  date: date,
+                  status: _selectedStatus,
+                  remarks: _remarksController.text,
+                );
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Attendance saved")));
+                  loadData();
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1A56DB),
                 padding: const EdgeInsets.symmetric(vertical: 16),

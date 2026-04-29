@@ -432,7 +432,10 @@ class _StudentCard extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => AttendanceManagementScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => AttendanceManagementScreen(student: student)),
+                  );
                 },
                 child: Row(
                   children: [

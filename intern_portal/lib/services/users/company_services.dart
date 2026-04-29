@@ -69,6 +69,26 @@ class CompanyService {
     return null;
   }
 
+  static Future<bool> updateInternshipStatus({required int internshipId, required String status}) async {
+    try {
+      final headers = await AuthHeaders.get();
+
+      final res = await http.post(
+        Uri.parse("${ApiEndpoints.internshipReq}?action=update_status"),
+        headers: headers,
+        body: jsonEncode({
+          "internship_id": internshipId,
+          "company_status": status, 
+        }),
+      );
+      final json = jsonDecode(res.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("Update ERROR: $e");
+      return false;
+    }
+  }
+
   static Future<AttendanceResponse?> fetchAttendance({
     String search = '',
     String batch = '',
@@ -95,7 +115,50 @@ class CompanyService {
     } catch (e) {
       debugPrint("Attendance ERROR: $e");
     }
-
     return null;
+  }
+
+  static Future<AttendanceDetailResponse?> fetchStudentAttendance(int internshipId) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final uri = Uri.parse(
+        ApiEndpoints.addAttendance,
+      ).replace(queryParameters: {'internship_id': internshipId.toString()});
+      final res = await http.get(uri, headers: headers);
+      if (!res.body.startsWith('{')) return null;
+      final json = jsonDecode(res.body);
+      if (json['success'] == true) {
+        return AttendanceDetailResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Fetch Attendance ERROR: $e");
+    }
+    return null;
+  }
+
+  static Future<bool> markAttendance({
+    required int internshipId,
+    required String date,
+    required String status,
+    String remarks = '',
+  }) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final res = await http.post(
+        Uri.parse(ApiEndpoints.addAttendance),
+        headers: headers,
+        body: jsonEncode({
+          "internship_id": internshipId,
+          "attendance_date": date,
+          "attendance_status": status,
+          "remarks": remarks,
+        }),
+      );
+      final json = jsonDecode(res.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("Mark Attendance ERROR: $e");
+      return false;
+    }
   }
 }

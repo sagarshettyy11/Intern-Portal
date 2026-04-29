@@ -51,3 +51,71 @@ class AttendanceResponse {
     );
   }
 }
+
+class AttendanceInfo {
+  final int internshipId;
+  final String name;
+  final String regNo;
+  final String domain;
+  final String college;
+  final String department;
+  final String jobTitle;
+  final double attendance;
+  final String status;
+
+  AttendanceInfo({
+    required this.internshipId,
+    required this.name,
+    required this.regNo,
+    required this.domain,
+    required this.college,
+    required this.department,
+    required this.jobTitle,
+    required this.attendance,
+    required this.status,
+  });
+
+  factory AttendanceInfo.fromJson(Map<String, dynamic> json) {
+    return AttendanceInfo(
+      internshipId: json['internship_id'],
+      name: json['student_name'] ?? '',
+      regNo: json['registration_no'] ?? '',
+      domain: json['internship_domain'] ?? '',
+      college: json['college_name'] ?? '',
+      department: json['department_name'] ?? '',
+      jobTitle: json['job_title'] ?? '',
+      attendance: (json['attendance_pct'] ?? 0).toDouble(),
+      status: json['attendance_label'] ?? '',
+    );
+  }
+}
+
+class AttendanceLog {
+  final String date;
+  final String status;
+  final String remarks;
+
+  AttendanceLog({required this.date, required this.status, required this.remarks});
+
+  factory AttendanceLog.fromJson(Map<String, dynamic> json) {
+    return AttendanceLog(
+      date: json['attendance_date'],
+      status: json['attendance_status'],
+      remarks: json['remarks'] ?? '',
+    );
+  }
+}
+
+class AttendanceDetailResponse {
+  final AttendanceInfo info;
+  final List<AttendanceLog> logs;
+
+  AttendanceDetailResponse({required this.info, required this.logs});
+
+  factory AttendanceDetailResponse.fromJson(Map<String, dynamic> json) {
+    return AttendanceDetailResponse(
+      info: AttendanceInfo.fromJson(json['info']),
+      logs: (json['attendance_logs'] as List).map((e) => AttendanceLog.fromJson(e)).toList(),
+    );
+  }
+}
