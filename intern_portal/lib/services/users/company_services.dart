@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/company/attendance_model.dart';
 import 'package:intern_portal/models/company/certificate_model.dart';
 import 'package:intern_portal/models/company/internship_req_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
@@ -65,6 +66,36 @@ class CompanyService {
     } catch (e) {
       debugPrint("Request ERROR: $e");
     }
+    return null;
+  }
+
+  static Future<AttendanceResponse?> fetchAttendance({
+    String search = '',
+    String batch = '',
+    int college = 0,
+    int branch = 0,
+  }) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final res = await http.post(
+        Uri.parse(ApiEndpoints.attendance),
+        headers: headers,
+        body: jsonEncode({
+          if (search.isNotEmpty) 'search': search,
+          if (batch.isNotEmpty) 'batch': batch,
+          if (college != 0) 'college': college,
+          if (branch != 0) 'branch': branch,
+        }),
+      );
+      if (!res.body.startsWith('{')) return null;
+      final json = jsonDecode(res.body);
+      if (json['success'] == true) {
+        return AttendanceResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Attendance ERROR: $e");
+    }
+
     return null;
   }
 }

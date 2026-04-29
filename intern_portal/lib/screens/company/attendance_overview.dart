@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/company/attendance_model.dart';
 import 'package:intern_portal/screens/company/student_attendence.dart';
+import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 
@@ -17,73 +19,23 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
   String _batch = 'Batch A';
   String _branch = 'CS';
   final TextEditingController _searchCtrl = TextEditingController();
-  static const _students = [
-    {
-      'name': 'Alex Johnson',
-      'id': 'INT-2026-2027-001',
-      'domain': 'Software development',
-      'period': '01/02/26 - 30/05/26',
-      'attendance': 0.0,
-      'status': 'CRITICAL',
-      'icon': 0xe61b,
-    },
-    {
-      'name': 'Maria Garcia',
-      'id': 'INT-2026-2027-042',
-      'domain': 'UI/UX Design',
-      'period': '01/02/26 - 30/05/26',
-      'attendance': 72.5,
-      'status': 'WARNING',
-      'icon': 0xe58e,
-    },
-    {
-      'name': 'Jordan Smith',
-      'id': 'INT-2026-2027-115',
-      'domain': 'Data Engineering',
-      'period': '01/02/26 - 30/05/26',
-      'attendance': 94.0,
-      'status': 'GOOD',
-      'icon': 0xe4c8,
-    },
-  ];
+  List<AttendanceStudent> students = [];
+  AttendanceSummary? summary;
+  bool isLoading = true;
 
-  Color _borderColor(String status) {
-    switch (status) {
-      case 'CRITICAL':
-        return const Color(0xFFE02424);
-      case 'WARNING':
-        return const Color(0xFFF0A500);
-      default:
-        return const Color(0xFF1A56DB);
-    }
+  @override
+  void initState() {
+    super.initState();
+    loadAttendance();
   }
 
-  Color _statusTextColor(String status) {
-    switch (status) {
-      case 'CRITICAL':
-        return const Color(0xFFE02424);
-      case 'WARNING':
-        return const Color(0xFFB45309);
-      default:
-        return const Color(0xFF057A55);
-    }
-  }
-
-  Color _statusBgColor(String status) {
-    switch (status) {
-      case 'CRITICAL':
-        return const Color(0xFFFFE4E4);
-      case 'WARNING':
-        return const Color(0xFFFEF3C7);
-      default:
-        return const Color(0xFFDEF7EC);
-    }
-  }
-
-  Color _attendanceColor(double pct) {
-    if (pct < 50) return const Color(0xFFE02424);
-    if (pct < 80) return const Color(0xFFF0A500);
-    return const Color(0xFF1A56DB);
+  Future<void> loadAttendance() async {
+    final res = await CompanyService.fetchAttendance(search: _searchCtrl.text, batch: _batch);
+    setState(() {
+      students = res?.students ?? [];
+      summary = res?.summary;
+      isLoading = false;
+    });
   }
 
   @override
@@ -121,16 +73,10 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
             const SizedBox(height: 14),
             _buildSearchBar(),
             const SizedBox(height: 16),
-            ..._students.map(
+            ...students.map(
               (s) => Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _StudentCard(
-                  student: s,
-                  borderColor: _borderColor(s['status'] as String),
-                  statusTextColor: _statusTextColor(s['status'] as String),
-                  statusBgColor: _statusBgColor(s['status'] as String),
-                  attendanceColor: _attendanceColor(s['attendance'] as double),
-                ),
+                child: _StudentCard(student: s),
               ),
             ),
             const SizedBox(height: 20),
@@ -147,9 +93,9 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
   Widget _buildTopStats() {
     return Row(
       children: [
-        Expanded(child: _statCard('TOTAL INTERNS', '128', const Color(0xFF111827))),
+        Expanded(child: _statCard('TOTAL INTERNS', '${summary?.totalStudents ?? 0}', const Color(0xFF111827))),
         const SizedBox(width: 12),
-        Expanded(child: _statCard('AVG ATTENDANCE', '64.2%', const Color(0xFFE02424))),
+        Expanded(child: _statCard('AVG ATTENDANCE', '${summary?.avgAttendance ?? 0}%', const Color(0xFFE02424))),
       ],
     );
   }
@@ -327,6 +273,9 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
   Widget _buildSearchBar() {
     return TextField(
       controller: _searchCtrl,
+      onChanged: (value) {
+        loadAttendance();
+      },
       style: GoogleFonts.inter(fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search student or ID...',
@@ -360,19 +309,54 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
 }
 
 class _StudentCard extends StatelessWidget {
-  final Map<String, dynamic> student;
-  final Color borderColor, statusTextColor, statusBgColor, attendanceColor;
-  const _StudentCard({
-    required this.student,
-    required this.borderColor,
-    required this.statusTextColor,
-    required this.statusBgColor,
-    required this.attendanceColor,
-  });
+  final AttendanceStudent student;
+  const _StudentCard({required this.student});
+  Color get borderColor {
+    switch (student.status.toLowerCase()) {
+      case 'critical':
+        return const Color(0xFFE02424);
+      case 'warning':
+      case 'at risk':
+        return const Color(0xFFF0A500);
+      default:
+        return const Color(0xFF1A56DB);
+    }
+  }
+
+  Color get statusTextColor {
+    switch (student.status.toLowerCase()) {
+      case 'critical':
+        return const Color(0xFFE02424);
+      case 'warning':
+      case 'at risk':
+        return const Color(0xFFB45309);
+      default:
+        return const Color(0xFF057A55);
+    }
+  }
+
+  Color get statusBgColor {
+    switch (student.status.toLowerCase()) {
+      case 'critical':
+        return const Color(0xFFFFE4E4);
+      case 'warning':
+      case 'at risk':
+        return const Color(0xFFFEF3C7);
+      default:
+        return const Color(0xFFDEF7EC);
+    }
+  }
+
+  Color get attendanceColor {
+    final pct = student.attendance;
+    if (pct < 50) return const Color(0xFFE02424);
+    if (pct < 80) return const Color(0xFFF0A500);
+    return const Color(0xFF1A56DB);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double pct = student['attendance'] as double;
-    final String status = student['status'] as String;
+    final double pct = student.attendance;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -386,17 +370,16 @@ class _StudentCard extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                student['name'] as String,
-                style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFF111827)),
+                student.name,
+                style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 16, color: const Color(0xFF111827)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(color: statusBgColor, borderRadius: BorderRadius.circular(20)),
                 child: Text(
-                  status,
+                  student.status,
                   style: GoogleFonts.inter(color: statusTextColor, fontSize: 11, fontWeight: FontWeight.w800),
                 ),
               ),
@@ -404,27 +387,30 @@ class _StudentCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            student['id'] as String,
-            style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 12, fontWeight: FontWeight.w800),
+            student.regNo,
+            style: GoogleFonts.inter(color: const Color(0xFF6B7280), fontSize: 12, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(Icons.laptop_outlined, size: 14, color: Colors.grey[700], fontWeight: FontWeight.w800),
+              Icon(Icons.laptop_outlined, size: 14, color: Colors.grey[700]),
               const SizedBox(width: 5),
-              Text(
-                student['domain'] as String,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.grey[700]),
+              Expanded(
+                child: Text(
+                  student.domain,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.grey[700]),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 2),
           Row(
             children: [
-              Icon(Icons.calendar_today_outlined, size: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
+              Icon(Icons.calendar_today_outlined, size: 12, color: Colors.grey[700]),
               const SizedBox(width: 5),
               Text(
-                student['period'] as String,
+                student.period,
                 style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w800),
               ),
             ],
@@ -432,42 +418,33 @@ class _StudentCard extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'ATTENDANCE',
-                    style: GoogleFonts.inter(fontSize: 10, color: Colors.black87, fontWeight: FontWeight.w800),
-                  ),
+                  Text('ATTENDANCE', style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w800)),
                   const SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Text(
-                        '$pct%',
-                        style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: attendanceColor),
-                      ),
-                      if (pct == 0.0) ...[
-                        const SizedBox(width: 4),
-                        Icon(Icons.arrow_upward_rounded, color: attendanceColor, size: 16, fontWeight: FontWeight.w800),
-                      ],
-                    ],
+                  Text(
+                    '$pct%',
+                    style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: attendanceColor),
                   ),
                 ],
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AttendanceManagementScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => AttendanceManagementScreen()));
                 },
                 child: Row(
                   children: [
                     Text(
                       'View Attendance',
-                      style: GoogleFonts.inter(color: Color(0xFF0000FF), fontWeight: FontWeight.w800, fontSize: 13),
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFF0000FF),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                      ),
                     ),
-                    SizedBox(width: 2),
-                    Icon(Icons.chevron_right, color: Color(0xFF0000FF), size: 18, fontWeight: FontWeight.w800),
+                    const Icon(Icons.chevron_right, color: Color(0xFF0000FF)),
                   ],
                 ),
               ),
