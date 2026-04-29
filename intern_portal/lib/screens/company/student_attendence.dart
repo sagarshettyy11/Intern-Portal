@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intl/intl.dart';
 
 class AttendanceManagementScreen extends StatefulWidget {
   const AttendanceManagementScreen({super.key});
@@ -11,38 +12,36 @@ class AttendanceManagementScreen extends StatefulWidget {
 class _AttendanceManagementScreenState extends State<AttendanceManagementScreen> {
   int _selectedDay = 9;
   String _selectedStatus = 'PRESENT';
+  DateTime _currentMonth = DateTime.now();
   final TextEditingController _remarksController = TextEditingController();
   static const _weekDays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
-  static const _calRows = [
-    [30, 31, 1, 2, 3, 4, 5],
-    [6, 7, 8, 9, 10, 11, 12],
-    [13, 14, 15, 16, 17, 18, 19],
-  ];
-  static const _dayStatus = <int, String>{
-    30: 'prev',
-    31: 'prev',
-    1: 'present',
-    2: 'present',
-    3: 'present',
-    4: 'holiday',
-    5: 'holiday',
-    6: 'present',
-    7: 'present',
-    8: 'present',
-    9: 'present',
-    10: 'future',
-    11: 'holiday',
-    12: 'holiday',
-    13: 'future',
-    14: 'future',
-    15: 'future',
-    16: 'future',
-    17: 'future',
-    18: 'holiday',
-    19: 'holiday',
-  };
+  List<List<DateTime?>> _generateCalendar(DateTime month) {
+    final firstDay = DateTime(month.year, month.month, 1);
+    final lastDay = DateTime(month.year, month.month + 1, 0);
+    int startWeekday = firstDay.weekday; // 1 = Monday
+    int totalDays = lastDay.day;
+    List<List<DateTime?>> weeks = [];
+    List<DateTime?> week = [];
+    for (int i = 1; i < startWeekday; i++) {
+      week.add(null);
+    }
+    for (int day = 1; day <= totalDays; day++) {
+      week.add(DateTime(month.year, month.month, day));
+      if (week.length == 7) {
+        weeks.add(week);
+        week = [];
+      }
+    }
+    if (week.isNotEmpty) {
+      while (week.length < 7) {
+        week.add(null);
+      }
+      weeks.add(week);
+    }
+    return weeks;
+  }
 
-  Color _dotColor(String key) {
+  /* Color _dotColor(String key) {
     switch (key) {
       case 'present':
         return const Color(0xFF1A56DB);
@@ -55,7 +54,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
       default:
         return Colors.transparent;
     }
-  }
+  } */
 
   @override
   void dispose() {
@@ -256,6 +255,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
   }
 
   Widget _buildCalendarCard() {
+    final weeks = _generateCalendar(_currentMonth);
     return _card(
       child: Column(
         children: [
@@ -267,7 +267,7 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                   Icon(Icons.calendar_month_outlined, color: Color(0xFF1A56DB), size: 20),
                   SizedBox(width: 8),
                   Text(
-                    'April 2026',
+                    DateFormat.yMMMM().format(_currentMonth),
                     style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 16, color: Color(0xFF111827)),
                   ),
                 ],
@@ -293,60 +293,36 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 .toList(),
           ),
           const SizedBox(height: 6),
-          ..._calRows.map(
-            (row) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                children: row.map((day) {
-                  final status = _dayStatus[day] ?? 'future';
-                  final isPrev = status == 'prev';
-                  final isFuture = status == 'future';
-                  final isSelected = day == _selectedDay && !isPrev;
-                  final dotColor = _dotColor(status);
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: (!isPrev && !isFuture) ? () => setState(() => _selectedDay = day) : null,
-                      child: Container(
-                        margin: const EdgeInsets.all(2),
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF1A56DB) : Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                          border: (!isSelected && !isPrev && !isFuture && status != 'holiday')
-                              ? Border.all(color: dotColor.withValues(alpha: 0.25), width: 1.2)
-                              : null,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '$day',
-                              style: GoogleFonts.inter(
-                                fontSize: 13,
-                                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                                color: isSelected
-                                    ? Colors.white
-                                    : (isPrev || isFuture)
-                                    ? const Color(0xFFD1D5DB)
-                                    : status == 'holiday'
-                                    ? const Color(0xFFD1D5DB)
-                                    : dotColor,
-                              ),
-                            ),
-                            if (!isSelected && !isPrev && !isFuture && status != 'holiday')
-                              Container(
-                                margin: const EdgeInsets.only(top: 2),
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(color: dotColor, shape: BoxShape.circle),
-                              ),
-                          ],
-                        ),
+
+          ...weeks.map(
+            (row) => Row(
+              children: row.map((date) {
+                if (date == null) {
+                  return Expanded(child: SizedBox(height: 36));
+                }
+
+                final isSelected =
+                    date.day == _selectedDay && date.month == _currentMonth.month && date.year == _currentMonth.year;
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => _selectedDay = date.day);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(2),
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF1A56DB) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text('${date.day}', style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
           const SizedBox(height: 10),
@@ -366,7 +342,15 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
 
   Widget _chevronBtn(IconData icon) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        setState(() {
+          if (icon == Icons.chevron_left) {
+            _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
+          } else {
+            _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
+          }
+        });
+      },
       child: Icon(icon, color: const Color(0xFF6B7280), size: 22),
     );
   }

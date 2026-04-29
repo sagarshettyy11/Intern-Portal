@@ -10,6 +10,7 @@ import 'package:intern_portal/screens/college/faculty/hod/student_analytics.dart
 import 'package:intern_portal/screens/company/attendance_overview.dart';
 import 'package:intern_portal/screens/company/company_profile.dart';
 import 'package:intern_portal/screens/company/internships.dart';
+import 'package:intern_portal/screens/company/student_attendence.dart';
 import 'package:intern_portal/screens/company/upload_certificate.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
           hintStyle: GoogleFonts.inter(color: Colors.grey, fontWeight: FontWeight.bold),
         ),
       ),
-      home: const UnifiedLoginPage(),
+      home: const AttendanceManagementScreen(),
       routes: {'/login': (context) => const LoginPage(), '/UnifiedLogin': (context) => const UnifiedLoginPage()},
     );
   }
