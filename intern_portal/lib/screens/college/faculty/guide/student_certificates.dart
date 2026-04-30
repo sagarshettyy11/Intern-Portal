@@ -1,39 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
+import 'package:intern_portal/models/guide/guide_certificate_model.dart';
 import 'package:intern_portal/screens/college/faculty/guide/faculty_profile.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
-
-enum ACFilterTab { all, issued, pending }
-
-enum ACCertStatus { issued, pending }
-
-class ACCertificate {
-  final String name;
-  final String studentId;
-  final String company;
-  final IconData companyIcon;
-  final String domainRole;
-  final IconData domainIcon;
-  final String? duration;
-  final String? verificationId;
-  final String? issuedDate;
-  final ACCertStatus status;
-
-  const ACCertificate({
-    required this.name,
-    required this.studentId,
-    required this.company,
-    required this.companyIcon,
-    required this.domainRole,
-    required this.domainIcon,
-    this.duration,
-    this.verificationId,
-    this.issuedDate,
-    required this.status,
-  });
-}
 
 class CertificatesPage extends StatefulWidget {
   const CertificatesPage({super.key});
@@ -42,54 +14,39 @@ class CertificatesPage extends StatefulWidget {
 }
 
 class _CertificatesPageState extends State<CertificatesPage> {
+  List<GuideCertificate> certificates = [];
   ACFilterTab _selectedTab = ACFilterTab.all;
-  final List<ACCertificate> _certificates = const [
-    ACCertificate(
-      name: 'Alex Thompson',
-      studentId: '#STU-2024-089',
-      company: 'TechCorp Solutions Inc.',
-      companyIcon: Icons.business_outlined,
-      domainRole: 'Devops engineer',
-      domainIcon: Icons.settings_suggest_outlined,
-      duration: '01 Mar 26 to 25 Apr 26',
-      verificationId: 'TC-2026-CERT-9921',
-      issuedDate: '28 Apr 2026',
-      status: ACCertStatus.issued,
-    ),
-    ACCertificate(
-      name: 'Sarah Jenkins',
-      studentId: '#STU-2024-112',
-      company: 'Innovate Web Labs',
-      companyIcon: Icons.business_outlined,
-      domainRole: 'UI/UX Designer',
-      domainIcon: Icons.palette_outlined,
-      duration: '15 Jan 26 to 15 Mar 26',
-      status: ACCertStatus.pending,
-    ),
-    ACCertificate(
-      name: 'Marcus Chen',
-      studentId: '#STU-2024-055',
-      company: 'Global Data Corp',
-      companyIcon: Icons.business_outlined,
-      domainRole: 'Data Analyst',
-      domainIcon: Icons.stacked_bar_chart_outlined,
-      status: ACCertStatus.issued,
-    ),
-  ];
+  GuideCertificateStats? stats;
+  bool isLoading = true;
 
-  List<ACCertificate> get _filtered {
-    switch (_selectedTab) {
-      case ACFilterTab.issued:
-        return _certificates.where((c) => c.status == ACCertStatus.issued).toList();
-      case ACFilterTab.pending:
-        return _certificates.where((c) => c.status == ACCertStatus.pending).toList();
-      case ACFilterTab.all:
-        return _certificates;
-    }
+  @override
+  void initState() {
+    super.initState();
+    loadCertificates();
+  }
+
+  Future<void> loadCertificates() async {
+    final res = await GuideServices.fetchCertificates(
+      search: '',
+      status: _selectedTab == ACFilterTab.issued
+          ? 'Issued'
+          : _selectedTab == ACFilterTab.pending
+          ? 'Pending'
+          : '',
+    );
+
+    setState(() {
+      certificates = res?.certificates ?? [];
+      stats = res?.stats;
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonAppBar(
@@ -144,11 +101,11 @@ class _CertificatesPageState extends State<CertificatesPage> {
   Widget _buildStatsRow() {
     return Row(
       children: [
-        _buildStatCard(label: 'TOTAL', value: '128', valueColor: const Color(0xFF1A56DB)),
+        _buildStatCard(label: 'TOTAL', value: '${stats?.total ?? 0}', valueColor: const Color(0xFF1A56DB)),
         const SizedBox(width: 10),
-        _buildStatCard(label: 'ISSUED', value: '112', valueColor: const Color(0xFF16A34A)),
+        _buildStatCard(label: 'ISSUED', value: '${stats?.issued ?? 0}', valueColor: const Color(0xFF16A34A)),
         const SizedBox(width: 10),
-        _buildStatCard(label: 'PENDING', value: '16', valueColor: const Color(0xFFEA580C)),
+        _buildStatCard(label: 'PENDING', value: '${stats?.pending ?? 0}', valueColor: const Color(0xFFEA580C)),
       ],
     );
   }
@@ -235,7 +192,13 @@ class _CertificatesPageState extends State<CertificatesPage> {
   Widget _buildTabChip(String label, ACFilterTab tab) {
     final bool isSelected = _selectedTab == tab;
     return GestureDetector(
-      onTap: () => setState(() => _selectedTab = tab),
+      onTap: () {
+        setState(() {
+          _selectedTab = tab;
+          isLoading = true;
+        });
+        loadCertificates();
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
@@ -276,16 +239,15 @@ class _CertificatesPageState extends State<CertificatesPage> {
 
   Widget _buildCertificatesList() {
     List<Widget> items = [];
-    for (final cert in _filtered) {
+    for (final cert in certificates) {
       items.add(_buildCertificateCard(cert));
       items.add(const SizedBox(height: 16));
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: items);
   }
 
-  Widget _buildCertificateCard(ACCertificate cert) {
-    final isIssued = cert.status == ACCertStatus.issued;
-
+  Widget _buildCertificateCard(GuideCertificate cert) {
+    final isIssued = cert.status == 'Issued';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -310,7 +272,7 @@ class _CertificatesPageState extends State<CertificatesPage> {
                       style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
                     ),
                     const SizedBox(height: 2),
-                    Text('ID: ${cert.studentId}', style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF9CA3AF))),
+                    Text('ID: ${cert.regNo}', style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF9CA3AF))),
                   ],
                 ),
               ),
@@ -318,12 +280,12 @@ class _CertificatesPageState extends State<CertificatesPage> {
             ],
           ),
           const SizedBox(height: 16),
-          _buildInfoRow(icon: cert.companyIcon, label: 'COMPANY', value: cert.company),
+          _buildInfoRow(icon: Icons.business, label: 'COMPANY', value: cert.company),
           const SizedBox(height: 10),
-          _buildInfoRow(icon: cert.domainIcon, label: 'DOMAIN / ROLE', value: cert.domainRole),
-          if (cert.duration != null) ...[
+          _buildInfoRow(icon: Icons.work_outline, label: 'DOMAIN / ROLE', value: "${cert.domain} • ${cert.role}"),
+          if (cert.duration.isNotEmpty) ...[
             const SizedBox(height: 10),
-            _buildInfoRow(icon: Icons.calendar_today_outlined, label: 'DURATION', value: cert.duration!),
+            _buildInfoRow(icon: Icons.calendar_today_outlined, label: 'DURATION', value: cert.duration),
           ],
           if (isIssued && cert.verificationId != null) ...[
             const SizedBox(height: 14),

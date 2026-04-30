@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intern_portal/models/guide/guide_certificate_model.dart';
 import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
 import 'package:intern_portal/models/guide/guide_internship_model.dart';
 import 'package:intern_portal/models/guide/guide_profile_model.dart';
@@ -139,6 +140,38 @@ class GuideServices {
     final json = jsonDecode(response.body);
     if (json['success'] == true) {
       return GuideProfileModel.fromJson(json['data']);
+    }
+    return null;
+  }
+
+  static Future<GuideCertificateResponse?> fetchCertificates({
+    String search = '',
+    String status = '',
+    int page = 1,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final uri = Uri.parse(ApiEndpoints.studentCertificate).replace(
+        queryParameters: {
+          if (search.isNotEmpty) 'search': search,
+          if (status.isNotEmpty) 'status': status,
+          'page': page.toString(),
+        },
+      );
+      final res = await http.get(uri, headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"});
+      final body = res.body;
+      if (!body.startsWith('{')) {
+        debugPrint("❌ CERT API ERROR:");
+        debugPrint(body);
+        return null;
+      }
+      final json = jsonDecode(body);
+      if (json['success'] == true) {
+        return GuideCertificateResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("Guide Cert ERROR: $e");
     }
     return null;
   }
