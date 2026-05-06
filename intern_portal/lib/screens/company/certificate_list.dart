@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/company/certificate_model.dart';
+import 'package:intern_portal/screens/college/faculty/guide/certificate_viewer.dart';
 import 'package:intern_portal/screens/company/upload_certificate.dart';
 import 'package:intern_portal/services/users/company_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -237,6 +238,7 @@ class _CertificateRecordCard extends StatelessWidget {
   final VoidCallback onRefresh;
   const _CertificateRecordCard({required this.record, required this.onRefresh});
   bool get _isIssued => record.status == 'ISSUED';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -255,57 +257,48 @@ class _CertificateRecordCard extends StatelessWidget {
             children: [
               Text(
                 record.studentName,
-                style: GoogleFonts.inter(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 15,
-                  color: _isIssued ? const Color(0xFF9CA3AF) : const Color(0xFF111827),
-                ),
+                style: GoogleFonts.inter(fontWeight: FontWeight.w800, fontSize: 15, color: const Color(0xFF111827)),
               ),
               _statusBadge(),
             ],
           ),
           const SizedBox(height: 2),
-          Text(
-            record.studentId.toString(),
-            style: GoogleFonts.inter(
-              fontSize: 12,
-              color: _isIssued ? const Color(0xFFD1D5DB) : const Color(0xFF6B7280),
-            ),
-          ),
+          Text(record.studentId.toString(), style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF6B7280))),
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(
-                Icons.calendar_today_outlined,
-                size: 13,
-                color: _isIssued ? const Color(0xFFD1D5DB) : const Color(0xFF9CA3AF),
-              ),
+              Icon(Icons.calendar_today_outlined, size: 13, color: const Color(0xFF9CA3AF)),
               const SizedBox(width: 5),
-              Text(
-                record.period,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  color: _isIssued ? const Color(0xFFD1D5DB) : const Color(0xFF6B7280),
-                ),
-              ),
+              Text(record.period, style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF6B7280))),
             ],
           ),
           const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
             child: _isIssued
-                ? OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.verified_outlined, size: 16, color: Color(0xFF9CA3AF)),
+                ? ElevatedButton.icon(
+                    onPressed: () {
+                      if (record.certificateUrl == null || record.certificateUrl!.isEmpty) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text("Certificate not found")));
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => CertificateViewer(fileUrl: record.certificateUrl!)),
+                      );
+                    },
+                    icon: const Icon(Icons.verified_outlined, size: 16, color: Colors.white),
                     label: Text(
                       'View Certificate',
-                      style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontWeight: FontWeight.w800, fontSize: 14),
+                      style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14),
                     ),
-                    style: OutlinedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1A56DB),
                       padding: const EdgeInsets.symmetric(vertical: 13),
-                      side: const BorderSide(color: Color(0xFFE5E7EB)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: const Color(0xFFF3F4F6),
+                      elevation: 0,
                     ),
                   )
                 : ElevatedButton.icon(
