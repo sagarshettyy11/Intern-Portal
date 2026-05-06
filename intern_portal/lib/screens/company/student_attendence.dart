@@ -110,6 +110,10 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
     );
   }
 
+  Set<String> get markedDates {
+    return logs.map((e) => e.date).toSet();
+  }
+
   Widget _buildStudentCard() {
     return _card(
       child: Column(
@@ -230,12 +234,53 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
     );
   }
 
+  int getTotalDays() {
+    if (info?.startDate == null || info!.startDate!.isEmpty) return 0;
+    final start = DateTime.parse(info!.startDate!);
+    final end = (info!.endDate != null && info!.endDate!.isNotEmpty)
+        ? DateTime.parse(info!.endDate!)
+        : DateTime.now(); // fallback
+    return end.difference(start).inDays + 1;
+  }
+
+  int getMarkedDays() {
+    return logs.length;
+  }
+
+  int getRemainingDays() {
+    return getTotalDays() - getMarkedDays();
+  }
+
+  double getAttendanceRate() {
+    final presentDays = logs.where((e) => e.status.toLowerCase() == 'present').length;
+    final total = logs.length;
+    if (total == 0) return 0;
+    return (presentDays / total) * 100;
+  }
+
+  Color getAttendanceColor(String? status) {
+    switch (status) {
+      case 'present':
+        return const Color(0xFF22C55E); // GREEN ✅
+      case 'absent':
+        return const Color(0xFFE02424); // RED ❌
+      case 'leave':
+        return const Color(0xFFF0A500); // YELLOW ⚠️
+      default:
+        return Colors.transparent;
+    }
+  }
+
+  Map<String, String> get attendanceMap {
+    return {for (var log in logs) log.date: log.status.toLowerCase()};
+  }
+
   Widget _buildStatsRow() {
     return Row(
       children: [
-        Expanded(child: _statCard('MONTHLY AVG', '68%', const Color(0xFF1A56DB))),
+        Expanded(child: _statCard('TOTAL DAYS', '${getTotalDays()}', const Color(0xFF1A56DB))),
         const SizedBox(width: 12),
-        Expanded(child: _statCard('WORKING DAYS', '22 Days', const Color(0xFFF0A500))),
+        Expanded(child: _statCard('MARKED DAYS', '${getMarkedDays()}', const Color(0xFFF0A500))),
       ],
     );
   }
@@ -359,6 +404,10 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
 
                 final isSelected =
                     date.day == _selectedDay && date.month == _currentMonth.month && date.year == _currentMonth.year;
+                final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+                final status = attendanceMap[formattedDate];
+                final isMarked = status != null;
+                final color = getAttendanceColor(status);
 
                 return Expanded(
                   child: GestureDetector(
@@ -369,11 +418,25 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                       margin: const EdgeInsets.all(2),
                       height: 36,
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF1A56DB) : Colors.transparent,
+                        color: isSelected
+                            ? const Color(0xFF1A56DB)
+                            : isMarked
+                            ? color.withValues(alpha: 0.2) // soft background
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Center(
-                        child: Text('${date.day}', style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
+                        child: Text(
+                          '${date.day}',
+                          style: GoogleFonts.inter(
+                            color: isSelected
+                                ? Colors.white
+                                : isMarked
+                                ? Colors
+                                      .grey // 👈 faded text
+                                : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   ),

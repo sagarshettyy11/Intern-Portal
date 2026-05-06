@@ -164,24 +164,31 @@ class CompanyService {
     required int internshipId,
     required int studentId,
     required File file,
-    String verificationId = '',
+    required String verificationId,
   }) async {
     try {
       final headers = await AuthHeaders.get();
-
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse("${ApiEndpoints.certificate}?action=upload&internship_id=$internshipId&student_id=$studentId"),
+      final uri = Uri.parse(
+        "${ApiEndpoints.uploadCertificate}"
+        "?action=upload"
+        "&internship_id=$internshipId"
+        "&student_id=$studentId",
       );
+      debugPrint("UPLOAD URL: $uri");
+      debugPrint("FILE EXISTS: ${await file.exists()}");
+      debugPrint("FILE PATH: ${file.path}");
+      debugPrint("VERIFICATION ID: $verificationId");
+      final request = http.MultipartRequest('POST', uri);
       request.headers.addAll(headers);
+      request.fields['verification_id'] = verificationId;
       request.files.add(await http.MultipartFile.fromPath('certificate_file', file.path));
-      if (verificationId.isNotEmpty) {
-        request.fields['verification_id'] = verificationId;
-      }
       final response = await request.send();
       final resBody = await response.stream.bytesToString();
       debugPrint("UPLOAD STATUS: ${response.statusCode}");
       debugPrint("UPLOAD BODY: $resBody");
+      if (response.statusCode != 200) {
+        return false;
+      }
       final json = jsonDecode(resBody);
       return json['success'] == true;
     } catch (e) {

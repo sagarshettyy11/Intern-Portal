@@ -63,6 +63,9 @@ class AttendanceInfo {
   final double attendance;
   final String status;
 
+  final String? startDate;
+  final String? endDate;
+
   AttendanceInfo({
     required this.internshipId,
     required this.name,
@@ -73,6 +76,8 @@ class AttendanceInfo {
     required this.jobTitle,
     required this.attendance,
     required this.status,
+    this.startDate,
+    this.endDate,
   });
 
   factory AttendanceInfo.fromJson(Map<String, dynamic> json) {
@@ -86,6 +91,9 @@ class AttendanceInfo {
       jobTitle: json['job_title'] ?? '',
       attendance: double.tryParse(json['attendance_pct'].toString()) ?? 0.0,
       status: json['attendance_label'] ?? '',
+
+      startDate: json['start_date'] ?? '',
+      endDate: json['end_date'] ?? '',
     );
   }
 }

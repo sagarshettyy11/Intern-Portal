@@ -47,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.pickFiles(
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
     );

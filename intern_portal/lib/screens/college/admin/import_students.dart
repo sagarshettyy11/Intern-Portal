@@ -27,7 +27,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
   File? _selectedFile;
 
   Future<void> _pickFile() async {
-    FilePickerResult? result = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['xlsx', 'csv']);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xlsx', 'csv']);
     if (result != null) {
       setState(() {
         _selectedFile = File(result.files.single.path!);

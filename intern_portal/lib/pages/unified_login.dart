@@ -215,6 +215,8 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                             NavigationService.pushReplacement(CollegeAdminDashboardScreen());
                                           } else if (role == "Company") {
                                             NavigationService.pushReplacement(InternshipRequestsScreen());
+                                          } else if (role == "Student") {
+                                            NavigationService.pushReplacement(DashboardPage());
                                           } else {
                                             CustomSnackbar.show(message: "Invalid role", isSuccess: false);
                                           }
@@ -247,7 +249,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            /* const SizedBox(height: 16),
                             Center(
                               child: Column(
                                 children: [
@@ -271,7 +273,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                   ),
                                 ],
                               ),
-                            ),
+                            ), */
                             const SizedBox(height: 14),
                             Center(
                               child: RichText(

@@ -28,22 +28,31 @@ class _UploadCertificateScreenState extends State<UploadCertificateScreen> {
 
   Future<void> _pickFile() async {
     try {
-      final result = await FilePicker.pickFiles(
+      final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png'],
+        allowMultiple: false,
+        withData: false,
       );
       if (result != null && result.files.isNotEmpty) {
-        final file = result.files.first;
-        setState(() {
-          _fileName = file.name;
-          if (file.path != null) {
-            _selectedFile = File(file.path!);
-          }
-        });
-        debugPrint("Selected file: ${file.path}");
+        final pickedFile = result.files.first;
+        debugPrint("Picked file name: ${pickedFile.name}");
+        debugPrint("Picked file path: ${pickedFile.path}");
+        if (pickedFile.path != null) {
+          final file = File(pickedFile.path!);
+          setState(() {
+            _selectedFile = file;
+            _fileName = pickedFile.name;
+          });
+        } else {
+          debugPrint("File path is null");
+        }
+      } else {
+        debugPrint("User cancelled picker");
       }
     } catch (e) {
-      debugPrint("File pick error: $e");
+      debugPrint("File picker error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Unable to pick file: $e")));
     }
   }
 
