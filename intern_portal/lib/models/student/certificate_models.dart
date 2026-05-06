@@ -6,6 +6,7 @@ class CertificateModel {
   final String? domain;
   final String? startDate;
   final String? endDate;
+  final String? fileUrl;
 
   CertificateModel({
     required this.certificateId,
@@ -15,6 +16,7 @@ class CertificateModel {
     this.domain,
     this.startDate,
     this.endDate,
+    this.fileUrl,
   });
 
   factory CertificateModel.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class CertificateModel {
       domain: json['internship_domain'],
       startDate: json['start_date'],
       endDate: json['end_date'],
+      fileUrl: json['file_url'],
     );
   }
 }

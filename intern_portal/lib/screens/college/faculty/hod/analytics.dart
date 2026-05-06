@@ -79,8 +79,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ],
       ),
     ),
-
-    // 👇 Smooth loader (no black screen)
     if (isLoading)
       Container(
         color: Colors.black.withValues(alpha: 0.05),

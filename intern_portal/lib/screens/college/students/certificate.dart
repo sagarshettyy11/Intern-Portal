@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/student/certificate_models.dart';
+import 'package:intern_portal/screens/college/faculty/guide/certificate_viewer.dart';
 import 'package:intern_portal/screens/college/students/profile.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class CertificatesScreen extends StatefulWidget {
   const CertificatesScreen({super.key});
@@ -14,11 +17,6 @@ class CertificatesScreen extends StatefulWidget {
 }
 
 class _CertificatesScreenState extends State<CertificatesScreen> {
-  static const Color kBlue = Color(0xFF1B3FAB);
-  static const Color kBlueLight = Color(0xFFDDE5FF);
-  static const Color kDark = Color(0xFF14142B);
-  static const Color kGrey = Color(0xFF9A9CB0);
-
   List<CertificateModel> certificates = [];
   int total = 0;
   int issued = 0;
@@ -43,6 +41,39 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
       });
     } catch (e) {
       setState(() => isLoading = false);
+    }
+  }
+
+  void _viewCertificate(CertificateModel cert) {
+    if (cert.fileUrl == null || cert.fileUrl!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Certificate not found")));
+      return;
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => CertificateViewer(fileUrl: cert.fileUrl!)));
+  }
+
+  Future<void> _downloadCertificate(CertificateModel cert) async {
+    try {
+      if (cert.fileUrl == null || cert.fileUrl!.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Certificate not found")));
+        return;
+      }
+      final dir = await getExternalStorageDirectory();
+      if (dir == null) {
+        throw Exception("Storage directory unavailable");
+      }
+      final fileName = cert.fileUrl!.split('/').last;
+      final savePath = "${dir.path}/$fileName";
+      await Dio().download(cert.fileUrl!, savePath);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Downloaded to: $savePath")));
+      }
+      debugPrint("FILE SAVED AT: $savePath");
+    } catch (e) {
+      debugPrint("DOWNLOAD ERROR: $e");
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Download failed")));
+      }
     }
   }
 
@@ -78,7 +109,7 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _statsRow(),
-            const SizedBox(height: 28),
+            const SizedBox(height: 10),
             _sectionHeader(),
             const SizedBox(height: 14),
             if (certificates.isEmpty) _emptyCard() else ...certificates.map((c) => _certificateCard(c)),
@@ -111,22 +142,27 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F2F5),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 6, offset: const Offset(0, 2)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
           ],
         ),
         child: Column(
           children: [
             Text(
               value,
-              style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.bold, color: kDark),
+              style: GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.w800, color: Colors.black),
             ),
             const SizedBox(height: 4),
             Text(
               label,
-              style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: kGrey),
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+                color: Colors.grey[800],
+              ),
             ),
           ],
         ),
@@ -140,20 +176,20 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
       children: [
         Row(
           children: [
-            Icon(Icons.verified, color: kBlue, size: 24),
+            Icon(Icons.verified, color: Color(0xFF0000FF), size: 24),
             SizedBox(width: 8),
             Text(
               'Issued Certificates',
-              style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: kDark),
+              style: GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black),
             ),
           ],
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(color: kBlueLight, borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(20)),
           child: Text(
             'Newest First',
-            style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w600, color: kBlue),
+            style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF0000FF)),
           ),
         ),
       ],
@@ -179,9 +215,11 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                 height: 68,
                 decoration: BoxDecoration(color: const Color(0xFFE8EDFF), borderRadius: BorderRadius.circular(16)),
                 alignment: Alignment.center,
-                child: const Text(
-                  'TE',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kBlue),
+                child: Text(
+                  c.companyName.isNotEmpty
+                      ? c.companyName.trim().split(' ').take(2).map((e) => e[0]).join().toUpperCase()
+                      : '--',
+                  style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF0000FF)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -190,40 +228,48 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
                 children: [
                   Text(
                     c.companyName,
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: kDark),
+                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black),
                   ),
                   SizedBox(height: 4),
-                  Text(c.domain ?? "-", style: GoogleFonts.inter(fontSize: 13.5, color: kGrey)),
+                  Text(
+                    c.domain ?? "-",
+                    style: GoogleFonts.inter(fontSize: 13.5, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                  ),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 14),
           _infoRow(
             icon: Icons.calendar_month_outlined,
             label: 'DURATION',
             value: "${c.startDate ?? ''} to ${c.endDate ?? ''}",
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           _infoRow(icon: Icons.event_available_outlined, label: 'ISSUED DATE', value: c.issuedDate),
+          const SizedBox(height: 8),
+          _infoRow(
+            icon: Icons.fingerprint,
+            label: 'VERIFICATION ID',
+            value: c.verificationId,
+            valueColor: Color(0xFF0000FF),
+          ),
           const SizedBox(height: 16),
-          _infoRow(icon: Icons.fingerprint, label: 'VERIFICATION ID', value: c.verificationId, valueColor: kBlue),
-          const SizedBox(height: 22),
           Row(
             children: [
               Expanded(
                 flex: 52,
                 child: SizedBox(
-                  height: 52,
+                  height: 40,
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () => _viewCertificate(c),
                     icon: const Icon(Icons.remove_red_eye_outlined, size: 19, color: Colors.white),
                     label: Text(
                       'View',
-                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kBlue,
+                      backgroundColor: Color(0xFF0000FF),
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
@@ -234,13 +280,13 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
               Expanded(
                 flex: 48,
                 child: SizedBox(
-                  height: 52,
+                  height: 40,
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () => _downloadCertificate(c),
                     icon: const Icon(Icons.download_outlined, size: 19, color: Color(0xFF3A3C50)),
                     label: Text(
                       'Download',
-                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF3A3C50)),
+                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF3A3C50)),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF0F1F6),
@@ -261,19 +307,24 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, size: 22, color: kGrey),
+        Icon(icon, size: 22, color: Colors.grey[800]),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: GoogleFonts.inter(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 0.9, color: kGrey),
+              style: GoogleFonts.inter(
+                fontSize: 10.5,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.9,
+                color: Colors.grey[800],
+              ),
             ),
             const SizedBox(height: 2),
             Text(
               value,
-              style: GoogleFonts.inter(fontSize: 14.5, fontWeight: FontWeight.w500, color: valueColor ?? kDark),
+              style: GoogleFonts.inter(fontSize: 14.5, fontWeight: FontWeight.w800, color: valueColor ?? Colors.black),
             ),
           ],
         ),
@@ -309,7 +360,7 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
           const SizedBox(height: 14),
           Text(
             'No other certificates issued yet',
-            style: GoogleFonts.inter(fontSize: 13.5, color: kGrey, fontWeight: FontWeight.w400),
+            style: GoogleFonts.inter(fontSize: 13.5, color: Colors.grey[800], fontWeight: FontWeight.w400),
           ),
         ],
       ),
