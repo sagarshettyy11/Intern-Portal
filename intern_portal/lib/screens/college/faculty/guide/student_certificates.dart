@@ -1,11 +1,16 @@
+import 'package:dio/dio.dart';
+import 'certificate_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:intern_portal/services/api_endpoints.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:intern_portal/widgets/bottom_navigation.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/guide/guide_certificate_model.dart';
 import 'package:intern_portal/screens/college/faculty/guide/faculty_profile.dart';
-import 'package:intern_portal/services/users/guide_services.dart';
-import 'package:intern_portal/widgets/appbar_navigation.dart';
-import 'package:intern_portal/widgets/bottom_navigation.dart';
 
 class CertificatesPage extends StatefulWidget {
   const CertificatesPage({super.key});
@@ -34,12 +39,45 @@ class _CertificatesPageState extends State<CertificatesPage> {
           ? 'Pending'
           : '',
     );
-
     setState(() {
       certificates = res?.certificates ?? [];
       stats = res?.stats;
       isLoading = false;
     });
+  }
+
+  void _viewCertificate(GuideCertificate cert) {
+    if (cert.fileUrl == null || cert.fileUrl!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Certificate not found")));
+      return;
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => CertificateViewer(fileUrl: cert.fileUrl!)));
+  }
+
+  Future<void> _downloadCertificate(GuideCertificate cert) async {
+    try {
+      if (cert.fileUrl == null || cert.fileUrl!.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Certificate not found")));
+        return;
+      }
+      final dir = await getExternalStorageDirectory();
+      if (dir == null) {
+        throw Exception("Storage directory unavailable");
+      }
+      final fileName = cert.fileUrl!.split('/').last;
+      final savePath = "${dir.path}/$fileName";
+      await Dio().download(cert.fileUrl!, savePath);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Downloaded to: $savePath")));
+      }
+      debugPrint("FILE SAVED AT: $savePath");
+    } catch (e) {
+      debugPrint("DOWNLOAD ERROR: $e");
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Download failed")));
+      }
+    }
   }
 
   @override
@@ -73,13 +111,12 @@ class _CertificatesPageState extends State<CertificatesPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
                     _buildStatsRow(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _buildSearchBar(),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
                     _buildTabRow(),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
                     _buildSectionHeader(),
                     const SizedBox(height: 14),
                     _buildCertificatesList(),
@@ -128,8 +165,8 @@ class _CertificatesPageState extends State<CertificatesPage> {
               label,
               style: GoogleFonts.inter(
                 fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF9CA3AF),
+                fontWeight: FontWeight.w900,
+                color: Colors.grey[700],
                 letterSpacing: 0.8,
               ),
             ),
@@ -147,22 +184,18 @@ class _CertificatesPageState extends State<CertificatesPage> {
   Widget _buildSearchBar() {
     return Container(
       height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF4F6FB), borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           SizedBox(width: 14),
-          Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
+          Icon(Icons.search, color: Colors.grey[700], size: 20),
           SizedBox(width: 10),
           Expanded(
             child: TextField(
               style: GoogleFonts.inter(fontSize: 14, color: Color(0xFF111827)),
               decoration: InputDecoration(
                 hintText: 'Search by student name or ID',
-                hintStyle: GoogleFonts.inter(fontSize: 14, color: Color(0xFF9CA3AF)),
+                hintStyle: GoogleFonts.inter(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.w800),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -210,8 +243,8 @@ class _CertificatesPageState extends State<CertificatesPage> {
         child: Text(
           label,
           style: GoogleFonts.inter(
-            color: isSelected ? Colors.white : const Color(0xFF6B7280),
-            fontWeight: FontWeight.w600,
+            color: isSelected ? Colors.white : Colors.grey[700],
+            fontWeight: FontWeight.w800,
             fontSize: 14,
           ),
         ),
@@ -259,7 +292,6 @@ class _CertificatesPageState extends State<CertificatesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Name + badge
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -269,10 +301,13 @@ class _CertificatesPageState extends State<CertificatesPage> {
                   children: [
                     Text(
                       cert.name,
-                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF111827)),
+                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
                     ),
                     const SizedBox(height: 2),
-                    Text('ID: ${cert.regNo}', style: GoogleFonts.inter(fontSize: 12, color: Color(0xFF9CA3AF))),
+                    Text(
+                      'ID: ${cert.regNo}',
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w700),
+                    ),
                   ],
                 ),
               ),
@@ -293,7 +328,7 @@ class _CertificatesPageState extends State<CertificatesPage> {
           ],
           const SizedBox(height: 14),
           // Action buttons
-          if (isIssued) _buildIssuedActions() else _buildPendingAction(),
+          if (isIssued) _buildIssuedActions(cert) else _buildPendingAction(),
         ],
       ),
     );
@@ -310,7 +345,7 @@ class _CertificatesPageState extends State<CertificatesPage> {
         isIssued ? 'ISSUED' : 'PENDING',
         style: GoogleFonts.inter(
           fontSize: 11,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w800,
           color: isIssued ? const Color(0xFF16A34A) : const Color(0xFF92400E),
           letterSpacing: 0.5,
         ),
@@ -336,8 +371,8 @@ class _CertificatesPageState extends State<CertificatesPage> {
               label,
               style: GoogleFonts.inter(
                 fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF9CA3AF),
+                color: Colors.grey[700],
+                fontWeight: FontWeight.w700,
                 letterSpacing: 0.8,
               ),
             ),
@@ -366,15 +401,15 @@ class _CertificatesPageState extends State<CertificatesPage> {
                 'VERIFICATION ID',
                 style: GoogleFonts.inter(
                   fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF9CA3AF),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[700],
                   letterSpacing: 0.7,
                 ),
               ),
               const SizedBox(height: 3),
               Text(
                 verificationId,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1A56DB)),
+                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1A56DB)),
               ),
             ],
           ),
@@ -385,15 +420,15 @@ class _CertificatesPageState extends State<CertificatesPage> {
                 'ISSUED DATE',
                 style: GoogleFonts.inter(
                   fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF9CA3AF),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[700],
                   letterSpacing: 0.7,
                 ),
               ),
               const SizedBox(height: 3),
               Text(
                 issuedDate,
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF111827)),
+                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF111827)),
               ),
             ],
           ),
@@ -402,16 +437,16 @@ class _CertificatesPageState extends State<CertificatesPage> {
     );
   }
 
-  Widget _buildIssuedActions() {
+  Widget _buildIssuedActions(GuideCertificate cert) {
     return Row(
       children: [
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.remove_red_eye_outlined, size: 18, color: Color(0xFF1A56DB)),
+            onPressed: () => _viewCertificate(cert),
+            icon: const Icon(Icons.remove_red_eye_outlined, size: 18, color: Color(0xFF1A56DB), fontWeight: FontWeight.w800),
             label: Text(
               'View',
-              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1A56DB)),
+              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF1A56DB)),
             ),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -423,11 +458,11 @@ class _CertificatesPageState extends State<CertificatesPage> {
         const SizedBox(width: 12),
         Expanded(
           child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.download_outlined, size: 18, color: Colors.white),
+            onPressed: () => _downloadCertificate(cert),
+            icon: const Icon(Icons.download_outlined, size: 18, color: Colors.white, fontWeight: FontWeight.w800),
             label: Text(
               'Download',
-              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+              style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF1A56DB),

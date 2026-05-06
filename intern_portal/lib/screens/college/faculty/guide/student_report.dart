@@ -209,7 +209,7 @@ class _StudentReportsPageState extends State<StudentReportsPage> {
                   isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : response == null || response!.reports.isEmpty
-                      ? const Center(child: Text("No reports found"))
+                      ? Center(child: Text("No reports found", style: GoogleFonts.inter()))
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

@@ -350,7 +350,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
   }
 }
 
-Widget _buildAccessItem(IconData icon, String label) {
+/* Widget _buildAccessItem(IconData icon, String label) {
   return Column(
     children: [
       Container(
@@ -365,7 +365,7 @@ Widget _buildAccessItem(IconData icon, String label) {
       ),
     ],
   );
-}
+} */
 
 class _ColumnPatternPainter extends CustomPainter {
   @override

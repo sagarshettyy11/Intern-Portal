@@ -167,9 +167,9 @@ class FacultyProfilePage extends StatelessWidget {
                             Navigator.pushNamedAndRemoveUntil(context, '/UnifiedLogin', (route) => false);
                           },
                           icon: const Icon(Icons.logout_rounded, color: Colors.white, size: 18),
-                          label: const Text(
+                          label: Text(
                             'Logout',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+                            style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
                           ),
                           style: OutlinedButton.styleFrom(
                             backgroundColor: Color(0xFF0000FF),
