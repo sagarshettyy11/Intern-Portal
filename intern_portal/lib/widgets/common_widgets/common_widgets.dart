@@ -130,15 +130,15 @@ class CustomDropdown extends StatelessWidget {
       ),
       items: items.map((item) {
         if (isMap) {
-          final isAvailable = item['is_available'];
+          final bool isAvailable = item['is_available'] ?? true;
           return DropdownMenuItem(
-            value: isAvailable ? item['faculty_id'] : null,
+            value: isAvailable ? item['id'] : null,
             enabled: isAvailable,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  item['faculty_name'],
+                  item['name'],
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,

@@ -18,36 +18,71 @@ class AdminServices {
       Uri.parse("${ApiEndpoints.adminDepartment}?action=list"),
       headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
     );
-    final json = jsonDecode(response.body);
-    if (json['success'] == true) {
-      final list = json['data']?['departments'] as List? ?? [];
-      return list.map((e) => Department.fromJson(e)).toList();
+    debugPrint("DEPT STATUS: ${response.statusCode}");
+    debugPrint("DEPT BODY: ${response.body}");
+    try {
+      final json = jsonDecode(response.body);
+      if (json['success'] == true) {
+        final list = json['data']?['departments'] as List? ?? [];
+        return list.map((e) => Department.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint("DEPARTMENT JSON ERROR: $e");
     }
     return [];
   }
 
-  static Future<bool> addDepartment({required String name, required String code}) async {
+  static Future<bool> addDepartment({required String name, required String code, int? hodId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+
     final response = await http.post(
       Uri.parse("${ApiEndpoints.adminDepartment}?action=add"),
-      headers: {"Authorization": "Bearer $token"},
-      body: {"dept_name": name, "dept_code": code},
+      headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+      body: jsonEncode({
+        "dept_name": name,
+        "dept_code": code,
+        "hod_faculty_ids": hodId != null ? [hodId] : [],
+      }),
     );
-    final json = jsonDecode(response.body);
-    return json['success'] == true;
+
+    debugPrint("ADD STATUS: ${response.statusCode}");
+    debugPrint("ADD BODY: ${response.body}");
+
+    try {
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("ADD ERROR: $e");
+      return false;
+    }
   }
 
-  static Future<bool> editDepartment({required int id, required String name, required String code}) async {
+  static Future<bool> editDepartment({required int id, required String name, required String code, int? hodId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+
     final response = await http.post(
       Uri.parse("${ApiEndpoints.adminDepartment}?action=edit"),
-      headers: {"Authorization": "Bearer $token"},
-      body: {"dept_id": id.toString(), "dept_name": name, "dept_code": code},
+      headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+      body: jsonEncode({
+        "dept_id": id,
+        "dept_name": name,
+        "dept_code": code,
+        "hod_faculty_ids": hodId != null ? [hodId] : [],
+      }),
     );
-    final json = jsonDecode(response.body);
-    return json['success'] == true;
+
+    debugPrint("EDIT STATUS: ${response.statusCode}");
+    debugPrint("EDIT BODY: ${response.body}");
+
+    try {
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("EDIT ERROR: $e");
+      return false;
+    }
   }
 
   static Future<bool> deactivateDepartment(int id) async {
@@ -62,19 +97,26 @@ class AdminServices {
     return json['success'] == true;
   }
 
-  static Future<List<dynamic>> fetchHodList() async {
+  static Future<List<dynamic>> fetchHodList({int? deptId}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    final response = await http.get(
-      Uri.parse("${ApiEndpoints.adminDepartment}?action=hod_list"),
-      headers: {"Authorization": "Bearer $token"},
-    );
-    final json = jsonDecode(response.body);
-    if (json['success'] == true) {
-      final list = json['data']['hods'] as List? ?? [];
-      return list.map((e) {
-        return {"id": e['faculty_id'], "name": e['faculty_name']};
-      }).toList();
+    String url = "${ApiEndpoints.adminDepartment}?action=hod_list";
+    if (deptId != null) {
+      url += "&dept_id=$deptId";
+    }
+    final response = await http.get(Uri.parse(url), headers: {"Authorization": "Bearer $token"});
+    debugPrint("HOD STATUS: ${response.statusCode}");
+    debugPrint("HOD BODY: ${response.body}");
+    try {
+      final json = jsonDecode(response.body);
+      if (json['success'] == true) {
+        final list = json['data']['faculty'] as List? ?? [];
+        return list.map((e) {
+          return {"id": e['faculty_id'], "name": e['faculty_name'], "selected": false, "isMap": true};
+        }).toList();
+      }
+    } catch (e) {
+      debugPrint("HOD JSON ERROR: $e");
     }
     return [];
   }

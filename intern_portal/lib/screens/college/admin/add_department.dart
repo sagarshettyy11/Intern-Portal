@@ -111,7 +111,7 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                     value: selectedHodId,
                     hint: "Select HOD",
                     items: hodList,
-                    isMap: true, 
+                    isMap: true,
                     onChanged: (value) {
                       setState(() {
                         selectedHodId = value;
@@ -152,10 +152,14 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                   }
                   setState(() => isLoading = true);
                   final success = widget.department == null
-                      ? await AdminServices.addDepartment(name: name, code: code)
-                      : await AdminServices.editDepartment(id: widget.department!.id, name: name, code: code);
+                      ? await AdminServices.addDepartment(name: name, code: code, hodId: selectedHodId)
+                      : await AdminServices.editDepartment(
+                          id: widget.department!.id,
+                          name: name,
+                          code: code,
+                          hodId: selectedHodId,
+                        );
                   setState(() => isLoading = false);
-
                   if (success) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
