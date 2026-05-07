@@ -56,36 +56,33 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ],
       ),
       body: Stack(
-  children: [
-    SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildStatsRow(),
-          const SizedBox(height: 24),
-          _buildSectionHeader(),
-          const SizedBox(height: 14),
-          _buildSearchBar(),
-          const SizedBox(height: 14),
-          _buildFilterTabs(),
-          const SizedBox(height: 16),
-          ...(analytics?.students ?? []).map(
-            (s) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: _buildStudentCard(s),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildStatsRow(),
+                const SizedBox(height: 24),
+                _buildSectionHeader(),
+                const SizedBox(height: 14),
+                _buildSearchBar(),
+                const SizedBox(height: 14),
+                _buildFilterTabs(),
+                const SizedBox(height: 16),
+                ...(analytics?.students ?? []).map(
+                  (s) => Padding(padding: const EdgeInsets.only(bottom: 16), child: _buildStudentCard(s)),
+                ),
+              ],
             ),
           ),
+          if (isLoading)
+            Container(
+              color: Colors.black.withValues(alpha: 0.05),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
         ],
       ),
-    ),
-    if (isLoading)
-      Container(
-        color: Colors.black.withValues(alpha: 0.05),
-        child: const Center(child: CircularProgressIndicator()),
-      ),
-  ],
-),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: const Color(0xFF1565C0),
@@ -252,7 +249,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Widget _buildStudentCard(StudentModel student) {
     final statusConfig = _statusConfig(student.status);
-
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -312,14 +308,33 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 ),
               ],
             ),
-
             if (student.company != null) ...[
               const SizedBox(height: 12),
-              Text(
-                student.company!,
-                style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF1565C0), fontWeight: FontWeight.w600),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          student.company!,
+                          style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF1565C0), fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          student.role ?? 'No Role',
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.supervisor_account_rounded),
+                    color: const Color(0xFF1565C0),
+                    tooltip: 'Assign Guide',
+                  ),
+                ],
               ),
-              Text(student.role ?? 'No Role', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600])),
             ],
             const SizedBox(height: 12),
             if (student.hasReports && student.total != null) ...[

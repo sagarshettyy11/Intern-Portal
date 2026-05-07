@@ -310,7 +310,6 @@ class DepartmentMasterCard extends StatelessWidget {
                                 id: department.id,
                                 name: department.name,
                                 code: department.code,
-                                hodId: department.hodId,
                               );
                               if (success) {
                                 ScaffoldMessenger.of(

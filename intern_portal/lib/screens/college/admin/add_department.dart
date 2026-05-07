@@ -29,7 +29,6 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
       final d = widget.department!;
       nameController.text = d.name;
       codeController.text = d.code;
-      selectedHodId = d.hodId;
     }
   }
 
@@ -112,7 +111,7 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                     value: selectedHodId,
                     hint: "Select HOD",
                     items: hodList,
-                    isMap: true, // 🔥 IMPORTANT
+                    isMap: true, 
                     onChanged: (value) {
                       setState(() {
                         selectedHodId = value;
@@ -147,27 +146,14 @@ class _AddDepartmentPageState extends State<AddDepartmentPage> {
                 onPressed: () async {
                   final name = nameController.text.trim();
                   final code = codeController.text.trim();
-
                   if (name.isEmpty || code.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill all fields")));
                     return;
                   }
-
                   setState(() => isLoading = true);
-
                   final success = widget.department == null
-                      ? await AdminServices.addDepartment(
-                          name: name,
-                          code: code,
-                          hodId: selectedHodId, // ✅ IMPORTANT
-                        )
-                      : await AdminServices.editDepartment(
-                          id: widget.department!.id,
-                          name: name,
-                          code: code,
-                          hodId: selectedHodId, // ✅ IMPORTANT
-                        );
-
+                      ? await AdminServices.addDepartment(name: name, code: code)
+                      : await AdminServices.editDepartment(id: widget.department!.id, name: name, code: code);
                   setState(() => isLoading = false);
 
                   if (success) {

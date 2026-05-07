@@ -39,7 +39,6 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
 
   Future<void> loadInitialData() async {
     setState(() => isLoading = true);
-
     final deptData = await AdminServices.fetchDepartments();
     final response = await AdminServices.fetchStudents(
       search: search,
@@ -104,6 +103,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 10),
                     GestureDetector(
                       onTap: () =>
                           Navigator.push(context, MaterialPageRoute(builder: (_) => const ImportStudentsScreen())),

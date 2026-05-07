@@ -10,6 +10,8 @@ class StudentModel {
   final int? departmentId;
   final String initials;
   final String? phone;
+  final int? guideId;
+  final String? guideName;
   StudentModel({
     required this.studentId,
     required this.name,
@@ -22,6 +24,8 @@ class StudentModel {
     this.phone,
     this.departmentName,
     this.departmentId,
+    this.guideId,
+    this.guideName,
   });
   bool get isActive => status == 'Active';
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class StudentModel {
       departmentName: json['department_name'],
       departmentId: json['department_id'],
       initials: json['initials'] ?? '',
+      guideId: json['guide_id'],
+      guideName: json['guide_name'],
     );
   }
 }
@@ -45,20 +51,33 @@ class StudentStats {
   final int total;
   final int active;
   final int inactive;
-  StudentStats({required this.total, required this.active, required this.inactive});
+  StudentStats({
+    required this.total,
+    required this.active,
+    required this.inactive,
+  });
   factory StudentStats.fromJson(Map<String, dynamic> json) {
-    return StudentStats(total: json['total'] ?? 0, active: json['active'] ?? 0, inactive: json['inactive'] ?? 0);
+    return StudentStats(
+      total: json['total'] ?? 0,
+      active: json['active'] ?? 0,
+      inactive: json['inactive'] ?? 0,
+    );
   }
 }
 
 class StudentListResponse {
   final List<StudentModel> students;
   final StudentStats stats;
-  StudentListResponse({required this.students, required this.stats});
+  StudentListResponse({
+    required this.students,
+    required this.stats,
+  });
   factory StudentListResponse.fromJson(Map<String, dynamic> json) {
     final data = json['data'] ?? {};
     return StudentListResponse(
-      students: (data['students'] as List? ?? []).map((e) => StudentModel.fromJson(e)).toList(),
+      students: (data['students'] as List? ?? [])
+          .map((e) => StudentModel.fromJson(e))
+          .toList(),
       stats: StudentStats.fromJson(data['stats'] ?? {}),
     );
   }

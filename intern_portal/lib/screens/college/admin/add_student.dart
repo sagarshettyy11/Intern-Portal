@@ -251,7 +251,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                                 children: [
                                   _AddFieldLabel(label: 'BATCH'),
                                   const SizedBox(height: 8),
-                                  _AddTextField(controller: _batchController, hintText: 'Fall 2024'),
+                                  _AddTextField(controller: _batchController, hintText: '2022-2026'),
                                 ],
                               ),
                             ),

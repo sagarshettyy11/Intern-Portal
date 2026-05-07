@@ -25,33 +25,25 @@ class AdminServices {
     return [];
   }
 
-  static Future<bool> addDepartment({required String name, required String code, int? hodId}) async {
+  static Future<bool> addDepartment({required String name, required String code}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.post(
       Uri.parse("${ApiEndpoints.adminDepartment}?action=add"),
       headers: {"Authorization": "Bearer $token"},
-      body: {"dept_name": name, "dept_code": code, if (hodId != null) "hod_faculty_id": hodId.toString()},
+      body: {"dept_name": name, "dept_code": code},
     );
     final json = jsonDecode(response.body);
-    if (json['success'] == true) {
-      return true;
-    }
-    return false;
+    return json['success'] == true;
   }
 
-  static Future<bool> editDepartment({required int id, required String name, required String code, int? hodId}) async {
+  static Future<bool> editDepartment({required int id, required String name, required String code}) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final response = await http.post(
       Uri.parse("${ApiEndpoints.adminDepartment}?action=edit"),
       headers: {"Authorization": "Bearer $token"},
-      body: {
-        "dept_id": id.toString(),
-        "dept_name": name,
-        "dept_code": code,
-        if (hodId != null) "hod_faculty_id": hodId.toString(),
-      },
+      body: {"dept_id": id.toString(), "dept_name": name, "dept_code": code},
     );
     final json = jsonDecode(response.body);
     return json['success'] == true;
@@ -78,7 +70,10 @@ class AdminServices {
     );
     final json = jsonDecode(response.body);
     if (json['success'] == true) {
-      return json['data']['hods'];
+      final list = json['data']['hods'] as List? ?? [];
+      return list.map((e) {
+        return {"id": e['faculty_id'], "name": e['faculty_name']};
+      }).toList();
     }
     return [];
   }
@@ -290,11 +285,18 @@ class AdminServices {
       "${deptId != null ? "&dept=$deptId" : ""}"
       "&batch=$batch",
     );
-    final response = await http.get(uri, headers: {"Authorization": "Bearer $token"});
-    final json = jsonDecode(response.body);
-    if (json['success'] == true) {
-      return StudentListResponse.fromJson(json);
+    final response = await http.get(uri, headers: {"Authorization": "Bearer $token", "Accept": "application/json"});
+    debugPrint("STATUS CODE: ${response.statusCode}");
+    debugPrint("BODY: ${response.body}");
+    try {
+      final json = jsonDecode(response.body);
+      if (json['success'] == true) {
+        return StudentListResponse.fromJson(json);
+      }
+    } catch (e) {
+      debugPrint("JSON ERROR: $e");
     }
+
     return null;
   }
 
