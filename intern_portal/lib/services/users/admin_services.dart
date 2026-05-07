@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/admin/dashboard_model.dart';
@@ -370,6 +371,19 @@ class AdminServices {
     );
     final json = jsonDecode(response.body);
     return json['success'] == true;
+  }
+
+  static Future<Map<String, dynamic>> importStudents(File file) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    var request = http.MultipartRequest('POST', Uri.parse("${ApiEndpoints.student}?action=import"));
+    request.headers.addAll({"Authorization": "Bearer $token"});
+    request.files.add(await http.MultipartFile.fromPath('excel_file', file.path));
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+    debugPrint("IMPORT STATUS: ${response.statusCode}");
+    debugPrint("IMPORT BODY: $responseBody");
+    return jsonDecode(responseBody);
   }
 
   static Future<AdminProfile?> fetchAdminProfile() async {
