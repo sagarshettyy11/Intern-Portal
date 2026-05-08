@@ -16,7 +16,8 @@ class AnalyticsScreen extends StatefulWidget {
 
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int _selectedFilter = 0;
-  final List<String> _filters = ['All Students', 'Ongoing', 'Unassigned', 'Completed'];
+  String selectedBatch = '2022-2026';
+  final List<String> _filters = ['All Students', 'Ongoing', 'Pending', 'Completed'];
   AnalyticsResponse? analytics;
   bool isLoading = true;
 
@@ -26,11 +27,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     loadAnalytics();
   }
 
-  Future<void> loadAnalytics({String search = '', String batch = '', String year = ''}) async {
+  Future<void> loadAnalytics({String search = '', String batch = '', String year = '', String status = ''}) async {
     if (analytics == null) {
       setState(() => isLoading = true);
     }
-    final res = await HodServices.fetchAnalytics(search: search, batch: batch, year: year);
+    final res = await HodServices.fetchAnalytics(search: search, batch: batch, year: year, status: status);
     setState(() {
       analytics = res;
       isLoading = false;
@@ -123,8 +124,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   stats[i]['label'] as String,
                   style: GoogleFonts.inter(
                     fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey[500],
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey[800],
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -133,7 +134,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   stats[i]['value'] as String,
                   style: GoogleFonts.inter(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
                     color: stats[i]['color'] as Color,
                   ),
                 ),
@@ -154,26 +155,38 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             color: const Color(0xFFEFF4FF),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFF90CAF9)),
           ),
-          child: Row(
-            children: [
-              Text(
-                'BATCH 2024',
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1565C0),
-                  letterSpacing: 0.4,
-                ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: selectedBatch,
+              icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF1565C0)),
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF1565C0),
+                letterSpacing: 0.4,
               ),
-              SizedBox(width: 4),
-              Icon(Icons.keyboard_arrow_down, color: Color(0xFF1565C0), size: 16),
-            ],
+              items: [
+                '2022-2026',
+                '2023-2027',
+                '2024-2028',
+                '2025-2029',
+              ].map((batch) => DropdownMenuItem(value: batch, child: Text(batch))).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedBatch = value;
+                  });
+                  loadAnalytics(batch: value);
+                }
+              },
+            ),
           ),
         ),
       ],
@@ -193,8 +206,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         },
         decoration: InputDecoration(
           hintText: 'Search by name or USN...',
-          hintStyle: GoogleFonts.inter(color: Colors.grey[400], fontSize: 14),
-          prefixIcon: Icon(Icons.search, color: Colors.grey[400], size: 20),
+          hintStyle: GoogleFonts.inter(color: Colors.grey[600], fontSize: 14, fontWeight: FontWeight.w800),
+          prefixIcon: Icon(Icons.search, color: Colors.grey[600], size: 20, fontWeight: FontWeight.w800),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
         ),
@@ -215,11 +228,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 setState(() => _selectedFilter = i);
                 String filter = _filters[i];
                 if (filter == 'Ongoing') {
-                  loadAnalytics(search: 'ongoing');
+                  loadAnalytics(status: 'ongoing');
                 } else if (filter == 'Completed') {
-                  loadAnalytics(search: 'completed');
-                } else if (filter == 'Unassigned') {
-                  loadAnalytics(search: 'not applied');
+                  loadAnalytics(status: 'completed');
+                } else if (filter == 'Pedning') {
+                  loadAnalytics(status: 'not applied');
                 } else {
                   loadAnalytics();
                 }
@@ -230,13 +243,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 decoration: BoxDecoration(
                   color: isSelected ? const Color(0xFF1565C0) : Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: isSelected ? const Color(0xFF1565C0) : Colors.grey[300]!),
+                  border: Border.all(color: isSelected ? const Color(0xFF0000FF) : Colors.grey[300]!),
                 ),
                 child: Text(
                   _filters[i],
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     color: isSelected ? Colors.white : Colors.black54,
                   ),
                 ),
@@ -271,7 +284,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   child: Center(
                     child: Text(
                       student.initials,
-                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1565C0)),
+                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1565C0)),
                     ),
                   ),
                 ),
@@ -287,7 +300,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                               student.name,
                               style: GoogleFonts.inter(
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
                                 color: Colors.black87,
                               ),
                             ),
@@ -298,7 +311,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       const SizedBox(height: 2),
                       Text(
                         '${student.usn}  •  ${student.batch}',
-                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[500]),
+                        style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[600], fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 6),
                       _buildIconText(Icons.email_outlined, student.email),
@@ -319,11 +332,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       children: [
                         Text(
                           student.company!,
-                          style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF1565C0), fontWeight: FontWeight.w600),
+                          style: GoogleFonts.inter(fontSize: 13, color: Color(0xFF1565C0), fontWeight: FontWeight.w800),
                         ),
                         Text(
                           student.role ?? 'No Role',
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w800),
                         ),
                       ],
                     ),
@@ -363,10 +376,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       MaterialPageRoute(builder: (_) => StudentReviewScreen(studentId: student.id)),
                     );
                   },
-                  icon: const Icon(Icons.chevron_right, size: 18),
-                  label: const Text('VIEW REPORTS'),
+                  icon: const Icon(Icons.chevron_right, size: 18, fontWeight: FontWeight.w800, color: Colors.white),
+                  label: Text(
+                    'VIEW REPORTS',
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: Colors.white),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1565C0),
+                    backgroundColor: const Color(0xFF0000FF),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -401,12 +417,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Widget _buildIconText(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 13, color: Colors.grey[500]),
+        Icon(icon, size: 13, color: Colors.grey[600], fontWeight: FontWeight.w800),
         const SizedBox(width: 5),
         Expanded(
           child: Text(
             text,
-            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600]),
+            style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w800),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -421,8 +437,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           label,
           style: GoogleFonts.inter(
             fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: Colors.grey[500],
+            fontWeight: FontWeight.w800,
+            color: Colors.grey[700],
             letterSpacing: 0.4,
           ),
         ),
@@ -451,15 +467,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   Map<String, Color> _statusConfig(String status) {
-    switch (status) {
+    switch (status.toUpperCase()) {
       case 'ONGOING':
-        return {'bg': const Color(0xFFFFF3E0), 'text': const Color(0xFFE65100)};
-      case 'NOT APPLIED':
-        return {'bg': const Color(0xFFFFEBEE), 'text': const Color(0xFFC62828)};
+        return {'bg': Colors.orange.shade100, 'text': Colors.orange.shade800};
+      case 'PENDING':
+        return {'bg': Colors.red.shade100, 'text': Colors.red.shade800};
       case 'COMPLETED':
-        return {'bg': const Color(0xFFE8F5E9), 'text': const Color(0xFF2E7D32)};
+        return {'bg': Colors.green.shade100, 'text': Colors.green.shade800};
       default:
-        return {'bg': const Color(0xFFEEEEEE), 'text': Colors.grey};
+        return {'bg': Colors.grey.shade300, 'text': Colors.grey};
     }
   }
 }

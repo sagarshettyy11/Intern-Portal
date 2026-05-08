@@ -96,7 +96,12 @@ class HodServices {
     }
   }
 
-  static Future<AnalyticsResponse?> fetchAnalytics({String search = '', String batch = '', String year = ''}) async {
+  static Future<AnalyticsResponse?> fetchAnalytics({
+    String search = '',
+    String batch = '',
+    String year = '',
+    String status = '',
+  }) async {
     try {
       final headers = await AuthHeaders.get();
       final uri = Uri.parse(ApiEndpoints.analytics).replace(
@@ -104,6 +109,7 @@ class HodServices {
           if (search.isNotEmpty) 'search': search,
           if (batch.isNotEmpty) 'batch': batch,
           if (year.isNotEmpty) 'year': year,
+          if (status.isNotEmpty) 'status': status,
         },
       );
       final res = await http.get(uri, headers: headers);

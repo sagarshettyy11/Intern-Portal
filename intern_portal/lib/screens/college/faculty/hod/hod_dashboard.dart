@@ -39,7 +39,6 @@ class _HodDashboardPageState extends State<HodDashboardPage> {
       return const Scaffold(body: Center(child: Text("Failed to load dashboard")));
     }
     final batches = data!.batchYears.entries.toList();
-
     final chartData = batches.map((e) {
       final b = e.value;
       final total = b.total == 0 ? 1 : b.total;
@@ -252,15 +251,23 @@ class _HodDashboardPageState extends State<HodDashboardPage> {
             const SizedBox(height: 12),
             Column(
               children: data!.guideLoads.map((g) {
-                final double progress = g.mentees == 0 ? 0 : g.completed / g.mentees;
+                final double progress = (g.mentees / 10).clamp(0.0, 1.0);
+                Color progressColor;
+                if (g.mentees >= 8) {
+                  progressColor = Colors.red;
+                } else if (g.mentees >= 5) {
+                  progressColor = Colors.orange;
+                } else {
+                  progressColor = const Color(0xFF3B6EF0);
+                }
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: _GuideLoadCard(
                     name: g.name,
                     mentees: "${g.mentees} Mentees",
-                    responseTime: "~2 hrs", // optional
+                    // responseTime: "~2 hrs", // optional
                     progress: progress,
-                    progressColor: const Color(0xFF3B6EF0),
+                    progressColor: progressColor,
                   ),
                 );
               }).toList(),
@@ -486,13 +493,11 @@ class _ApprovalRow extends StatelessWidget {
 class _GuideLoadCard extends StatelessWidget {
   final String name;
   final String mentees;
-  final String responseTime;
   final double progress;
   final Color progressColor;
   const _GuideLoadCard({
     required this.name,
     required this.mentees,
-    required this.responseTime,
     required this.progress,
     required this.progressColor,
   });
@@ -524,7 +529,7 @@ class _GuideLoadCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
+              /* Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
@@ -541,7 +546,7 @@ class _GuideLoadCard extends StatelessWidget {
                     style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.black87),
                   ),
                 ],
-              ),
+              ), */
             ],
           ),
           const SizedBox(height: 10),

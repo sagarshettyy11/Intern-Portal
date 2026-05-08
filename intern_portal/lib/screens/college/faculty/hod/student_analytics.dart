@@ -92,29 +92,29 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black54,
+                      color: Colors.black,
                       letterSpacing: 0.5,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             Text(
               data?.student.name ?? '',
-              style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black87),
             ),
             const SizedBox(height: 4),
             Row(
               children: [
                 Text(
                   'USN: ${data?.student.registrationNo ?? ''}',
-                  style: GoogleFonts.inter(fontSize: 13, color: Colors.black54),
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], fontWeight: FontWeight.w700),
                 ),
                 SizedBox(width: 12),
                 Text(
                   'Batch: ${data?.student.batch ?? ''}',
-                  style: GoogleFonts.inter(fontSize: 13, color: Colors.black54),
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -122,37 +122,26 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             _buildContactRow(Icons.email_outlined, data?.student.email ?? ''),
             const SizedBox(height: 4),
             _buildContactRow(Icons.phone_outlined, data?.student.phone ?? ''),
-            const SizedBox(height: 16),
-            Divider(color: Colors.grey[200], height: 1),
-            const SizedBox(height: 14),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Container(
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-                  child: const Icon(Icons.business_outlined, color: Color(0xFF1565C0), size: 20),
+                  child: const Icon(Icons.business_outlined, color: Color(0xFF0000FF), size: 20),
                 ),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'COMPANY',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.grey[500],
-                        letterSpacing: 0.6,
-                      ),
-                    ),
-                    Text(
                       data?.internship?.company ?? 'Not Assigned',
-                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1565C0)),
+                      style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFF0000FF)),
                     ),
                     Text(
                       '${data?.internship?.startDate ?? ''} - ${data?.internship?.endDate ?? ''}',
-                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500]),
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -166,30 +155,30 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                   'ROLE',
                   style: GoogleFonts.inter(
                     fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey[500],
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey[700],
                     letterSpacing: 0.6,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   data?.internship?.role ?? 'Not Assigned',
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'GUIDE',
                   style: GoogleFonts.inter(
                     fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey[500],
+                    fontWeight: FontWeight.w800,
+                    color: Colors.grey[700],
                     letterSpacing: 0.6,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   data?.internship?.guide ?? 'Not Assigned',
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -202,9 +191,12 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
   Widget _buildContactRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: Colors.grey[500]),
+        Icon(icon, size: 14, color: Colors.grey[700]),
         const SizedBox(width: 6),
-        Text(text, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700])),
+        Text(
+          text,
+          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], fontWeight: FontWeight.w700),
+        ),
       ],
     );
   }
@@ -212,9 +204,9 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
   Widget _buildStatsRow() {
     final stats = [
       {'label': 'TOTAL', 'value': data?.stats.total.toString() ?? '0', 'color': const Color(0xFF1565C0)},
-      {'label': 'DONE', 'value': data?.stats.approved.toString() ?? '0', 'color': const Color(0xFF2E7D32)},
-      {'label': 'PEND', 'value': data?.stats.pending.toString() ?? '0', 'color': const Color(0xFFF57C00)},
-      {'label': 'REJ', 'value': data?.stats.rejected.toString() ?? '0', 'color': const Color(0xFFC62828)},
+      {'label': 'COMPLETED', 'value': data?.stats.approved.toString() ?? '0', 'color': const Color(0xFF2E7D32)},
+      {'label': 'PENDING', 'value': data?.stats.pending.toString() ?? '0', 'color': const Color(0xFFF57C00)},
+      {'label': 'REJECTED', 'value': data?.stats.rejected.toString() ?? '0', 'color': const Color(0xFFC62828)},
     ];
     return Container(
       decoration: BoxDecoration(
@@ -233,8 +225,8 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                     stats[i]['label'] as String,
                     style: GoogleFonts.inter(
                       fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[700],
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -291,29 +283,28 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1565C0),
+                    color: const Color(0xFF0000FF),
                     letterSpacing: 0.6,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(color: const Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-                  child: const Icon(Icons.calendar_today_outlined, color: Color(0xFF1565C0), size: 16),
+                  child: const Icon(Icons.calendar_today_outlined, color: Color(0xFF0000FF), size: 16),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   '${(progress * 100).toInt()}%',
-                  style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
+                  style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w800, color: Colors.black87),
                 ),
                 Text(
                   daysLeft > 0 ? '$daysLeft Days Left' : 'Completed',
-                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], fontWeight: FontWeight.w500),
                 ),
               ],
             ),
@@ -324,7 +315,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                 value: progress,
                 minHeight: 10,
                 backgroundColor: const Color(0xFFE0E7F5),
-                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF1565C0)),
+                valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF0000FF)),
               ),
             ),
           ],
@@ -341,7 +332,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
           'All Reports',
           style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
-        GestureDetector(
+        /* GestureDetector(
           onTap: () {},
           child: Row(
             children: [
@@ -353,7 +344,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
               Icon(Icons.filter_list, color: Color(0xFF1565C0), size: 18),
             ],
           ),
-        ),
+        ), */
       ],
     );
   }
@@ -378,8 +369,8 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                   'REPORT #${report.id}',
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1565C0),
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF0000FF),
                     letterSpacing: 0.4,
                   ),
                 ),
@@ -389,26 +380,29 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
             const SizedBox(height: 6),
             Text(
               report.title,
-              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.black87),
             ),
             const SizedBox(height: 6),
-            Text(report.description, style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[600], height: 1.4)),
-            const SizedBox(height: 14),
-            Divider(color: Colors.grey[200], height: 1),
-            const SizedBox(height: 10),
+            Text(
+              report.description,
+              style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[700], height: 1.4, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 6),
             Row(
               children: [
                 Expanded(
-                  child: Text(report.date, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[500])),
+                  child: Text(
+                    report.date,
+                    style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[700], fontWeight: FontWeight.bold),
+                  ),
                 ),
-                // Download button
                 GestureDetector(
                   onTap: () {},
                   child: Container(
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(color: const Color(0xFFF3F5F8), borderRadius: BorderRadius.circular(8)),
-                    child: Icon(Icons.download_outlined, color: Colors.grey[600], size: 20),
+                    child: Icon(Icons.download_outlined, color: Colors.black, size: 20),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -416,14 +410,17 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1565C0),
+                    backgroundColor: const Color(0xFF0000FF),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     textStyle: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
                     elevation: 0,
                   ),
-                  child: const Text('View'),
+                  child: Text(
+                    'View',
+                    style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w800),
+                  ),
                 ),
               ],
             ),
@@ -445,7 +442,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
   }
 
   Map<String, Color> _statusConfig(String status) {
-    switch (status) {
+    switch (status.toUpperCase()) {
       case 'PENDING':
         return {'bg': const Color(0xFFFFF3E0), 'text': const Color(0xFFE65100)};
       case 'APPROVED':
