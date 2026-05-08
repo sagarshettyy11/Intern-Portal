@@ -54,13 +54,15 @@ class Academic {
   final String department;
   final String university;
   final String year;
+  final String? batch;
   final double? cgpa;
-  Academic({required this.department, required this.university, required this.year, this.cgpa});
+  Academic({required this.department, required this.university, required this.year, required this.batch, this.cgpa});
   factory Academic.fromJson(Map<String, dynamic> json) {
     return Academic(
       department: json['department_name'] ?? '',
       university: json['university_name'] ?? '',
       year: json['year_of_study'] ?? '',
+      batch: (json['batch'] ?? '').toString(),
       cgpa: json['cgpa'] != null ? double.tryParse(json['cgpa'].toString()) : null,
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/data/student/registeration_data.dart';
+import 'package:intern_portal/screens/college/students/notifications.dart';
 import 'package:intern_portal/screens/college/students/submit_report.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/themes/status_utils.dart';
@@ -49,13 +50,8 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FA),
       appBar: CommonAppBar(
-        title: "Reports Overview",
-        showBack: true,
+        showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black87, fontWeight: FontWeight.bold),
-            onPressed: () {},
-          ),
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const SubmitReportPage()));
@@ -68,9 +64,16 @@ class ReportsOverviewPageState extends State<ReportsOverviewPage> {
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.add, color: Colors.white, size: 18, fontWeight: FontWeight.bold),
+              child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationsScreen()));
+            },
+            child: const Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Padding(

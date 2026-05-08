@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/student/dashboard_models.dart';
+import 'package:intern_portal/screens/college/students/notifications.dart';
 import 'package:intern_portal/screens/college/students/registration.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -60,8 +61,13 @@ class _DashboardPageState extends State<DashboardPage> {
               child: const Icon(Icons.add, color: Colors.white, size: 18),
             ),
           ),
-          Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
-          const SizedBox(width: 4),
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationsScreen()));
+            },
+            child: const Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: SingleChildScrollView(

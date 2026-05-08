@@ -36,7 +36,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
-      appBar: CommonAppBar(title: "Company Profile", showBack: true),
+      appBar: CommonAppBar(showLogo: true),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

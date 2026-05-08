@@ -7,6 +7,7 @@ import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/common_widgets/profile_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -201,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       SizedBox(width: 12),
                       Expanded(
-                        child: AcademicBox(label: "YEAR", value: profile!.academic.year),
+                        child: AcademicBox(label: "BATCH", value: profile!.academic.batch ?? ''),
                       ),
                     ],
                   ),
@@ -312,26 +313,31 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 22),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.remove('token');
+                        await prefs.clear();
+                        Navigator.pushNamedAndRemoveUntil(context, '/UnifiedLogin', (route) => false);
+                      },
+                      icon: const Icon(Icons.logout_rounded, color: Colors.white, size: 20),
+                      label: Text(
+                        'Logout',
+                        style: GoogleFonts.inter(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w800),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF0000FF),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 0,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 14),
-              color: Colors.white,
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      profile!.personal.name.toUpperCase(),
-                      style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[500]),
-                    ),
-                    Text(
-                      profile!.personal.registrationNo,
-                      style: GoogleFonts.inter(fontSize: 11, color: Colors.grey[400]),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],

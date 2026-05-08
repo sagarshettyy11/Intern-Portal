@@ -42,21 +42,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F5F8),
-      appBar: CommonAppBar(
-        showLogo: true,
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
-          ),
-        ],
-      ),
+      appBar: CommonAppBar(showLogo: true),
       body: Stack(
         children: [
           SingleChildScrollView(

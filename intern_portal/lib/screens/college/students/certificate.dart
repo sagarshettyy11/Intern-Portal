@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/student/certificate_models.dart';
 import 'package:intern_portal/screens/college/faculty/guide/certificate_viewer.dart';
+import 'package:intern_portal/screens/college/students/notifications.dart';
 import 'package:intern_portal/screens/college/students/profile.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
@@ -88,19 +89,15 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFF0F4FF),
       appBar: CommonAppBar(
-        showBack: false,
         showLogo: true,
         actions: [
           InkWell(
-            borderRadius: BorderRadius.circular(20),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => ProfilePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationsScreen()));
             },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
+            child: const Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: SingleChildScrollView(

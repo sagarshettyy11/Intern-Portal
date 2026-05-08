@@ -44,21 +44,7 @@ class _StudentPerformancePageState extends State<StudentPerformancePage> {
     final completedPercent = (completed * 100).toStringAsFixed(0);
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
-      appBar: CommonAppBar(
-        showLogo: true,
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => HodProfilePage()));
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
-          ),
-        ],
-      ),
+      appBar: CommonAppBar(showLogo: true),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
