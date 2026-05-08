@@ -65,19 +65,7 @@ class _CertificatesListScreenState extends State<CertificatesListScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
-      appBar: CommonAppBar(
-        showLogo: true,
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
-          ),
-        ],
-      ),
+      appBar: CommonAppBar(showLogo: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         child: Column(

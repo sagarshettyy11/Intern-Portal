@@ -20,7 +20,6 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
   List<InternshipRequestModel> _requests = [];
   CompanyStats? stats;
   bool isLoading = true;
-
   @override
   void initState() {
     super.initState();
@@ -58,19 +57,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
-      appBar: CommonAppBar(
-        showLogo: true,
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
-          ),
-        ],
-      ),
+      appBar: CommonAppBar(showLogo: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 6, 16, 100),
         child: Column(
@@ -82,17 +69,9 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             const SizedBox(height: 20),
             _sectionHeader(),
             const SizedBox(height: 14),
-
             ...filteredRequests().map(_buildRequestCard),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: kBlue,
-        elevation: 4,
-        shape: const CircleBorder(),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
       bottomNavigationBar: CompanyAppBottomNav(
         currentIndex: 1,
@@ -416,9 +395,7 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
               bg: const Color(0xFFFFEEEE),
               onTap: () => _updateStatus(r.internshipId, "Rejected"),
             ),
-
             const SizedBox(width: 10),
-
             _circleActionBtn(
               icon: Icons.check,
               iconColor: const Color(0xFF1E8A4C),
@@ -427,7 +404,6 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
             ),
           ],
         );
-
       case 'review':
         return SizedBox(
           width: double.infinity,
@@ -453,8 +429,8 @@ class _InternshipRequestsScreenState extends State<InternshipRequestsScreen> {
           decoration: BoxDecoration(color: const Color(0xFFF6F7FA), borderRadius: BorderRadius.circular(12)),
           alignment: Alignment.center,
           child: Text(
-            'Processing...',
-            style: GoogleFonts.inter(fontSize: 14, color: kGrey, fontWeight: FontWeight.w500),
+            'Ongoing...',
+            style: GoogleFonts.inter(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w800),
           ),
         );
     }

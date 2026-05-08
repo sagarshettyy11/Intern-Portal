@@ -48,26 +48,14 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4F8),
-      appBar: CommonAppBar(
-        showLogo: true,
-        actions: [
-          InkWell(
-            borderRadius: BorderRadius.circular(20),
-            onTap: () {},
-            child: const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: CircleAvatar(radius: 16, child: Icon(Icons.person, size: 18, color: Colors.black)),
-            ),
-          ),
-        ],
-      ),
+      appBar: CommonAppBar(showLogo: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         child: Column(
           children: [
             _buildTopStats(),
-            const SizedBox(height: 14),
-            _buildExportCard(),
+            // const SizedBox(height: 14),
+            // _buildExportCard(),
             // const SizedBox(height: 14),
             // _buildFiltersCard(),
             const SizedBox(height: 14),
@@ -146,7 +134,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
     );
   }
 
-  Widget _buildExportCard() {
+  /* Widget _buildExportCard() {
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +171,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
     );
   }
 
-  /* Widget _buildFiltersCard() {
+  Widget _buildFiltersCard() {
     return _card(
       child: Column(
         children: [
@@ -295,8 +283,8 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
       style: GoogleFonts.inter(fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search student or ID...',
-        hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14),
-        prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20),
+        hintStyle: GoogleFonts.inter(color: Colors.grey[800], fontSize: 14, fontWeight: FontWeight.bold),
+        prefixIcon: Icon(Icons.search, color: Colors.grey[800], size: 20, fontWeight: FontWeight.bold),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -310,7 +298,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
     );
   }
 
-  Widget _card({required Widget child}) {
+  /* Widget _card({required Widget child}) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -321,7 +309,7 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
       padding: const EdgeInsets.all(16),
       child: child,
     );
-  }
+  } */
 }
 
 class _StudentCard extends StatelessWidget {
