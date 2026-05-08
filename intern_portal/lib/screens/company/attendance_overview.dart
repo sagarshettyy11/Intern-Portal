@@ -95,9 +95,25 @@ class _AttendanceOverviewScreenState extends State<AttendanceOverviewScreen> {
       children: [
         Expanded(child: _statCard('TOTAL INTERNS', '${summary?.totalStudents ?? 0}', const Color(0xFF111827))),
         const SizedBox(width: 12),
-        Expanded(child: _statCard('AVG ATTENDANCE', '${summary?.avgAttendance ?? 0}%', const Color(0xFFE02424))),
+        Expanded(
+          child: _statCard(
+            'AVG ATTENDANCE',
+            '${summary?.avgAttendance ?? 0}%',
+            getAttendanceProgressColor((summary?.avgAttendance ?? 0).toDouble()),
+          ),
+        ),
       ],
     );
+  }
+
+  Color getAttendanceProgressColor(double attendance) {
+    if (attendance < 40) {
+      return const Color(0xFFE02424); // Red
+    } else if (attendance < 75) {
+      return const Color(0xFFF0A500); // Yellow
+    } else {
+      return const Color(0xFF22C55E); // Green
+    }
   }
 
   Widget _statCard(String label, String value, Color valColor) {

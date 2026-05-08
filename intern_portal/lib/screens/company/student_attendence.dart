@@ -135,7 +135,11 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 ),
                 child: Text(
                   '${info?.attendance ?? 0}% ${info?.status ?? ''}',
-                  style: GoogleFonts.inter(color: Color(0xFFE02424), fontSize: 11, fontWeight: FontWeight.w800),
+                  style: GoogleFonts.inter(
+                    color: getAttendanceProgressColor((info?.attendance ?? 0).toDouble()),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
@@ -172,7 +176,11 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
               ),
               Text(
                 '${info?.attendance ?? 0}%',
-                style: GoogleFonts.inter(color: Color(0xFFE02424), fontWeight: FontWeight.w800, fontSize: 14),
+                style: GoogleFonts.inter(
+                  color: getAttendanceProgressColor((info?.attendance ?? 0).toDouble()),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 14,
+                ),
               ),
             ],
           ),
@@ -180,15 +188,25 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
-              value: 0.005,
+              value: (info?.attendance ?? 0) / 100,
               minHeight: 7,
               backgroundColor: const Color(0xFFE5E7EB),
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFE02424)),
+              valueColor: AlwaysStoppedAnimation<Color>(getAttendanceProgressColor((info?.attendance ?? 0).toDouble())),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Color getAttendanceProgressColor(double attendance) {
+    if (attendance < 40) {
+      return const Color(0xFFE02424); // Red
+    } else if (attendance < 75) {
+      return const Color(0xFFF0A500); // Yellow
+    } else {
+      return const Color(0xFF22C55E); // Green
+    }
   }
 
   Color getStatusColor(String status) {
@@ -401,14 +419,12 @@ class _AttendanceManagementScreenState extends State<AttendanceManagementScreen>
                 if (date == null) {
                   return Expanded(child: SizedBox(height: 36));
                 }
-
                 final isSelected =
                     date.day == _selectedDay && date.month == _currentMonth.month && date.year == _currentMonth.year;
                 final formattedDate = DateFormat('yyyy-MM-dd').format(date);
                 final status = attendanceMap[formattedDate];
                 final isMarked = status != null;
                 final color = getAttendanceColor(status);
-
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
