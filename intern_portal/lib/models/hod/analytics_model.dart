@@ -40,6 +40,7 @@ class StatsModel {
 }
 
 class StudentModel {
+  final int id;
   final String name;
   final String initials;
   final String usn;
@@ -55,6 +56,7 @@ class StudentModel {
   final bool hasReports;
 
   const StudentModel({
+    required this.id,
     required this.name,
     required this.initials,
     required this.usn,
@@ -69,8 +71,10 @@ class StudentModel {
     this.pending,
     required this.hasReports,
   });
+
   factory StudentModel.fromJson(Map<String, dynamic> json) {
     return StudentModel(
+      id: int.parse(json['student_id'].toString()),
       name: json['name'],
       initials: _getInitials(json['name']),
       usn: json['reg_no'],
@@ -89,6 +93,8 @@ class StudentModel {
 
   static String _getInitials(String name) {
     final parts = name.split(" ");
-    return parts.length > 1 ? parts[0][0] + parts[1][0] : parts[0][0];
+    return parts.length > 1
+        ? parts[0][0] + parts[1][0]
+        : parts[0][0];
   }
 }

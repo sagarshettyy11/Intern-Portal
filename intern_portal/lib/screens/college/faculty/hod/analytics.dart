@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/hod/analytics_model.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
+import 'package:intern_portal/screens/college/faculty/hod/student_analytics.dart';
 import 'package:intern_portal/services/users/hod_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
@@ -356,7 +357,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => StudentReviewScreen(studentId: student.id)),
+                    );
+                  },
                   icon: const Icon(Icons.chevron_right, size: 18),
                   label: const Text('VIEW REPORTS'),
                   style: ElevatedButton.styleFrom(

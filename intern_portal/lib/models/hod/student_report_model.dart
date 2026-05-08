@@ -79,7 +79,7 @@ class Internship {
   });
   factory Internship.fromJson(Map<String, dynamic> json) {
     return Internship(
-      id: json['id'],
+      id: int.parse(json['id'].toString()),
       company: json['company'] ?? '',
       role: json['role'] ?? '',
       guide: json['guide'] ?? '',
@@ -107,7 +107,7 @@ class Report {
   });
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(
-      id: json['report_id'],
+      id: int.parse(json['report_id'].toString()),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       date: json['report_date'] ?? '',

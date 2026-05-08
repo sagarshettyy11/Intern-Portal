@@ -36,7 +36,7 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
     }
     return Scaffold(
       backgroundColor: const Color(0xFFF3F5F8),
-      appBar: CommonAppBar(title: "Guide Workload", showBack: true),
+      appBar: CommonAppBar(title: "Report Details", showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Column(
@@ -159,49 +159,37 @@ class _StudentReviewScreenState extends State<StudentReviewScreen> {
               ],
             ),
             const SizedBox(height: 14),
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ROLE',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.grey[500],
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        data?.internship?.role ?? 'Not Assigned',
-                        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
-                      ),
-                    ],
+                Text(
+                  'ROLE',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey[500],
+                    letterSpacing: 0.6,
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'GUIDE',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.grey[500],
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        data?.internship?.guide ?? 'Not Assigned',
-                        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
-                      ),
-                    ],
+                const SizedBox(height: 2),
+                Text(
+                  data?.internship?.role ?? 'Not Assigned',
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'GUIDE',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey[500],
+                    letterSpacing: 0.6,
                   ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  data?.internship?.guide ?? 'Not Assigned',
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
                 ),
               ],
             ),
