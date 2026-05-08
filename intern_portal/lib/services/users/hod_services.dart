@@ -33,6 +33,47 @@ class HodServices {
     }
   }
 
+  static Future<List<GuideModel>> fetchGuides() async {
+    try {
+      final headers = await AuthHeaders.get();
+      final res = await http.get(Uri.parse(ApiEndpoints.studentPerformance), headers: headers);
+      debugPrint("GUIDE STATUS: ${res.statusCode}");
+      debugPrint("GUIDE BODY: ${res.body}");
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        if (json['success'] == true) {
+          final List guides = json['data']['guides'] ?? [];
+          return guides.map((e) => GuideModel.fromJson(e)).toList();
+        }
+      }
+      return [];
+    } catch (e) {
+      debugPrint("FETCH GUIDE ERROR: $e");
+      return [];
+    }
+  }
+
+  static Future<bool> assignGuide({required int internshipId, required int guideId}) async {
+    try {
+      final headers = await AuthHeaders.get();
+      final res = await http.post(
+        Uri.parse(ApiEndpoints.studentPerformance),
+        headers: headers,
+        body: jsonEncode({'internship_id': internshipId, 'guide_id': guideId}),
+      );
+      debugPrint("ASSIGN GUIDE STATUS: ${res.statusCode}");
+      debugPrint("ASSIGN GUIDE BODY: ${res.body}");
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        return json['success'] == true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint("ASSIGN GUIDE ERROR: $e");
+      return false;
+    }
+  }
+
   static Future<DepartmentPerformance?> fetchStudentPerformance() async {
     try {
       final headers = await AuthHeaders.get();

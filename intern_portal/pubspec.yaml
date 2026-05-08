@@ -32,18 +32,18 @@ flutter_launcher_icons:
   android: true
   ios: true
   min_sdk_android: 21
-  image_path: "assets/intern.jpeg"
+  image_path: "assets/intern_icon.png"
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/intern.jpeg"
+  adaptive_icon_foreground: "assets/intern_icon.png"
 
 flutter_native_splash:
   android: true
   ios: true
-  color: ""   
-  image: assets/splash_screen.png
+  color: "#FFFFFF"
+  image: assets/intern_icon.png
   android_12:
-    color: "#0000FF"
-    image: assets/splash_screen.png
+    color: "#FFFFFF"
+    image: assets/intern_icon.png
 
 flutter:
   uses-material-design: true

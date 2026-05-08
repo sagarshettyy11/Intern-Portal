@@ -45,7 +45,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
+                /* Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                   child: Row(
                     children: [
@@ -62,6 +62,10 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                       ),
                     ],
                   ),
+                ), */
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Image.asset("assets/splash_screen.png", height: 50, fit: BoxFit.contain),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -133,7 +137,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                             ),
                             const SizedBox(height: 6),
                             CustomTextField(hint: "Enter your Email ID", controller: emailController),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -190,7 +194,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 16),
                             SizedBox(
                               width: double.infinity,
                               height: 50,
@@ -274,7 +278,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                 ],
                               ),
                             ), */
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 18),
                             Center(
                               child: RichText(
                                 text: TextSpan(
@@ -293,7 +297,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 10),
                             Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -322,7 +326,7 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 10),
                             Center(
                               child: Text(
                                 "© 2026 University Academic Internship Portal. All rights reserved.",

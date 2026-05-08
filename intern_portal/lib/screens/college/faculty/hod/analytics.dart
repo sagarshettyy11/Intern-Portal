@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/hod/analytics_model.dart';
+import 'package:intern_portal/models/hod/student_model.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_profile.dart';
 import 'package:intern_portal/screens/college/faculty/hod/student_analytics.dart';
 import 'package:intern_portal/services/users/hod_services.dart';
@@ -18,13 +19,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int _selectedFilter = 0;
   String selectedBatch = '2022-2026';
   final List<String> _filters = ['All Students', 'Ongoing', 'Pending', 'Completed'];
+
   AnalyticsResponse? analytics;
+  List<GuideModel> guides = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     loadAnalytics();
+    loadGuides();
+  }
+
+  Future<void> loadGuides() async {
+    final res = await HodServices.fetchGuides();
+    setState(() {
+      guides = res;
+    });
   }
 
   Future<void> loadAnalytics({String search = '', String batch = '', String year = '', String status = ''}) async {
@@ -217,7 +228,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   loadAnalytics(status: 'ongoing');
                 } else if (filter == 'Completed') {
                   loadAnalytics(status: 'completed');
-                } else if (filter == 'Pedning') {
+                } else if (filter == 'Pending') {
                   loadAnalytics(status: 'not applied');
                 } else {
                   loadAnalytics();
@@ -328,7 +339,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showAssignGuidePopup(student);
+                    },
                     icon: const Icon(Icons.supervisor_account_rounded),
                     color: const Color(0xFF1565C0),
                     tooltip: 'Assign Guide',
@@ -397,6 +410,163 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAssignGuidePopup(StudentModel student) {
+    int? selectedGuide;
+    final guideList = guides;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Dialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.supervisor_account_rounded, color: Color(0xFF1565C0)),
+                          const SizedBox(width: 8),
+                          Text("Assign Guide", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w800)),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F7FB),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: const Color(0xFFE3F2FD),
+                              child: Text(
+                                student.initials,
+                                style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: const Color(0xFF1565C0)),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    student.name,
+                                    style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w800),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    student.usn,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    student.company ?? 'No Company',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: const Color(0xFF1565C0),
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text("Select Faculty Guide", style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<int>(
+                        initialValue: selectedGuide,
+                        isExpanded: true,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        hint: const Text("Choose Guide"),
+                        items: guideList.map((guide) {
+                          return DropdownMenuItem<int>(
+                            value: guide.id,
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                "${guide.name} • ${guide.designation}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: GoogleFonts.inter(fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setModalState(() {
+                            selectedGuide = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 22),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: selectedGuide == null
+                              ? null
+                              : () async {
+                                  final success = await HodServices.assignGuide(
+                                    internshipId: student.id,
+                                    guideId: selectedGuide!,
+                                  );
+                                  Navigator.pop(context);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success ? "Guide assigned successfully" : "Failed to assign guide",
+                                        style: GoogleFonts.inter(),
+                                      ),
+                                    ),
+                                  );
+                                  if (success) {
+                                    loadAnalytics();
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0000FF),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Text(
+                            "ASSIGN GUIDE",
+                            style: GoogleFonts.inter(fontWeight: FontWeight.w800, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

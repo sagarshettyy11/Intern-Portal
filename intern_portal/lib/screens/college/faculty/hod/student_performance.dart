@@ -16,6 +16,8 @@ class StudentPerformancePage extends StatefulWidget {
 
 class _StudentPerformancePageState extends State<StudentPerformancePage> {
   DepartmentPerformance? data;
+  List<StudentData> filteredStudents = [];
+  bool isSearching = false;
   bool isLoading = true;
   @override
   void initState() {
@@ -25,10 +27,17 @@ class _StudentPerformancePageState extends State<StudentPerformancePage> {
 
   void loadData() async {
     final res = await HodServices.fetchStudentPerformance();
-    setState(() {
-      data = res;
-      isLoading = false;
-    });
+    if (res != null) {
+      setState(() {
+        data = res;
+        filteredStudents = res.students;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -341,27 +350,50 @@ class _StudentPerformancePageState extends State<StudentPerformancePage> {
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.grey[200]!),
                     ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search, color: Colors.grey[800], size: 18),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Search students or companies...',
-                          style: GoogleFonts.inter(fontSize: 13, color: Colors.grey[800], fontWeight: FontWeight.w800),
+                    child: TextField(
+                      onChanged: (value) {
+                        final query = value.trim().toLowerCase();
+
+                        if (query.isEmpty) {
+                          setState(() {
+                            isSearching = false;
+                            filteredStudents.clear();
+                          });
+                          return;
+                        }
+                        setState(() {
+                          isSearching = true;
+                          filteredStudents = data!.students.where((student) {
+                            return student.name.toLowerCase().contains(query) ||
+                                student.registrationNo.toLowerCase().contains(query) ||
+                                student.email.toLowerCase().contains(query) ||
+                                student.guide.toLowerCase().contains(query);
+                          }).toList();
+                        });
+                      },
+                      style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.search, color: Colors.grey[700], size: 18),
+                        hintText: 'Search students or companies...',
+                        hintStyle: GoogleFonts.inter(
+                          fontSize: 13,
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w700,
                         ),
-                      ],
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
 
                   const SizedBox(height: 10),
                   Column(
-                    children: data!.students.map((s) {
+                    children: (isSearching ? filteredStudents : data!.students).map((s) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: StudentCard(student: s),

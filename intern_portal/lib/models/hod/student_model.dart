@@ -36,6 +36,16 @@ class GradeData {
   }
 }
 
+class GuideModel {
+  final int id;
+  final String name;
+  final String designation;
+  GuideModel({required this.id, required this.name, required this.designation});
+  factory GuideModel.fromJson(Map<String, dynamic> json) {
+    return GuideModel(id: json['id'] ?? 0, name: json['name'] ?? '', designation: json['designation'] ?? '');
+  }
+}
+
 class StudentData {
   final int studentId;
   final String name;
@@ -74,15 +84,15 @@ class StudentData {
 class DepartmentPerformance {
   final DepartmentSummary summary;
   final List<GradeData> grades;
+  final List<GuideModel> guides;
   final List<StudentData> students;
-
-  DepartmentPerformance({required this.summary, required this.grades, required this.students});
-
+  DepartmentPerformance({required this.summary, required this.grades, required this.guides, required this.students});
   factory DepartmentPerformance.fromJson(Map<String, dynamic> json) {
     return DepartmentPerformance(
       summary: DepartmentSummary.fromJson(json['summary']),
       grades: (json['grades'] as List).map((e) => GradeData.fromJson(e)).toList(),
       students: (json['students'] as List).map((e) => StudentData.fromJson(e)).toList(),
+      guides: (json['guides'] as List).map((e) => GuideModel.fromJson(e)).toList(),
     );
   }
 }
