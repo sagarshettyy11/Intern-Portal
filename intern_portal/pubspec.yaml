@@ -40,10 +40,10 @@ flutter_native_splash:
   android: true
   ios: true
   color: "#FFFFFF"
-  image: assets/intern_icon.png
+  image: assets/intern_splash.png
   android_12:
     color: "#FFFFFF"
-    image: assets/intern_icon.png
+    image: assets/intern_splash.png
 
 flutter:
   uses-material-design: true
@@ -52,3 +52,4 @@ flutter:
     - assets/splash_screen.png
     - assets/intern_portal.png
     - assets/intern_icon.png
+    - assets/intern_splash.png
