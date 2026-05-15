@@ -325,17 +325,66 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
     }
   }
 
-  void _sendNotification() {
-    if (_selectedStudent == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select a student')));
-      return;
-    }
-    if (_messageController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please write a message')));
-      return;
-    }
+  Future<void> _sendNotification() async {
+  if (_selectedStudent == null) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Notification sent to $_selectedStudent'), backgroundColor: const Color(0xFF1A56DB)),
+      const SnackBar(
+        content: Text('Please select a student'),
+      ),
+    );
+    return;
+  }
+
+  if (_messageController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Please write a message'),
+      ),
+    );
+    return;
+  }
+
+  setState(() {
+    isSending = true;
+  });
+
+  bool success;
+
+  if (selectedFile != null) {
+    success =
+        await GuideServices.sendNotificationWithAttachment(
+      studentId: _selectedStudent!.studentId,
+      description: _messageController.text.trim(),
+      file: selectedFile!,
+    );
+  } else {
+    success = await GuideServices.sendNotification(
+      studentId: _selectedStudent!.studentId,
+      description: _messageController.text.trim(),
     );
   }
+
+  setState(() {
+    isSending = false;
+  });
+
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Notification sent to ${_selectedStudent!.name}',
+        ),
+        backgroundColor: const Color(0xFF1A56DB),
+      ),
+    );
+
+    Navigator.pop(context, true);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Failed to send notification'),
+      ),
+    );
+  }
+}
 }

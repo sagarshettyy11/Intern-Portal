@@ -109,7 +109,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title Row
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -132,17 +131,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
             ],
           ),
-          const SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.only(left: 52),
+            padding: const EdgeInsets.only(left: 48),
             child: Text(
               item.message,
-              style: GoogleFonts.inter(fontSize: 13, height: 1.5, color: !item.isRead ? textDark : textGrey),
+              style: GoogleFonts.inter(fontSize: 13, color: !item.isRead ? textDark : textGrey),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 4),
           const Divider(height: 1, color: Color(0xFFEEEFF3)),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
           // Footer Row
           Row(
             children: [
@@ -150,12 +148,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
-                child: const Icon(Icons.business_outlined, size: 13, color: textGrey),
+                child: Icon(Icons.business_outlined, size: 13, color: Colors.grey[800]),
               ),
               const SizedBox(width: 7),
               Text(
                 item.actorName ?? "System",
-                style: GoogleFonts.inter(fontSize: 12, color: textGrey, fontWeight: FontWeight.w500),
+                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w500),
               ),
 
               const Spacer(),
@@ -167,7 +165,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: primaryBlue),
                 ),
               ] else
-                Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+                Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800])),
             ],
           ),
           if (item.attachmentUrl != null) ...[
@@ -197,8 +195,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _buildIconBox(IconData icon, bool isUnread) {
     return Container(
-      width: 44,
-      height: 44,
+      width: 36,
+      height: 36,
       decoration: BoxDecoration(
         color: isUnread ? lightBlue : const Color(0xFFEEEFF3),
         borderRadius: BorderRadius.circular(10),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/guide/guide_certificate_model.dart';
@@ -249,6 +250,30 @@ class GuideServices {
       return json['success'] == true;
     } catch (e) {
       debugPrint("SEND NOTIFICATION ERROR: $e");
+    }
+    return false;
+  }
+
+  static Future<bool> sendNotificationWithAttachment({
+    required int studentId,
+    required String description,
+    required File file,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      var request = http.MultipartRequest('POST', Uri.parse(ApiEndpoints.guideNotifications));
+      request.headers['Authorization'] = "Bearer $token";
+      request.fields['action'] = 'send_notification';
+      request.fields['student_id'] = studentId.toString();
+      request.fields['description'] = description;
+      request.files.add(await http.MultipartFile.fromPath('attachment', file.path));
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("ATTACHMENT NOTIFICATION ERROR: $e");
     }
     return false;
   }
