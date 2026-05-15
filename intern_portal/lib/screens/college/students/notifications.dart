@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/models/student/notification_models.dart';
+import 'package:intern_portal/screens/college/faculty/guide/certificate_viewer.dart';
+import 'package:intern_portal/services/api_endpoints.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -92,90 +98,127 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _buildNotificationCard(NotificationModel item) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: !item.isRead ? cardWhite : const Color(0xFFF8F9FC),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: !item.isRead ? 0.06 : 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildIconBox(getIcon(item.eventType), !item.isRead),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  item.title,
-                  style: GoogleFonts.inter(
-                    fontSize: 15,
-                    fontWeight: !item.isRead ? FontWeight.bold : FontWeight.w600,
-                    color: !item.isRead ? textDark : const Color(0xFF444444),
-                  ),
-                ),
-              ),
-              if (!item.isRead)
-                const Padding(
-                  padding: EdgeInsets.only(top: 2),
-                  child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
-                ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 48),
-            child: Text(
-              item.message,
-              style: GoogleFonts.inter(fontSize: 13, color: !item.isRead ? textDark : textGrey),
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Divider(height: 1, color: Color(0xFFEEEFF3)),
-          const SizedBox(height: 6),
-          // Footer Row
-          Row(
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
-                child: Icon(Icons.business_outlined, size: 13, color: Colors.grey[800]),
-              ),
-              const SizedBox(width: 7),
-              Text(
-                item.actorName ?? "System",
-                style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w500),
-              ),
-
-              const Spacer(),
-              if (item.attachmentUrl != null) ...[
-                const Icon(Icons.attach_file_rounded, size: 14, color: primaryBlue),
-                const SizedBox(width: 3),
-                Text(
-                  'Attachment',
-                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: primaryBlue),
-                ),
-              ] else
-                Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800])),
-            ],
-          ),
-          if (item.attachmentUrl != null) ...[
-            const SizedBox(height: 4),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+    return GestureDetector(
+      onTap: () async {
+        if (!item.isRead) {
+          final success = await StudentServices.markNotificationRead(item.id);
+          if (success) {
+            setState(() {
+              item.isRead = true;
+              unreadCount = unreadCount > 0 ? unreadCount - 1 : 0;
+            });
+          }
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: !item.isRead ? cardWhite : const Color(0xFFF8F9FC),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: !item.isRead ? 0.06 : 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
           ],
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildIconBox(getIcon(item.eventType), !item.isRead),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    item.title,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: !item.isRead ? FontWeight.bold : FontWeight.w600,
+                      color: !item.isRead ? textDark : const Color(0xFF444444),
+                    ),
+                  ),
+                ),
+                if (!item.isRead)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 2),
+                    child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
+                  ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 48),
+              child: Text(
+                item.message,
+                style: GoogleFonts.inter(fontSize: 13, color: !item.isRead ? textDark : textGrey),
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Divider(height: 1, color: Color(0xFFEEEFF3)),
+            const SizedBox(height: 6),
+            // Footer Row
+            Row(
+              children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(color: const Color(0xFFEEEFF3), borderRadius: BorderRadius.circular(6)),
+                  child: Icon(Icons.business_outlined, size: 13, color: Colors.grey[800]),
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  item.actorName ?? "System",
+                  style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800], fontWeight: FontWeight.w500),
+                ),
+
+                const Spacer(),
+                if (item.attachmentUrl != null) ...[
+                  GestureDetector(
+                    onTap: () async {
+                      try {
+                        final url = ApiEndpoints.fileUrl(item.attachmentUrl!);
+                        final dir = await getTemporaryDirectory();
+                        final fileName = item.attachmentUrl!.split('/').last;
+                        final savePath = "${dir.path}/$fileName";
+                        await Dio().download(url, savePath);
+                        if (!context.mounted) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => AttachmentViewer(file: File(savePath))),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(const SnackBar(content: Text('Failed to open attachment')));
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.attach_file_rounded, size: 14, color: primaryBlue),
+                        const SizedBox(width: 3),
+                        Text(
+                          'View Attachment',
+                          style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w700, color: primaryBlue),
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else
+                  Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: Colors.grey[800])),
+              ],
+            ),
+            if (item.attachmentUrl != null) ...[
+              const SizedBox(height: 4),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(item.timeAgo, style: GoogleFonts.inter(fontSize: 12, color: textGrey)),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

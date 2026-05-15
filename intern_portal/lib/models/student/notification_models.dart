@@ -5,7 +5,7 @@ class NotificationModel {
   final String eventType;
   final String? actorName;
   final String? attachmentUrl;
-  final bool isRead;
+  bool isRead;
   final String timeAgo;
 
   NotificationModel({

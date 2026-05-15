@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/student/certificate_models.dart';
 import 'package:intern_portal/models/student/dashboard_models.dart';
@@ -214,5 +215,22 @@ class StudentServices {
       };
     }
     throw Exception("Failed to load certificates");
+  }
+
+  static Future<bool> markNotificationRead(int notificationId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.patch(
+        Uri.parse(ApiEndpoints.notifications),
+        headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+        body: jsonEncode({"action": "mark_read", "notification_id": notificationId}),
+      );
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("MARK READ ERROR: $e");
+    }
+    return false;
   }
 }
