@@ -203,28 +203,28 @@ class UnifiedLoginPageState extends State<UnifiedLoginPage> {
                                     ? null
                                     : () async {
                                         setState(() => isLoading = true);
-                                        final result = await AuthService.login(
-                                          email: emailController.text.trim(),
-                                          password: passwordController.text.trim(),
-                                        );
-                                        setState(() => isLoading = false);
-                                        if (result['success']) {
-                                          final role = result['data']['role'];
-                                          CustomSnackbar.show(message: "Welcome back!", isSuccess: true);
-                                          if (role == "Guide") {
-                                            NavigationService.pushReplacement(GuideDashboardPage());
-                                          } else if (role == "HOD") {
-                                            NavigationService.pushReplacement(HodDashboardPage());
-                                          } else if (role == "CollegeAdmin") {
-                                            NavigationService.pushReplacement(CollegeAdminDashboardScreen());
-                                          } else if (role == "Company") {
-                                            NavigationService.pushReplacement(InternshipRequestsScreen());
-                                          } else if (role == "Student") {
-                                            NavigationService.pushReplacement(DashboardPage());
-                                          } else {
-                                            CustomSnackbar.show(message: "Invalid role", isSuccess: false);
-                                          }
-                                        }
+final result = await AuthService.login(
+  email: emailController.text.trim(),
+  password: passwordController.text.trim(),
+);
+setState(() => isLoading = false);
+if (result['success']) {
+  final role = result['data']['role'];
+  CustomSnackbar.show(message: "Welcome back!", isSuccess: true);
+  if (role == "Guide") {
+    NavigationService.pushReplacement(GuideDashboardPage());
+  } else if (role == "HOD") {
+    NavigationService.pushReplacement(HodDashboardPage());
+  } else if (role == "CollegeAdmin") {
+    NavigationService.pushReplacement(CollegeAdminDashboardScreen());
+  } else if (role == "Company") {
+    NavigationService.pushReplacement(InternshipRequestsScreen());
+  } else if (role == "Student") {
+    NavigationService.pushReplacement(DashboardPage());
+  } else {
+    CustomSnackbar.show(message: "Invalid role", isSuccess: false);
+  }
+}
                                       },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF0000FF),

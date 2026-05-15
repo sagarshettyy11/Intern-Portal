@@ -1,35 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intern_portal/models/guide/guide_notification_model.dart';
 import 'package:intern_portal/screens/college/faculty/guide/send_notfication.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
-
-enum SFAlertTab { allNotifications, reports, mentors }
-
-enum SFBottomNavTab { dashboard, messages, alerts, library }
-
-class SFAlertItem {
-  final String title;
-  final String body;
-  final String boldName;
-  final String time;
-  final IconData icon;
-  final Color iconBgColor;
-  final Color iconColor;
-  final bool hasUnreadDot;
-  final String? groupLabel;
-
-  const SFAlertItem({
-    required this.title,
-    required this.body,
-    required this.boldName,
-    required this.time,
-    required this.icon,
-    required this.iconBgColor,
-    required this.iconColor,
-    this.hasUnreadDot = false,
-    this.groupLabel,
-  });
-}
 
 class GuideNotifications extends StatefulWidget {
   const GuideNotifications({super.key});
@@ -39,46 +13,30 @@ class GuideNotifications extends StatefulWidget {
 
 class _GuideNotificationsState extends State<GuideNotifications> {
   SFAlertTab _selectedTab = SFAlertTab.allNotifications;
-  final List<SFAlertItem> _alerts = const [
-    SFAlertItem(
-      title: 'New Report Submitted',
-      boldName: 'Rahul Sharma',
-      body: ' has uploaded the final internship performance summary.',
-      time: '2M AGO',
-      icon: Icons.check_box_outlined,
-      iconBgColor: Color(0xFFDCEAFD),
-      iconColor: Color(0xFF1A56DB),
-      hasUnreadDot: true,
-    ),
-    SFAlertItem(
-      title: 'Direct Message',
-      boldName: 'Priya Kapur',
-      body: ' requested a meeting regarding the upcoming workshop.',
-      time: '1H AGO',
-      icon: Icons.chat_bubble,
-      iconBgColor: Color(0xFFF5F0DC),
-      iconColor: Color(0xFFB5860D),
-    ),
-    SFAlertItem(
-      title: 'Onboarding Complete',
-      boldName: 'System Admin',
-      body: ' confirmed 12 new scholar registrations for Q3.',
-      time: 'YESTERDAY',
-      icon: Icons.verified_user,
-      iconBgColor: Color(0xFFDCE8F5),
-      iconColor: Color(0xFF3B6EA5),
-      groupLabel: 'YESTERDAY',
-    ),
-    SFAlertItem(
-      title: 'Deadline Alert',
-      boldName: '',
-      body: 'Budget approvals for the summer internship program are due in 48 hours.',
-      time: 'YESTERDAY',
-      icon: Icons.warning_rounded,
-      iconBgColor: Color(0xFFFEE8E8),
-      iconColor: Color(0xFFDC2626),
-    ),
-  ];
+  List<NotificationModel> notifications = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotifications();
+  }
+
+  Future<void> loadNotifications() async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await GuideServices.fetchNotifications();
+    if (response != null) {
+      setState(() {
+        notifications = response.notifications;
+      });
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,29 +119,31 @@ class _GuideNotificationsState extends State<GuideNotifications> {
   }
 
   Widget _buildAlertsList() {
-    List<Widget> items = [];
-    for (int i = 0; i < _alerts.length; i++) {
-      final alert = _alerts[i];
-      if (alert.groupLabel != null) {
-        items.add(
-          Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 12),
-            child: Text(
-              alert.groupLabel!,
-              style: GoogleFonts.inter(color: Color(0xFF6B7280), fontSize: 12, fontWeight: FontWeight.w800),
-            ),
-          ),
-        );
-      }
-      items.add(_buildAlertCard(alert));
-      if (i < _alerts.length - 1 && _alerts[i + 1].groupLabel == null) {
-        items.add(const SizedBox(height: 12));
-      }
+    if (isLoading) {
+      return const Center(
+        child: Padding(padding: EdgeInsets.all(30), child: CircularProgressIndicator()),
+      );
     }
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: items);
+    if (notifications.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Text("No notifications found", style: GoogleFonts.inter(fontSize: 14, color: Colors.grey)),
+        ),
+      );
+    }
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: notifications.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        return _buildAlertCard(notifications[index]);
+      },
+    );
   }
 
-  Widget _buildAlertCard(SFAlertItem alert) {
+  Widget _buildAlertCard(NotificationModel alert) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -196,10 +156,17 @@ class _GuideNotificationsState extends State<GuideNotifications> {
               Container(
                 width: 52,
                 height: 52,
-                decoration: BoxDecoration(color: alert.iconBgColor, borderRadius: BorderRadius.circular(12)),
-                child: Icon(alert.icon, color: alert.iconColor, size: 26),
+                decoration: BoxDecoration(
+                  color: getNotificationBgColor(alert.eventType),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  getNotificationIcon(alert.eventType),
+                  color: getNotificationColor(alert.eventType),
+                  size: 26,
+                ),
               ),
-              if (alert.hasUnreadDot)
+              if (!alert.isRead)
                 Positioned(
                   top: 2,
                   right: 2,
@@ -228,7 +195,7 @@ class _GuideNotificationsState extends State<GuideNotifications> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      alert.time,
+                      formatTime(alert.createdAt),
                       style: GoogleFonts.inter(color: Colors.grey[800], fontSize: 11, fontWeight: FontWeight.w700),
                     ),
                   ],
@@ -236,16 +203,14 @@ class _GuideNotificationsState extends State<GuideNotifications> {
                 const SizedBox(height: 4),
                 RichText(
                   text: TextSpan(
-                    style: GoogleFonts.inter(color: Color(0xFF374151), fontSize: 13.5, height: 1.45),
-                    children: alert.boldName.isNotEmpty
-                        ? [
-                            TextSpan(
-                              text: alert.boldName,
-                              style: GoogleFonts.inter(fontWeight: FontWeight.w800),
-                            ),
-                            TextSpan(text: alert.body),
-                          ]
-                        : [TextSpan(text: alert.body)],
+                    style: GoogleFonts.inter(color: const Color(0xFF374151), fontSize: 13.5, height: 1.45),
+                    children: [
+                      TextSpan(
+                        text: alert.actor.name,
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w800),
+                      ),
+                      TextSpan(text: " ${alert.message}"),
+                    ],
                   ),
                 ),
               ],
@@ -254,6 +219,59 @@ class _GuideNotificationsState extends State<GuideNotifications> {
         ],
       ),
     );
+  }
+
+  IconData getNotificationIcon(String type) {
+    switch (type) {
+      case 'guide_message':
+        return Icons.chat_bubble;
+      case 'report_submitted':
+        return Icons.assignment;
+      case 'deadline_alert':
+        return Icons.warning_rounded;
+      default:
+        return Icons.notifications;
+    }
+  }
+
+  Color getNotificationColor(String type) {
+    switch (type) {
+      case 'guide_message':
+        return const Color(0xFFB5860D);
+      case 'report_submitted':
+        return const Color(0xFF1A56DB);
+      case 'deadline_alert':
+        return const Color(0xFFDC2626);
+      default:
+        return Colors.blue;
+    }
+  }
+
+  Color getNotificationBgColor(String type) {
+    switch (type) {
+      case 'guide_message':
+        return const Color(0xFFF5F0DC);
+      case 'report_submitted':
+        return const Color(0xFFDCEAFD);
+      case 'deadline_alert':
+        return const Color(0xFFFEE8E8);
+      default:
+        return const Color(0xFFE5E7EB);
+    }
+  }
+
+  String formatTime(DateTime dateTime) {
+    final difference = DateTime.now().difference(dateTime);
+    if (difference.inMinutes < 60) {
+      return "${difference.inMinutes}M AGO";
+    }
+    if (difference.inHours < 24) {
+      return "${difference.inHours}H AGO";
+    }
+    if (difference.inDays == 1) {
+      return "YESTERDAY";
+    }
+    return "${difference.inDays}D AGO";
   }
 
   Widget _buildFAB() {

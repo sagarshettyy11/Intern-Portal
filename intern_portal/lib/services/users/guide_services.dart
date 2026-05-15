@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:intern_portal/models/guide/guide_certificate_model.dart';
 import 'package:intern_portal/models/guide/guide_dashboard_model.dart';
 import 'package:intern_portal/models/guide/guide_internship_model.dart';
+import 'package:intern_portal/models/guide/guide_notification_model.dart';
 import 'package:intern_portal/models/guide/guide_profile_model.dart';
 import 'package:intern_portal/models/guide/guide_report_model.dart';
 import 'package:intern_portal/services/api_endpoints.dart';
@@ -174,5 +175,81 @@ class GuideServices {
       debugPrint("Guide Cert ERROR: $e");
     }
     return null;
+  }
+
+  static Future<NotificationResponse?> fetchNotifications({int page = 1, int perPage = 15}) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final url = "${ApiEndpoints.guideNotifications}?page=$page&per_page=$perPage";
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+      );
+      final body = response.body;
+      if (!body.startsWith('{')) {
+        debugPrint("❌ NOTIFICATION API ERROR:");
+        debugPrint(body);
+        return null;
+      }
+      final json = jsonDecode(body);
+      if (json['success'] == true) {
+        return NotificationResponse.fromJson(json['data']);
+      }
+    } catch (e) {
+      debugPrint("FETCH NOTIFICATION ERROR: $e");
+    }
+    return null;
+  }
+
+  static Future<bool> markNotificationAsRead(int notificationId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.patch(
+        Uri.parse(ApiEndpoints.guideNotifications),
+        headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+        body: jsonEncode({"action": "mark_read", "notification_id": notificationId}),
+      );
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("MARK READ ERROR: $e");
+    }
+    return false;
+  }
+
+  static Future<bool> markAllNotificationsRead() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.patch(
+        Uri.parse(ApiEndpoints.guideNotifications),
+        headers: {"Authorization": "Bearer $token", "Content-Type": "application/json"},
+        body: jsonEncode({"action": "mark_all_read"}),
+      );
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("MARK ALL READ ERROR: $e");
+    }
+    return false;
+  }
+
+  static Future<bool> sendNotification({required int studentId, required String description}) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.guideNotifications),
+        headers: {"Authorization": "Bearer $token"},
+        body: {"action": "send_notification", "student_id": studentId.toString(), "description": description},
+      );
+      final json = jsonDecode(response.body);
+      return json['success'] == true;
+    } catch (e) {
+      debugPrint("SEND NOTIFICATION ERROR: $e");
+    }
+    return false;
   }
 }

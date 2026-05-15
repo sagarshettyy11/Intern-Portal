@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:intern_portal/models/guide/guide_notification_model.dart';
+import 'package:intern_portal/services/users/guide_services.dart';
 
 class SendNotificationPage extends StatefulWidget {
   const SendNotificationPage({super.key});
@@ -9,20 +13,18 @@ class SendNotificationPage extends StatefulWidget {
 }
 
 class _SendNotificationPageState extends State<SendNotificationPage> {
-  String? _selectedStudent;
   final TextEditingController _messageController = TextEditingController();
   int _charCount = 0;
-  final Map<String, String> _attachedFile = {
-    'name': 'Internship_Agreement_V2.pdf',
-    'size': '1.2 MB',
-    'status': 'Ready to send',
-  };
-  bool _fileAttached = true;
-  final List<String> _students = ['Alice Johnson', 'Bob Smith', 'Carol Williams', 'David Brown'];
+  StudentModel? _selectedStudent;
+  List<StudentModel> students = [];
+  File? selectedFile;
+  bool isLoadingStudents = true;
+  bool isSending = false;
 
   @override
   void initState() {
     super.initState();
+    loadStudents();
     _messageController.addListener(() {
       setState(() {
         _charCount = _messageController.text.length;
@@ -30,10 +32,14 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
     });
   }
 
-  @override
-  void dispose() {
-    _messageController.dispose();
-    super.dispose();
+  Future<void> loadStudents() async {
+    final response = await GuideServices.fetchNotifications();
+    if (response != null) {
+      setState(() {
+        students = response.myStudents;
+        isLoadingStudents = false;
+      });
+    }
   }
 
   @override
@@ -60,9 +66,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                     _buildAttachmentsSection(),
                     const SizedBox(height: 32),
                     _buildSendButton(),
-                    const SizedBox(height: 16),
-                    _buildSaveDraftButton(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 12),
                   ],
                 ),
               ),
@@ -112,15 +116,15 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
+            child: DropdownButton<StudentModel>(
               value: _selectedStudent,
               isExpanded: true,
               hint: Text('Choose a student...', style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 15)),
               icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF374151)),
-              items: _students.map((student) {
-                return DropdownMenuItem<String>(
+              items: students.map((student) {
+                return DropdownMenuItem<StudentModel>(
                   value: student,
-                  child: Text(student, style: GoogleFonts.inter(color: Color(0xFF111827), fontSize: 15)),
+                  child: Text(student.name, style: GoogleFonts.inter(color: const Color(0xFF111827), fontSize: 15)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -242,7 +246,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
           ),
         ),
         // Attached file
-        if (_fileAttached) ...[
+        if (selectedFile != null) ...[
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -260,13 +264,17 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _attachedFile['name']!,
-                        style: GoogleFonts.inter(color: Color(0xFF111827), fontSize: 14, fontWeight: FontWeight.w600),
+                        selectedFile!.path.split('/').last,
+                        style: GoogleFonts.inter(
+                          color: const Color(0xFF111827),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${_attachedFile['size']} • ${_attachedFile['status']}',
-                        style: GoogleFonts.inter(color: Color(0xFF9CA3AF), fontSize: 12),
+                        "${(selectedFile!.lengthSync() / 1024).toStringAsFixed(1)} KB • Ready to send",
+                        style: GoogleFonts.inter(color: const Color(0xFF9CA3AF), fontSize: 12),
                       ),
                     ],
                   ),
@@ -274,7 +282,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      _fileAttached = false;
+                      selectedFile = null;
                     });
                   },
                   child: const Icon(Icons.close, color: Color(0xFFEF4444), size: 20),
@@ -307,22 +315,14 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
     );
   }
 
-  Widget _buildSaveDraftButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
-      child: TextButton(
-        onPressed: _saveDraft,
-        child: Text(
-          'Save as Draft',
-          style: GoogleFonts.inter(color: Color(0xFF374151), fontSize: 15, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
 
-  void _pickFile() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('File picker triggered')));
+  void _pickFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        selectedFile = File(result.files.single.path!);
+      });
+    }
   }
 
   void _sendNotification() {
@@ -337,9 +337,5 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Notification sent to $_selectedStudent'), backgroundColor: const Color(0xFF1A56DB)),
     );
-  }
-
-  void _saveDraft() {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Draft saved')));
   }
 }
