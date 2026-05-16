@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/controllers/navigation_controller.dart';
 import 'package:intern_portal/models/student/student_models.dart';
+import 'package:intern_portal/screens/college/students/notifications.dart';
 import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/common_widgets/profile_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -33,6 +35,22 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  Future<void> launchGuideEmail(String? email) async {
+    if (email == null || email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Guide email not available")));
+      return;
+    }
+    final Uri emailUri = Uri(scheme: 'mailto', path: email, queryParameters: {'subject': 'Internship Discussion'});
+    try {
+      final launched = await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No email app found")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -47,10 +65,13 @@ class _ProfilePageState extends State<ProfilePage> {
         showBack: false,
         showLogo: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black, fontWeight: FontWeight.bold),
-            onPressed: () {},
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationsScreen()));
+            },
+            child: const Icon(Icons.notifications_outlined, color: Colors.black, size: 24),
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: SingleChildScrollView(
@@ -264,14 +285,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(
-                            Icons.mail_outline,
-                            color: Color(0xFF3B6EF0),
-                            size: 18,
-                            fontWeight: FontWeight.bold,
+                        InkWell(
+                          onTap: () => launchGuideEmail(profile!.guide?.email),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(color: Color(0xFFEFF4FF), borderRadius: BorderRadius.circular(8)),
+                            child: Icon(Icons.mail_outline, color: Color(0xFF3B6EF0), size: 18),
                           ),
                         ),
                       ],

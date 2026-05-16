@@ -124,7 +124,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               ),
             ),
-            SizedBox(height: 14),
+            /* SizedBox(height: 14),
             Row(
               children: [
                 Expanded(
@@ -160,7 +160,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ],
-            ),
+            ), */
             SizedBox(height: 14),
             IntrinsicHeight(
               child: Row(
@@ -194,7 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             SizedBox(height: 14),
             _JourneyTimeline(steps: dashboard!.journey),
-            SizedBox(height: 22),
+            /* SizedBox(height: 22),
             Text(
               "Priority Alerts",
               style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
@@ -252,7 +252,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   );
                 }).toList(),
-              ),
+              ), */
             SizedBox(height: 22),
             Text(
               "Resources for You",

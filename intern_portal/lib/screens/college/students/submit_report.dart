@@ -290,10 +290,6 @@ class SubmitReportPageState extends State<SubmitReportPage> {
           ],
         ),
       ),
-      bottomNavigationBar: AppBottomNav(
-        currentIndex: 1,
-        onTap: (index) => StudentBottomNavController.onItemTapped(context, index),
-      ),
     );
   }
 }

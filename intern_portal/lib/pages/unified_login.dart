@@ -4,7 +4,7 @@ import 'package:intern_portal/screens/college/admin/admin_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/guide/guide_dashboard.dart';
 import 'package:intern_portal/screens/college/faculty/hod/hod_dashboard.dart';
 import 'package:intern_portal/screens/college/students/dashboard.dart';
-import 'package:intern_portal/screens/college/students/secure_account.dart';
+import 'package:intern_portal/pages/secure_account.dart';
 import 'package:intern_portal/screens/company/internships.dart';
 import 'package:intern_portal/services/authentication/auth_services.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';

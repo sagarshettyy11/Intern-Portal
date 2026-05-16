@@ -29,4 +29,4 @@ final List<String> industries = [
 ];
 
 // Report
-final List<String> filters = ["All Reports", "Pending", "Submitted", "Approved"];
+final List<String> filters = ["All Reports", "Submitted", "Approved", "Rejected"];

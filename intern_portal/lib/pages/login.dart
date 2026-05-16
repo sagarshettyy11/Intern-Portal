@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_portal/screens/college/students/dashboard.dart';
-import 'package:intern_portal/screens/college/students/secure_account.dart';
+import 'package:intern_portal/pages/secure_account.dart';
 import 'package:intern_portal/services/authentication/auth_services.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
 import 'package:intern_portal/widgets/custom_snackbar.dart';

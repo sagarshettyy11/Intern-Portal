@@ -8,6 +8,8 @@ import 'package:intern_portal/services/users/student_services.dart';
 import 'package:intern_portal/widgets/appbar_navigation.dart';
 import 'package:intern_portal/widgets/bottom_navigation.dart';
 import 'package:intern_portal/widgets/common_widgets/common_widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InternshipsPage extends StatefulWidget {
   const InternshipsPage({super.key});
@@ -30,6 +32,16 @@ class _InternshipsPageState extends State<InternshipsPage> {
       data = res;
       isLoading = false;
     });
+  }
+
+  String formatDate(String? date) {
+    if (date == null || date.isEmpty) return "-";
+    try {
+      final parsed = DateTime.parse(date);
+      return DateFormat('dd MMM yyyy').format(parsed);
+    } catch (e) {
+      return date;
+    }
   }
 
   @override
@@ -132,7 +144,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _StatBox(
-                      label: "REPORTS SUBMITTED",
+                      label: "REPORTS APPROVED",
                       value: "${d.reports.approved}/${d.reports.total}",
                       sub: "Due in 2 days",
                       subColor: Colors.grey,
@@ -143,7 +155,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                     child: _StatBox(
                       label: "DAYS REMAINING",
                       value: "${d.progress.daysRemaining ?? 0} Days",
-                      sub: "End Nov 15, 2024",
+                      sub: "End on ${formatDate(d.internship.endDate)}",
                       subColor: Colors.grey,
                     ),
                   ),
@@ -162,16 +174,12 @@ class _InternshipsPageState extends State<InternshipsPage> {
               ],
             ),
             const SizedBox(height: 16),
-            const SizedBox(height: 16),
-
             Column(
               children: List.generate(milestones.length, (index) {
                 final m = milestones[index];
-
                 final isDone = m.status == "done";
                 final isActive = m.status == "active";
                 final isFuture = m.status == "pending";
-
                 return _MilestoneItem(
                   isDone: isDone,
                   isFuture: isFuture,
@@ -192,7 +200,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
               children: d.mentors.map((mentor) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: _MentorCard(name: mentor.name, role: mentor.role),
+                  child: _MentorCard(name: mentor.name, role: mentor.role, email: mentor.email),
                 );
               }).toList(),
             ),
@@ -380,7 +388,25 @@ class _MilestoneItem extends StatelessWidget {
 
 class _MentorCard extends StatelessWidget {
   final String name, role;
-  const _MentorCard({required this.name, required this.role});
+  final String? email;
+  const _MentorCard({required this.name, required this.role, this.email});
+
+  Future<void> _launchEmail(BuildContext context) async {
+    if (email == null || email!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Email not available")));
+      return;
+    }
+    final Uri emailUri = Uri(scheme: 'mailto', path: email, queryParameters: {'subject': 'Internship Discussion'});
+    try {
+      final launched = await launchUrl(emailUri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No email app found")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -413,14 +439,13 @@ class _MentorCard extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: const Color(0xFFF0F5FF), borderRadius: BorderRadius.circular(8)),
-            child: const Icon(
-              Icons.chat_bubble_outline,
-              color: Color(0xFF3B6EF0),
-              size: 18,
-              fontWeight: FontWeight.bold,
+          InkWell(
+            onTap: () => _launchEmail(context),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(color: const Color(0xFFF0F5FF), borderRadius: BorderRadius.circular(8)),
+              child: const Icon(Icons.mail_outline, color: Color(0xFF3B6EF0), size: 18),
             ),
           ),
         ],

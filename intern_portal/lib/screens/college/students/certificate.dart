@@ -181,14 +181,6 @@ class _CertificatesScreenState extends State<CertificatesScreen> {
             ),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(color: Colors.blue[100], borderRadius: BorderRadius.circular(20)),
-          child: Text(
-            'Newest First',
-            style: GoogleFonts.inter(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFF0000FF)),
-          ),
-        ),
       ],
     );
   }
